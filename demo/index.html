@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Leiden+ Editor Demo</title>
+        <style>
+            .cm-editor {
+                max-height: 400px;
+                min-height: 128px;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Leiden+</h2>
+        <div id="leiden"></div>
+
+        <h2>EpiDoc</h2>
+        <div id="epidoc"></div>
+    </body>
+    <script type="module">
+        import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup";
+        import { lintGutter } from "@codemirror/lint";
+        import { ViewPlugin } from "@codemirror/view";
+        import {xml} from "@codemirror/lang-xml";
+        import { leiden } from "../src/language.js";
+        import { leiden2epiDoc } from "../src/index.js";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const xmlEditor = new EditorView({
+                state: EditorState.create({extensions: [basicSetup, xml(), lintGutter()]}),
+                parent: document.getElementById('epidoc')
+            });
+
+            const updatePlugin = ViewPlugin.fromClass(
+                class {
+                    update(update) {
+                        if (update.docChanged) {
+                            const lines = update.state.doc.toJSON();
+                            const xml = leiden2epiDoc(lines.join('\n'));
+                            xmlEditor.dispatch({
+                                changes: {from: 0, to: xmlEditor.state.doc.length, insert: xml}
+                            });
+                        }
+                    }
+                }
+            );
+
+            new EditorView({
+                state: EditorState.create({doc: '\n', extensions: [basicSetup, leiden(), lintGutter(), updatePlugin]}),
+                parent: document.getElementById('leiden')
+            });
+        });
+    </script>
+</html>

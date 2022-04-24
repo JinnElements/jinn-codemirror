@@ -1,0 +1,49 @@
+@top Document {
+    newline?
+    (
+        block |
+        line
+    )+
+}
+
+block {
+    Div { "<=" newline? ( block | line )+ "=>" newline? } |
+    Recto { "<D=.r" newline? ( block | line )+ "=D>" newline? }
+}
+
+line {
+    NumberedWrappedLine { Number ".- " inline+ newline } |
+    NumberedLine { Number ". " inline+ newline } |
+    Line { inline+ newline }
+}
+
+inline {
+    Abbrev | Supplied | lost | Text | QuestionMark | Number
+}
+
+Abbrev {
+    "(" inline+ ")"
+}
+
+Supplied {
+    "<" inline* CertLow? ">"
+}
+
+lost {
+    Gap { "[." Number "]" } |
+    SuppliedLost { "[" inline+ "]" }
+}
+
+@tokens {
+    newline { $[\n]+ }
+
+    Text { ![\n()<>?=.0-9\[\]]+ }
+
+    CertLow { "(?)" }
+
+    QuestionMark { "?" }
+
+    Number { std.digit+ }
+}
+
+@external propSource leidenHighlighting from "./highlight"
