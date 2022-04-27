@@ -57,7 +57,15 @@ function iterate(root, text, inExpan) {
                     xml.push(`<div n="${value ? value[1] : ''}" subtype="part" type="textpart">`);
                     break;
                 case 'Unclear':
-                    xml.push(`<unclear>${text(node)}</unclear>`);
+                    const content = text(node);
+                    let stripped = '';
+                    for (let i = 0; i < content.length; i++) {
+                        const codepoint = content.codePointAt(i);
+                        if (codepoint !== 0x0323) {
+                            stripped += String.fromCodePoint(codepoint);
+                        }
+                    }
+                    xml.push(`<unclear>${stripped}</unclear>`);
                     return false;
                 case 'Gap':
                     node.next(true);

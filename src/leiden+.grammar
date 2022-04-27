@@ -46,7 +46,7 @@ lost {
 @tokens {
     chars { ![() <>?=.0-9\[\]]+ }
 
-    Unclear { (![\u0323] "\u0323")+ }
+    Unclear { (![\u0323] '\u0323')+ }
 
     space { " " }
 

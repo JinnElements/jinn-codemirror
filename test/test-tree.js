@@ -75,4 +75,8 @@ describe('inline', () => {
         `<=([.?].1λινοκ(αλάμης))=>`,
         '<ab><expan><gap reason="lost" extent="unknown" unit="character"/><gap reason="illegible" quantity="1" unit="character"/>λινοκ<ex>αλάμης</ex></expan></ab>'
     );
+    testTransform('unclear',
+        `<=(ἀ[κ ρ̣ό̣δ̣(ρυα)])=>`,
+        '<ab><expan>ἀ<supplied reason="lost">κ <unclear>ρόδ</unclear><ex>ρυα</ex></supplied></expan></ab>'
+    );
 });
