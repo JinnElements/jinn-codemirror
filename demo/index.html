@@ -27,7 +27,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const xmlEditor = new EditorView({
-                state: EditorState.create({extensions: [basicSetup, xml(), lintGutter()]}),
+                state: EditorState.create({extensions: [basicSetup, xml(), EditorView.lineWrapping, lintGutter()]}),
                 parent: document.getElementById('epidoc')
             });
 
@@ -46,7 +46,7 @@
             );
 
             new EditorView({
-                state: EditorState.create({doc: '\n', extensions: [basicSetup, leiden(), lintGutter(), updatePlugin]}),
+                state: EditorState.create({extensions: [basicSetup, leiden(), lintGutter(), EditorView.lineWrapping, updatePlugin]}),
                 parent: document.getElementById('leiden')
             });
         });

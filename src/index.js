@@ -1,30 +1,39 @@
 import { parser } from "./parser.js";
 
 export function leiden2epiDoc(input) {
+
+    function text(node) {
+        return input.substring(node.from, node.to);
+    }
+    
     const tree = parser.parse(input);
 
+    const xml = iterate(tree, text, false);
+    return xml.join('');
+}
+
+function iterate(root, text, inExpan) {
     const xml = [];
-    let inExpan = false;
-    tree.iterate({
+    let value;
+    root.iterate({
         enter: (node) => {
             if (node.type.isError) {
-                xml.push(`<!-- Error:${input.substring(node.from, node.to)} -->`);
+                xml.push(`<!-- Error:${text(node)} -->`);
                 return;
             }
             switch (node.name) {
                 case 'Text':
-                    xml.push(input.substring(node.from, node.to));
+                    xml.push(text(node));
                     break;
-                case 'Line':
-                    xml.push('<lb/>');
-                    break;
-                case 'NumberedLine':
+                case 'LineBreak':
                     node.firstChild();
-                    xml.push(`<lb n="${input.substring(node.from, node.to)}"/>`);
+                    value = /^([0-9]+)\..*$/.exec(text(node));
+                    xml.push(`<lb n="${value ? value[1] : ''}"/>`);
                     break;
-                case 'NumberedWrappedLine':
+                case 'LineBreakWrapped':
                     node.firstChild();
-                    xml.push(`<lb n="${input.substring(node.from, node.to)}" break="no"/>`);
+                    value = /^([0-9]+)\..*$/.exec(text(node));
+                    xml.push(`<lb n="${value ? value[1] : ''}" break="no"/>`);
                     break;
                 case 'Document':
                     break;
@@ -34,14 +43,42 @@ export function leiden2epiDoc(input) {
                 case 'Recto':
                     xml.push('<div n="r" type="textpart">');
                     break;
+                case 'Verso':
+                    xml.push('<div n="r" type="textpart">');
+                    break;
+                case 'Fragment':
+                    node.firstChild();
+                    value = /^([0-9]+)\..*$/.exec(text(node));
+                    xml.push(`<div n="${value ? value[1] : ''}" subtype="fragment" type="textpart">`);
+                    break;
+                case 'Part':
+                    node.firstChild();
+                    value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
+                    xml.push(`<div n="${value ? value[1] : ''}" subtype="part" type="textpart">`);
+                    break;
+                case 'Unclear':
+                    xml.push(`<unclear>${text(node)}</unclear>`);
+                    return false;
                 case 'Gap':
                     node.next(true);
-                    xml.push(`<gap reason="lost" quantity="${input.substring(node.from, node.to)}" unit="character"/>`);
+                    xml.push(`<gap reason="lost" quantity="${text(node)}" unit="character"/>`);
+                    return false;
+                case 'GapUnknown':
+                    xml.push(`<gap reason="lost" extent="unknown" unit="character"/>`);
+                    return false;
+                case 'Illegible':
+                    value = /^\.([0-9?]+).*$/.exec(text(node));
+                    if (value && value[1] === '?') {
+                        xml.push(`<gap reason="illegible" extent="unkown" unit="character"/>`);
+                    } else {
+                        xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="character"/>`);
+                    }
                     return false;
                 case 'Abbrev':
                     if (inExpan) {
                         node.lastChild();
-                        if (node && node.name === 'QuestionMark') {
+                        value = text(node);
+                        if (value.length > 0 && value.charAt(value.length - 1) === '?') {
                             xml.push(`<ex cert="low">`);
                         } else {
                             xml.push(`<ex>`);
@@ -62,7 +99,13 @@ export function leiden2epiDoc(input) {
                     node.parent();
                     break;
                 case 'SuppliedLost':
-                    xml.push('<supplied reason="lost">');
+                    node.lastChild();
+                    if (node.name === 'CertLow') {
+                        xml.push('<supplied reason="lost" cert="low">');
+                    } else {
+                        xml.push('<supplied reason="lost">');
+                    }
+                    node.parent();
                     break;
                 case 'CertLow':
                     return false;
@@ -70,7 +113,7 @@ export function leiden2epiDoc(input) {
                     if (!inExpan) {
                         xml.push('?');
                     }
-                    break;
+                    return false;
                 default:
                     xml.push(`<${node.name}>`);
                     break;
@@ -80,6 +123,10 @@ export function leiden2epiDoc(input) {
             switch (node.name) {
                 case 'Abbrev':
                     if (inExpan) {
+                        const last = xml[xml.length - 1];
+                        if (last.endsWith('?')) {
+                            xml[xml.length - 1] = last.substring(0, last.length - 2);
+                        }
                         xml.push('</ex>');
                         inExpan = false;
                     } else {
@@ -90,6 +137,9 @@ export function leiden2epiDoc(input) {
                     xml.push('</ab>');
                     break;
                 case 'Recto':
+                case 'Verso':
+                case 'Fragment':
+                case 'Part':
                     xml.push('</div>');
                     break;
                 case 'Supplied':
@@ -99,5 +149,5 @@ export function leiden2epiDoc(input) {
             }
         }
     });
-    return xml.join('');
+    return xml;
 }

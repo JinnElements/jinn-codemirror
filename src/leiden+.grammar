@@ -1,24 +1,32 @@
 @top Document {
-    newline?
     (
-        block |
-        line
+        block
     )+
 }
 
 block {
-    Div { "<=" newline? ( block | line )+ "=>" newline? } |
-    Recto { "<D=.r" newline? ( block | line )+ "=D>" newline? }
-}
-
-line {
-    NumberedWrappedLine { Number ".- " inline+ newline } |
-    NumberedLine { Number ". " inline+ newline } |
-    Line { inline+ newline }
+    Div { "<=" ( block )+ "=>" } |
+    Recto { "<D=.r" ( block )+ "=D>" } |
+    Verso { "<D=.v" ( block )+ "=D>" } |
+    Part { "<D=." PartId ( block )+ "=D>"} |
+    Fragment { "<D=." FragmentNum ( block )+ "=D>"} |
+    inline
 }
 
 inline {
-    Abbrev | Supplied | lost | Text | QuestionMark | Number
+    LineBreakWrapped |
+    LineBreak |
+    Number |
+    Abbrev | 
+    Supplied | 
+    lost | 
+    Text |
+    Illegible |
+    Unclear
+}
+
+Text {
+    chars | "." | QuestionMark | space | "="
 }
 
 Abbrev {
@@ -30,20 +38,43 @@ Supplied {
 }
 
 lost {
+    GapUnknown { "[.?]" } |
     Gap { "[." Number "]" } |
-    SuppliedLost { "[" inline+ "]" }
+    SuppliedLost { "[" inline+ CertLow? "]" }
 }
 
 @tokens {
-    newline { $[\n]+ }
+    chars { ![() <>?=.0-9\[\]]+ }
 
-    Text { ![\n()<>?=.0-9\[\]]+ }
+    Unclear { (![\u0323] "\u0323")+ }
+
+    space { " " }
 
     CertLow { "(?)" }
 
     QuestionMark { "?" }
 
     Number { std.digit+ }
-}
 
-@external propSource leidenHighlighting from "./highlight"
+    FragmentNum {
+        Number ".fragment"
+    }
+
+    PartId {
+        ( $[a-zA-Z] | std.digit )+ ".part"
+    }
+
+    LineBreak {
+        Number "." space?
+    }
+
+    LineBreakWrapped {
+        Number ".-" space?
+    }
+
+    Illegible {
+        "." ( Number | QuestionMark )
+    }
+
+    @precedence { Illegible, ".", FragmentNum, LineBreakWrapped, LineBreak, Unclear, Number, chars }
+}
