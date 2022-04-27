@@ -1,18 +1,21 @@
 import { parser } from "./parser.js";
 
 export function leiden2epiDoc(input) {
-
-    function text(node) {
-        return input.substring(node.from, node.to);
-    }
     
     const tree = parser.parse(input);
+    return syntax2epiDoc(tree, input);
+}
 
-    const xml = iterate(tree, text, false);
+export function syntax2epiDoc(tree, input) {
+    const xml = iterate(tree, input, false);
     return xml.join('');
 }
 
-function iterate(root, text, inExpan) {
+function iterate(root, input, inExpan) {
+    function text(node) {
+        return input.substring(node.from, node.to);
+    }
+
     const xml = [];
     let value;
     root.iterate({

@@ -21,9 +21,10 @@
         import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup";
         import { lintGutter } from "@codemirror/lint";
         import { ViewPlugin } from "@codemirror/view";
+        import {syntaxTree} from "@codemirror/language";
         import {xml} from "@codemirror/lang-xml";
         import { leiden } from "../src/language.js";
-        import { leiden2epiDoc } from "../src/index.js";
+        import { syntax2epiDoc } from "../src/index.js";
 
         window.addEventListener('DOMContentLoaded', () => {
             const xmlEditor = new EditorView({
@@ -35,8 +36,9 @@
                 class {
                     update(update) {
                         if (update.docChanged) {
+                            const tree = syntaxTree(update.state);
                             const lines = update.state.doc.toJSON();
-                            const xml = leiden2epiDoc(lines.join('\n'));
+                            const xml = syntax2epiDoc(tree, lines.join('\n'));
                             xmlEditor.dispatch({
                                 changes: {from: 0, to: xmlEditor.state.doc.length, insert: xml}
                             });
