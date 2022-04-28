@@ -25,6 +25,11 @@ describe('inline', () => {
         '<ab><expan>ab<supplied reason="omitted">cdef<ex cert="low">ghi</ex></supplied></expan></ab>'
     );
     testTransform(
+        'expands multiple abbreviations',
+        `<=([(Ἑπτα)]κ̣ω̣μ̣[(ίας)])=>`,
+        '<ab><expan><supplied reason="lost"><ex>Ἑπτα</ex></supplied><unclear>κωμ</unclear><supplied reason="lost"><ex>ίας</ex></supplied></expan></ab>'
+    );
+    testTransform(
         'expansion of whole word',
         `<=((ἔτους))=>`,
         '<ab><expan><ex>ἔτους</ex></expan></ab>'

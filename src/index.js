@@ -1,21 +1,15 @@
 import { parser } from "./parser.js";
 
 export function leiden2epiDoc(input) {
-    
     const tree = parser.parse(input);
     return syntax2epiDoc(tree, input);
 }
 
-export function syntax2epiDoc(tree, input) {
-    const xml = iterate(tree, input, false);
-    return xml.join('');
-}
-
-function iterate(root, input, inExpan) {
+export function syntax2epiDoc(root, input) {
     function text(node) {
         return input.substring(node.from, node.to);
     }
-
+    const stack = [];
     const xml = [];
     let value;
     root.iterate({
@@ -86,7 +80,7 @@ function iterate(root, input, inExpan) {
                     }
                     return false;
                 case 'Abbrev':
-                    if (inExpan) {
+                    if (stack.length > 0) {
                         node.lastChild();
                         value = text(node);
                         if (value.length > 0 && value.charAt(value.length - 1) === '?') {
@@ -96,9 +90,9 @@ function iterate(root, input, inExpan) {
                         }
                         node.parent();
                     } else {
-                        inExpan = true;
                         xml.push('<expan>');
                     }
+                    stack.push('expan');
                     break;
                 case 'Supplied':
                     node.lastChild();
@@ -121,7 +115,7 @@ function iterate(root, input, inExpan) {
                 case 'CertLow':
                     return false;
                 case 'QuestionMark':
-                    if (!inExpan) {
+                    if (stack.length < 2) {
                         xml.push('?');
                     }
                     return false;
@@ -133,16 +127,16 @@ function iterate(root, input, inExpan) {
         leave: (node) => {
             switch (node.name) {
                 case 'Abbrev':
-                    if (inExpan) {
+                    if (stack.length > 1) {
                         const last = xml[xml.length - 1];
                         if (last.endsWith('?')) {
                             xml[xml.length - 1] = last.substring(0, last.length - 2);
                         }
                         xml.push('</ex>');
-                        inExpan = false;
                     } else {
                         xml.push('</expan>');
                     }
+                    stack.pop();
                     break;
                 case 'Div':
                     xml.push('</ab>');
@@ -160,5 +154,5 @@ function iterate(root, input, inExpan) {
             }
         }
     });
-    return xml;
+    return xml.join('');
 }
