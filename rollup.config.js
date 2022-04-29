@@ -6,7 +6,7 @@ import copy from 'rollup-plugin-copy';
 export default [
     {
         input: ['./src/index.ts', './src/jinn-codemirror.ts'],
-        external: id => id != "tslib" && !/^(\.?\/|\w:)/.test(id),
+        // external: id => id != "tslib" && !/^(\.?\/|\w:)/.test(id),
         output: [{
             format: "es",
             dir: "./dist"

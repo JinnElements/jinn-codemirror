@@ -1,1 +1,1 @@
-export{l as leiden2epiDoc,s as syntax2epiDoc}from"./index-e462de8c.js";import"@lezer/lr";
+export{l as leiden2epiDoc,s as syntax2epiDoc}from"./index-0016da4e.js";
