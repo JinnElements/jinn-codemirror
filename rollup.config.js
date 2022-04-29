@@ -1,14 +1,34 @@
-import {nodeResolve} from "@rollup/plugin-node-resolve"
+import typescript from "rollup-plugin-ts";
+import resolve from '@rollup/plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
+import copy from 'rollup-plugin-copy';
 
 export default [
     {
-        input: './src/index.js',
+        input: ['./src/index.ts', './src/jinn-codemirror.ts'],
+        external: id => id != "tslib" && !/^(\.?\/|\w:)/.test(id),
         output: [{
             format: "es",
-            file: "./dist/index.es.js"
+            dir: "./dist"
         }],
         plugins: [
-            nodeResolve()
+            resolve(),
+            typescript(),
+            terser({
+                compress: {
+                    reduce_vars: false
+                }
+            }),
+            copy({
+                targets: [
+                    {
+                        src: 'demo/index.html',
+                        dest: '.',
+                        transform: (contents) =>
+                            contents.toString().replace(/..\/src\/jinn-codemirror.ts/, 'dist/jinn-codemirror.js')
+                    }
+                ]
+            })
         ]
     }
 ]

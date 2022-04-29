@@ -1,24 +1,26 @@
+import { Tree, TreeCursor } from "@lezer/common";
 import { parser } from "./parser.js";
 
-export function leiden2epiDoc(input) {
+export function leiden2epiDoc(input: string) {
     const tree = parser.parse(input);
     return syntax2epiDoc(tree, input);
 }
 
-export function syntax2epiDoc(root, input) {
-    function text(node) {
+export function syntax2epiDoc(root: Tree, input: string) {
+    function text(node:TreeCursor) {
         return input.substring(node.from, node.to);
     }
-    const stack = [];
-    const xml = [];
+    const stack:string[] = [];
+    const xml:string[] = [];
     let value;
     root.iterate({
-        enter: (node) => {
+        enter: (node:TreeCursor) => {
             if (node.type.isError) {
                 xml.push(`<!-- Error:${text(node)} -->`);
                 return;
             }
-            switch (node.name) {
+            const name = node.name;
+            switch (name) {
                 case 'Text':
                     xml.push(text(node));
                     break;
@@ -58,7 +60,7 @@ export function syntax2epiDoc(root, input) {
                     let stripped = '';
                     for (let i = 0; i < content.length; i++) {
                         const codepoint = content.codePointAt(i);
-                        if (codepoint !== 0x0323) {
+                        if (codepoint && codepoint !== 0x0323) {
                             stripped += String.fromCodePoint(codepoint);
                         }
                     }
@@ -120,7 +122,7 @@ export function syntax2epiDoc(root, input) {
                     }
                     return false;
                 default:
-                    xml.push(`<${node.name}>`);
+                    xml.push(`<${name}>`);
                     break;
             }
         },
