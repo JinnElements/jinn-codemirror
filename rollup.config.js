@@ -26,6 +26,11 @@ export default [
                         dest: '.',
                         transform: (contents) =>
                             contents.toString().replace(/..\/src\/jinn-codemirror.ts/, 'dist/jinn-codemirror.js')
+                            .replace(/..\/src\/epidoc.json/, 'dist/epidoc.json')
+                    },
+                    {
+                        src: 'src/epidoc.json',
+                        dest: 'dist'
                     }
                 ]
             })
