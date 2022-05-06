@@ -19,10 +19,11 @@ inline {
     Number |
     Abbrev | 
     Supplied | 
-    lost | 
+    lost |
     Text |
     Illegible |
-    Unclear
+    Unclear |
+    LostLines
 }
 
 Text {
@@ -73,8 +74,12 @@ lost {
     }
 
     Illegible {
-        "." ( Number | QuestionMark )
+        "." ( Number | QuestionMark ) "lin"?
     }
 
-    @precedence { Illegible, ".", FragmentNum, LineBreakWrapped, LineBreak, Unclear, Number, chars }
+    LostLines {
+        "lost." ( Number | QuestionMark ) "lin"
+    }
+
+    @precedence { Illegible, LostLines, ".", FragmentNum, LineBreakWrapped, LineBreak, Unclear, Number, chars }
 }

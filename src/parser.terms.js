@@ -12,4 +12,5 @@ export const
   Text = 18,
   QuestionMark = 19,
   Illegible = 20,
-  Unclear = 21
+  Unclear = 21,
+  LostLines = 22

@@ -60,9 +60,21 @@ describe('inline', () => {
         `<=1. ἀπ<ε>γραψάμην=>`,
         `<ab><lb n="1"/>ἀπ<supplied reason="omitted">ε</supplied>γραψάμην</ab>`
     );
-    testTransform('lost',
+    testTransform('lost characters',
         `<=[.8]ἀπεγραψάμην=>`,
         '<ab><gap reason="lost" quantity="8" unit="character"/>ἀπεγραψάμην</ab>'
+    );
+    testTransform('lost characters unknown',
+        `<=[.?]ἀπεγραψάμην=>`,
+        '<ab><gap reason="lost" extent="unknown" unit="character"/>ἀπεγραψάμην</ab>'
+    );
+    testTransform('lost lines',
+        `<=1. ἀπεγραψάμην lost.3lin=>`,
+        '<ab><lb n="1"/>ἀπεγραψάμην <gap reason="lost" quantity="3" unit="line"/></ab>'
+    );
+    testTransform('lost lines unknown',
+        `<=1. ἀπεγραψάμην lost.?lin=>`,
+        '<ab><lb n="1"/>ἀπεγραψάμην <gap reason="lost" extent="unknown" unit="line"/></ab>'
     );
     testTransform('gap in expan',
         `<=(Α[.2]ωνο(ς))=>`,
@@ -79,6 +91,14 @@ describe('inline', () => {
     testTransform('illegible, nested',
         `<=([.?].1λινοκ(αλάμης))=>`,
         '<ab><expan><gap reason="lost" extent="unknown" unit="character"/><gap reason="illegible" quantity="1" unit="character"/>λινοκ<ex>αλάμης</ex></expan></ab>'
+    );
+    testTransform('illegible lines',
+        `<=1. (λινοκ(αλάμης)) .3lin=>`,
+        '<ab><lb n="1"/><expan>λινοκ<ex>αλάμης</ex></expan> <gap reason="illegible" quantity="3" unit="line"/></ab>'
+    );
+    testTransform('illegible lines, extent unknown',
+        `<=1. (λινοκ(αλάμης)) .?lin=>`,
+        '<ab><lb n="1"/><expan>λινοκ<ex>αλάμης</ex></expan> <gap reason="illegible" quantity="?" unit="line"/></ab>'
     );
     testTransform('unclear',
         `<=(ἀ[κ ρ̣ό̣δ̣(ρυα)])=>`,

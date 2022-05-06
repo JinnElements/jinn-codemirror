@@ -74,11 +74,25 @@ export function syntax2epiDoc(root: Tree, input: string) {
                     xml.push(`<gap reason="lost" extent="unknown" unit="character"/>`);
                     return false;
                 case 'Illegible':
-                    value = /^\.([0-9?]+).*$/.exec(text(node));
-                    if (value && value[1] === '?') {
-                        xml.push(`<gap reason="illegible" extent="unkown" unit="character"/>`);
-                    } else {
-                        xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="character"/>`);
+                    value = /^\.([0-9?]+)(lin)?$/.exec(text(node));
+                    if (value) {
+                        if (value[2] === 'lin') {
+                            xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="line"/>`);
+                        } else if (value[1] === '?') {
+                            xml.push(`<gap reason="illegible" extent="unkown" unit="character"/>`);
+                        } else {
+                            xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="character"/>`);
+                        }
+                    }
+                    return false;
+                case 'LostLines':
+                    value = /^lost\.([0-9?]+)lin$/.exec(text(node));
+                    if (value) {
+                        if (value[1] === '?') {
+                            xml.push(`<gap reason="lost" extent="unknown" unit="line"/>`);
+                        } else {
+                            xml.push(`<gap reason="lost" quantity="${value ? value[1]: ''}" unit="line"/>`);
+                        }
                     }
                     return false;
                 case 'Abbrev':
