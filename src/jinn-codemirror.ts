@@ -1,58 +1,6 @@
-import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup";
-import { lintGutter } from "@codemirror/lint";
-import { ViewPlugin, ViewUpdate } from "@codemirror/view";
-import {syntaxTree} from "@codemirror/language";
-import { EditorStateConfig, Extension } from "@codemirror/state";
-import {xml} from "@codemirror/lang-xml";
-import { leiden } from "./language";
-import { syntax2epiDoc } from "./index";
-import { Tree } from "@lezer/common";
-
-abstract class EditorConfig {
-
-    getConfig(parent:JinnCodemirror): EditorStateConfig {
-        const self = this;
-        const updateListener = ViewPlugin.fromClass(class {
-            update(update: ViewUpdate) {
-                if (update.docChanged) {
-                    const tree = syntaxTree(update.state);
-                    const lines = update.state.doc.toJSON();
-                    const content = self.onUpdate(tree, lines.join('\n'));
-
-                    parent.dispatchEvent(new CustomEvent('update', {
-                        detail: content,
-                        composed: true,
-                        bubbles: true
-                    }));
-                }
-            }
-        });
-
-        return {extensions: [basicSetup, EditorView.lineWrapping, ...this.getExtensions(), updateListener]};
-    }
-
-    abstract getExtensions(): Extension[];
-
-    onUpdate(tree:Tree, content:string) {
-        return content;
-    }
-}
-
-class XMLConfig extends EditorConfig {
-    getExtensions(): Extension[] {
-        return [xml()];
-    }
-}
-
-class LeidenConfig extends EditorConfig {
-    getExtensions(): Extension[] {
-        return [leiden()];
-    }
-
-    onUpdate(tree: Tree, content: string): string {
-        return syntax2epiDoc(tree, content);
-    }
-}
+import {EditorState, EditorView} from "@codemirror/basic-setup";
+import { XMLConfig } from "./xml";
+import { LeidenConfig } from "./leiden+";
 
 export class JinnCodemirror extends HTMLElement {
 
@@ -86,9 +34,12 @@ export class JinnCodemirror extends HTMLElement {
 
         const wrapper = document.createElement('div');
         this.shadowRoot?.appendChild(wrapper);
-        this._editor = new EditorView({
-            state: EditorState.create(config.getConfig(this)),
-            parent: wrapper
+        config.getConfig(this)
+        .then((config) => {
+            this._editor = new EditorView({
+                state: EditorState.create(config),
+                parent: wrapper
+            });
         });
         this.content = initialContent;
     }
