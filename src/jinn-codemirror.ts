@@ -1,6 +1,7 @@
 import {EditorState, EditorView} from "@codemirror/basic-setup";
 import { XMLConfig } from "./xml";
 import { LeidenConfig } from "./leiden+";
+import { EditorConfig } from "./config";
 
 export class JinnCodemirror extends HTMLElement {
 
@@ -15,6 +16,10 @@ export class JinnCodemirror extends HTMLElement {
         const css = document.createElement('style');
         css.innerHTML = this.styles();
         this.shadowRoot?.appendChild(css);
+
+        const toolbarSlot = document.createElement('slot');
+        toolbarSlot.name = 'toolbar';
+        this.shadowRoot?.appendChild(toolbarSlot);
     }
 
     connectedCallback() {
@@ -22,7 +27,7 @@ export class JinnCodemirror extends HTMLElement {
         console.log(`<jinn-codemirror> mode: ${this.mode}`);
 
         const initialContent = this.innerHTML;
-        let config;
+        let config:EditorConfig;
         switch(this.mode) {
             case 'leiden':
                 config = new LeidenConfig();
@@ -35,11 +40,12 @@ export class JinnCodemirror extends HTMLElement {
         const wrapper = document.createElement('div');
         this.shadowRoot?.appendChild(wrapper);
         config.getConfig(this)
-        .then((config) => {
+        .then((stateConfig) => {
             this._editor = new EditorView({
-                state: EditorState.create(config),
+                state: EditorState.create(stateConfig),
                 parent: wrapper
             });
+            this.renderToolbar(config);
         });
         this.content = initialContent;
     }
@@ -51,6 +57,20 @@ export class JinnCodemirror extends HTMLElement {
         }
         this._editor.dispatch({
             changes: {from: 0, to: this._editor.state.doc.length, insert: text}
+        });
+    }
+
+    private renderToolbar(config:EditorConfig) {
+        const commands = config.getCommands();
+        const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
+        slot?.assignedElements().forEach((elem) => {
+            elem.querySelectorAll('[data-command]').forEach((btn) => {
+                const cmdName = <string>(<HTMLElement>btn).dataset.command;
+                const command = commands[cmdName];
+                if (command) {
+                    btn.addEventListener('click', () => command(<EditorView>this._editor));
+                }
+            });
         });
     }
 

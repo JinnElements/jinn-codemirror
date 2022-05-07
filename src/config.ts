@@ -1,9 +1,13 @@
 import { EditorView, basicSetup } from "@codemirror/basic-setup";
-import { ViewPlugin, ViewUpdate } from "@codemirror/view";
+import { Command, ViewPlugin, ViewUpdate } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorStateConfig, Extension } from "@codemirror/state";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
+
+export interface EditorCommands {
+    [index:string]: Command
+}
 
 export abstract class EditorConfig {
 
@@ -31,6 +35,10 @@ export abstract class EditorConfig {
 
     abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;
 
+    getCommands():EditorCommands {
+        return {};
+    }
+    
     onUpdate(tree: Tree, content: string) {
         return content;
     }
