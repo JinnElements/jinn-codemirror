@@ -5,6 +5,7 @@ declare class JinnCodemirror extends HTMLElement {
     constructor();
     connectedCallback(): void;
     set content(text: string);
+    private renderToolbar;
     styles(): string;
 }
 export { JinnCodemirror };

@@ -8,15 +8,34 @@
                 min-height: 128px;
                 font-size: 16px;
             }
+            [slot=toolbar] {
+                display: flex;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            [slot=toolbar] button {
+                font-size: .85rem;
+            }
         </style>
         <script type="module" src="dist/jinn-codemirror.js"></script>
     </head>
     <body>
         <h2>Leiden+</h2>
-        <jinn-codemirror id="leiden-editor" mode="leiden"></jinn-codemirror>
+        <jinn-codemirror id="leiden-editor" mode="leiden">
+            <div slot="toolbar">
+                <button data-command="expan">(a(bcd))</button>
+                <button data-command="erasure">〚abc〛</button>
+                <button data-command="div">&lt;=...</button>
+                <button data-command="fragment">&lt;D=.1.fragment...</button>
+                <button data-command="part">&lt;D=.A.part...</button>
+                <button data-command="recto">&lt;D=.r...</button>
+                <button data-command="verso">&lt;D=.v...</button>
+            </div>
+        </jinn-codemirror>
 
         <h2>EpiDoc</h2>
-        <jinn-codemirror id="xml-editor" mode="xml" schema="dist/epidoc.json"></jinn-codemirror>
+        <jinn-codemirror id="xml-editor" mode="xml" schema="dist/epidoc.json">
+        </jinn-codemirror>
 
         <script>
             window.addEventListener('DOMContentLoaded', () => {
