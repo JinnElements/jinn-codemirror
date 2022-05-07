@@ -1,10 +1,10 @@
-import { EditorState, Extension, EditorSelection } from "@codemirror/state";
+import { Extension } from "@codemirror/state";
 import { Tree, TreeCursor } from "@lezer/common";
-import { EditorView, Command, keymap, KeyBinding } from "@codemirror/view";
+import { EditorView, keymap, KeyBinding } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { syntax2epiDoc } from ".";
-import { EditorConfig, EditorCommands } from "./config";
+import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
 import { JinnCodemirror } from "./jinn-codemirror";
 import { leiden } from "./language";
 
@@ -26,33 +26,13 @@ const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {
     return diagnostics;
 }
 
-const wrapCommand = (start:string, end:string, pos:number = -1):Command => (editor) => {
-    editor.dispatch(editor.state.changeByRange(range => {
-        return {
-            changes: [{from: range.from, insert: start}, {from: range.to, insert: end}],
-            range: EditorSelection.range(range.from + start.length, range.to + start.length)
-        };
-    }));
-    return true;
-}
-
-const expanCommand:Command = (editor) => {
-    editor.dispatch(editor.state.changeByRange(range => {
-        return {
-            changes: [{from: range.from, insert: '('}, {from: range.to, insert: '())'}],
-            range: EditorSelection.range(range.to + 2, range.to + 2)
-        };
-    }));
-    return true;
-}
-
 const commands:EditorCommands = {
-    expan: expanCommand,
-    div: wrapCommand('<=', '=>'),
-    fragment: wrapCommand('<D=.1.fragment\n', '\n=D>'),
-    part: wrapCommand('<D=.A.part', '=D>'),
-    recto: wrapCommand('<D=.r', '=D>'),
-    verso: wrapCommand('<D=.v', '=D>')
+    expan: snippetCommand('(${_}(${}))'),
+    div: wrapCommand('<=\n', '\n=>'),
+    fragment: snippetCommand('<D=.${1:1}.fragment<=\n${2}\n=>=D>'),
+    part: snippetCommand('<D=.${1:A}.part<=\n${2}\n=>=D>'),
+    recto: wrapCommand('<D=.r<=\n', '\n=>=D>'),
+    verso: wrapCommand('<D=.v<=\n', '\n=>=D>')
 };
 
 const leidenKeymap: readonly KeyBinding[] = [

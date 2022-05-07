@@ -26,7 +26,6 @@ export class JinnCodemirror extends HTMLElement {
         this.mode = this.getAttribute('mode') || 'xml';
         console.log(`<jinn-codemirror> mode: ${this.mode}`);
 
-        const initialContent = this.innerHTML;
         let config:EditorConfig;
         switch(this.mode) {
             case 'leiden':
@@ -47,7 +46,6 @@ export class JinnCodemirror extends HTMLElement {
             });
             this.renderToolbar(config);
         });
-        this.content = initialContent;
     }
 
     set content(text:string) {
@@ -68,7 +66,10 @@ export class JinnCodemirror extends HTMLElement {
                 const cmdName = <string>(<HTMLElement>btn).dataset.command;
                 const command = commands[cmdName];
                 if (command) {
-                    btn.addEventListener('click', () => command(<EditorView>this._editor));
+                    btn.addEventListener('click', () => {
+                        command(<EditorView>this._editor)
+                        this._editor?.focus();
+                    });
                 }
             });
         });
