@@ -23,7 +23,8 @@ inline {
     Text |
     Illegible |
     Unclear |
-    LostLines
+    LostLines |
+    Erasure
 }
 
 Text {
@@ -44,8 +45,12 @@ lost {
     SuppliedLost { "[" inline+ CertLow? "]" }
 }
 
+Erasure {
+    "〚" inline+ "〛"
+}
+
 @tokens {
-    chars { ![() <>?=.0-9\[\]]+ }
+    chars { ![() <>?=.0-9\[\]〚〛]+ }
 
     Unclear { (![\u0323] '\u0323')+ }
 
@@ -81,5 +86,9 @@ lost {
         "lost." ( Number | QuestionMark ) "lin"
     }
 
-    @precedence { Illegible, LostLines, ".", FragmentNum, LineBreakWrapped, LineBreak, Unclear, Number, chars }
+    @precedence { LostLines, Illegible, ".", FragmentNum, LineBreakWrapped, LineBreak, Unclear, Number, chars }
+
 }
+
+// @external tokens eofToken from "./tokens" { eof }
+// @external tokens sofToken from "./tokens" { sof }

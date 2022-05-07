@@ -32,7 +32,8 @@ const commands:EditorCommands = {
     fragment: snippetCommand('<D=.${1:1}.fragment<=\n${2}\n=>=D>'),
     part: snippetCommand('<D=.${1:A}.part<=\n${2}\n=>=D>'),
     recto: wrapCommand('<D=.r<=\n', '\n=>=D>'),
-    verso: wrapCommand('<D=.v<=\n', '\n=>=D>')
+    verso: wrapCommand('<D=.v<=\n', '\n=>=D>'),
+    erasure: wrapCommand('〚', '〛')
 };
 
 const leidenKeymap: readonly KeyBinding[] = [
@@ -41,7 +42,8 @@ const leidenKeymap: readonly KeyBinding[] = [
     { key: "Ctrl-l Ctrl-f", mac: "Cmd-l Cmd-f", run: commands.fragment },
     { key: "Ctrl-l Ctrl-p", mac: "Cmd-l Cmd-p", run: commands.part },
     { key: "Ctrl-l Ctrl-r", mac: "Cmd-l Cmd-r", run: commands.recto },
-    { key: "Ctrl-l Ctrl-v", mac: "Cmd-l Cmd-v", run: commands.verso }
+    { key: "Ctrl-l Ctrl-v", mac: "Cmd-l Cmd-v", run: commands.verso },
+    { key: "Ctrl-l Ctrl-d", mac: "Cmd-l Cmd-d", run: commands.erasure }
 ];
 
 export class LeidenConfig extends EditorConfig {

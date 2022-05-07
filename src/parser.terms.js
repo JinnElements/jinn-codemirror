@@ -13,4 +13,5 @@ export const
   QuestionMark = 19,
   Illegible = 20,
   Unclear = 21,
-  LostLines = 22
+  LostLines = 22,
+  Erasure = 23

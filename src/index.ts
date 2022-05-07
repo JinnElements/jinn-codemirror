@@ -85,6 +85,9 @@ export function syntax2epiDoc(root: Tree, input: string) {
                         }
                     }
                     return false;
+                case 'Erasure':
+                    xml.push('<del rend="erasure">');
+                    break;
                 case 'LostLines':
                     value = /^lost\.([0-9?]+)lin$/.exec(text(node));
                     if (value) {
@@ -166,6 +169,9 @@ export function syntax2epiDoc(root: Tree, input: string) {
                 case 'Supplied':
                 case 'SuppliedLost':
                     xml.push('</supplied>');
+                    break;
+                case 'Erasure':
+                    xml.push('</del>');
                     break;
             }
         }

@@ -101,7 +101,13 @@ describe('inline', () => {
         '<ab><lb n="1"/><expan>λινοκ<ex>αλάμης</ex></expan> <gap reason="illegible" quantity="?" unit="line"/></ab>'
     );
     testTransform('unclear',
+        `<=ạ=>`,
+        '<ab><unclear>a</unclear></ab>'
+    );
+    testTransform('unclear with supplied',
         `<=(ἀ[κ ρ̣ό̣δ̣(ρυα)])=>`,
         '<ab><expan>ἀ<supplied reason="lost">κ <unclear>ρόδ</unclear><ex>ρυα</ex></supplied></expan></ab>'
     );
+    testTransform('erasure', `<=ab〚c def g〛hi=>`, '<ab>ab<del rend="erasure">c def g</del>hi</ab>');
+    testTransform('erasure with expan and gap', `<=〚(Ψε.2λως) 〛=>`, '<ab><del rend="erasure"><expan>Ψε<gap reason="illegible" quantity="2" unit="character"/>λως</expan> </del></ab>');
 });
