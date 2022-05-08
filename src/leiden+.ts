@@ -1,6 +1,6 @@
-import { Extension } from "@codemirror/state";
+import { EditorSelection, Extension } from "@codemirror/state";
 import { Tree, TreeCursor } from "@lezer/common";
-import { EditorView, keymap, KeyBinding } from "@codemirror/view";
+import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { syntax2epiDoc } from ".";
@@ -26,6 +26,26 @@ const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {
     return diagnostics;
 }
 
+export const toggleUnclearCommand:Command = (editor) => {
+    editor.dispatch(editor.state.changeByRange(range => {
+        const content = editor.state.doc.slice(range.from, range.to).toString();
+        let newContent = '';
+        for (let i = 0; i < content.length; i++) {
+            if (i + 1 < content.length && content.charCodeAt(i + 1) === 0x323) {
+                newContent += content.charAt(i);
+                i++;
+            } else {
+                newContent += `${content.charAt(i)}\u0323`;
+            }
+        }
+        return {
+            changes: [{from: range.from, to: range.to, insert: newContent}],
+            range: EditorSelection.range(range.from, range.from + newContent.length)
+        };
+    }));
+    return true;
+}
+
 const commands:EditorCommands = {
     expan: snippetCommand('(${_}(${}))'),
     div: wrapCommand('<=\n', '\n=>'),
@@ -33,7 +53,8 @@ const commands:EditorCommands = {
     part: snippetCommand('<D=.${1:A}.part<=\n${2}\n=>=D>'),
     recto: wrapCommand('<D=.r<=\n', '\n=>=D>'),
     verso: wrapCommand('<D=.v<=\n', '\n=>=D>'),
-    erasure: wrapCommand('〚', '〛')
+    erasure: wrapCommand('〚', '〛'),
+    unclear: toggleUnclearCommand
 };
 
 const leidenKeymap: readonly KeyBinding[] = [
@@ -43,7 +64,8 @@ const leidenKeymap: readonly KeyBinding[] = [
     { key: "Ctrl-l Ctrl-p", mac: "Cmd-l Cmd-p", run: commands.part },
     { key: "Ctrl-l Ctrl-r", mac: "Cmd-l Cmd-r", run: commands.recto },
     { key: "Ctrl-l Ctrl-v", mac: "Cmd-l Cmd-v", run: commands.verso },
-    { key: "Ctrl-l Ctrl-d", mac: "Cmd-l Cmd-d", run: commands.erasure }
+    { key: "Ctrl-l Ctrl-d", mac: "Cmd-l Cmd-d", run: commands.erasure },
+    { key: "Ctrl-l Ctrl-u", mac: "Cmd-l Cmd-u", run: commands.unclear }
 ];
 
 export class LeidenConfig extends EditorConfig {

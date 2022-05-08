@@ -15,6 +15,11 @@
             }
             [slot=toolbar] button {
                 font-size: .85rem;
+                border: 1px solid transparent;
+                background-color: inherit;
+            }
+            [slot=toolbar] button:hover {
+                border: 1px solid orange;
             }
         </style>
         <script type="module" src="../src/jinn-codemirror.ts"></script>
@@ -25,6 +30,7 @@
             <div slot="toolbar">
                 <button data-command="expan">(a(bcd))</button>
                 <button data-command="erasure">〚abc〛</button>
+                <button data-command="unclear">ạ</button>
                 <button data-command="div">&lt;=...</button>
                 <button data-command="fragment">&lt;D=.1.fragment...</button>
                 <button data-command="part">&lt;D=.A.part...</button>

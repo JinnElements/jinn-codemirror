@@ -104,6 +104,10 @@ describe('inline', () => {
         `<=ạ=>`,
         '<ab><unclear>a</unclear></ab>'
     );
+    testTransform('unclear in word',
+        `<=abc̣ḍẹfg=>`,
+        '<ab>ab<unclear>cde</unclear>fg</ab>'
+    );
     testTransform('unclear with supplied',
         `<=(ἀ[κ ρ̣ό̣δ̣(ρυα)])=>`,
         '<ab><expan>ἀ<supplied reason="lost">κ <unclear>ρόδ</unclear><ex>ρυα</ex></supplied></expan></ab>'

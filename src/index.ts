@@ -22,6 +22,7 @@ export function syntax2epiDoc(root: Tree, input: string) {
             const name = node.name;
             switch (name) {
                 case 'Text':
+                case 'Number':
                     xml.push(text(node));
                     break;
                 case 'LineBreak':

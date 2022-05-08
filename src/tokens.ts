@@ -1,10 +1,57 @@
 import {ExternalTokenizer} from "@lezer/lr";
-import { eof, sof } from "./parser.terms.js";
+import { chars, Unclear, lostLinesStart } from "./parser.terms.js";
 
-export const eofToken = new ExternalTokenizer(input => {
-    if (input.next < 0) input.acceptToken(eof)
+// export const eofToken = new ExternalTokenizer(input => {
+//     if (input.next < 0) input.acceptToken(eof)
+// });
+
+// export const sofToken = new ExternalTokenizer(input => {
+//     if (input.pos === 0) input.acceptToken(sof)
+// });
+
+const skipped = '() <>?=.0123456789\[\]〚〛';
+
+export const charsToken = new ExternalTokenizer(input => {
+    let str = '';
+    for(;;) {
+        if (input.next < 0) {
+            break;
+        }
+        if (input.next === 46 && str === 'lost') {
+            input.advance();
+            input.acceptToken(lostLinesStart);
+            return;
+        }
+        if (skipped.indexOf(String.fromCharCode(input.next)) > -1) {
+            break;
+        }
+        const nextChar = input.peek(1);
+        if (nextChar === 0x0323) {
+            break;
+        }
+        str += String.fromCharCode(input.next);
+        input.advance();
+    }
+    if (str.length > 0) {
+        input.acceptToken(chars);
+    }
 });
 
-export const sofToken = new ExternalTokenizer(input => {
-    if (input.pos === 0) input.acceptToken(sof)
+export const unclearToken = new ExternalTokenizer(input => {
+    let charCount = 0;
+    for(;;) {
+        if (input.next < 0 || skipped.indexOf(String.fromCharCode(input.next)) > -1) {
+            break;
+        }
+        const nextChar = input.peek(1);
+        if (nextChar === 0x0323) {
+            charCount++;
+            input.advance(2);
+        } else {
+            break;
+        }
+    }
+    if (charCount > 0) {
+        input.acceptToken(Unclear);
+    }
 });
