@@ -88,5 +88,5 @@ export abstract class EditorConfig {
         return content;
     }
 
-    abstract serialize(): undefined | Node | string;
+    abstract serialize(): null | Element | string;
 }

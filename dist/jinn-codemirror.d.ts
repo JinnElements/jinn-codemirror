@@ -12,11 +12,11 @@ declare abstract class EditorConfig {
     abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;
     getCommands(): EditorCommands;
     onUpdate(tree: Tree, content: string): string;
-    abstract serialize(): undefined | Node | string;
+    abstract serialize(): null | Element | string;
 }
 declare class JinnCodemirror extends HTMLElement {
     mode?: string;
-    value?: Node | string;
+    value?: Element | string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
     constructor();

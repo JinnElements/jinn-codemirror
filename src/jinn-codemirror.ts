@@ -6,7 +6,7 @@ import { EditorConfig } from "./config";
 export class JinnCodemirror extends HTMLElement {
 
     public mode?: string;
-    public value?: Node|string;
+    public value?: Element|string|null;
 
     _editor?: EditorView;
     _config?: EditorConfig;

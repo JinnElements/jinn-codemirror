@@ -81,7 +81,7 @@ export class LeidenConfig extends EditorConfig {
         return syntax2epiDoc(tree, content);
     }
 
-    serialize(): undefined | string | Node {
+    serialize(): null | string | Element {
         return this.editor.content;
     }
 }

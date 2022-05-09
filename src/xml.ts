@@ -19,14 +19,14 @@ export class XMLConfig extends EditorConfig {
         return json;
     }
 
-    serialize(): undefined | string | Node {
+    serialize(): null | string | Element {
         const parser = new DOMParser();
         const parsed = parser.parseFromString(this.editor.content, "application/xml");
         const errors = parsed.getElementsByTagName("parsererror")
         if (errors.length) {
             console.error(errors)
-            return;
+            return null;
         }
-        return parsed.getRootNode()
+        return parsed.firstElementChild
     }
 }
