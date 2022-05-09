@@ -12,7 +12,7 @@ declare abstract class EditorConfig {
     abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;
     getCommands(): EditorCommands;
     onUpdate(tree: Tree, content: string): string;
-    abstract serialize(): Node | string;
+    abstract serialize(): undefined | Node | string;
 }
 declare class JinnCodemirror extends HTMLElement {
     mode?: string;
