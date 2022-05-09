@@ -69,7 +69,7 @@ const leidenKeymap: readonly KeyBinding[] = [
 ];
 
 export class LeidenConfig extends EditorConfig {
-    async getExtensions(editor: JinnCodemirror): Promise<Extension[]> {
+    async getExtensions(): Promise<Extension[]> {
         return [leiden(), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
     }
 
@@ -79,5 +79,9 @@ export class LeidenConfig extends EditorConfig {
 
     onUpdate(tree: Tree, content: string): string {
         return syntax2epiDoc(tree, content);
+    }
+
+    serialize(): string | Node {
+        return this.editor.content;
     }
 }

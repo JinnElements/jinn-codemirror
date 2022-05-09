@@ -47,7 +47,13 @@ export const snippetCommand = (template:string):Command => (editor) => {
 
 export abstract class EditorConfig {
 
-    async getConfig(editor: JinnCodemirror): Promise<EditorStateConfig> {
+    editor: JinnCodemirror;
+
+    constructor(editor:JinnCodemirror) {
+        this.editor = editor;
+    }
+
+    async getConfig(): Promise<EditorStateConfig> {
         const self = this;
         const updateListener = ViewPlugin.fromClass(class {
             update(update: ViewUpdate) {
@@ -55,8 +61,10 @@ export abstract class EditorConfig {
                     const tree = syntaxTree(update.state);
                     const lines = update.state.doc.toJSON();
                     const content = self.onUpdate(tree, lines.join('\n'));
-
-                    editor.dispatchEvent(new CustomEvent('update', {
+                    
+                    // save content to property `value` on editor parent
+                    self.editor.value = self.serialize();
+                    self.editor.dispatchEvent(new CustomEvent('update', {
                         detail: content,
                         composed: true,
                         bubbles: true
@@ -65,7 +73,7 @@ export abstract class EditorConfig {
             }
         });
 
-        const customExtensions = await this.getExtensions(editor);
+        const customExtensions = await this.getExtensions(this.editor);
         return { extensions: [basicSetup, EditorView.lineWrapping, ...customExtensions, updateListener] };
     }
 
@@ -78,4 +86,6 @@ export abstract class EditorConfig {
     onUpdate(tree: Tree, content: string) {
         return content;
     }
+
+    abstract serialize(): Node|string;
 }

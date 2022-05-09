@@ -6,8 +6,10 @@ import { EditorConfig } from "./config";
 export class JinnCodemirror extends HTMLElement {
 
     public mode?: string;
-    
+    public value?: Node|string;
+
     _editor?: EditorView;
+    _config?: EditorConfig;
 
     constructor() {
         super();
@@ -26,25 +28,24 @@ export class JinnCodemirror extends HTMLElement {
         this.mode = this.getAttribute('mode') || 'xml';
         console.log(`<jinn-codemirror> mode: ${this.mode}`);
 
-        let config:EditorConfig;
         switch(this.mode) {
             case 'leiden':
-                config = new LeidenConfig();
+                this._config = new LeidenConfig(this);
                 break;
             default:
-                config = new XMLConfig();
+                this._config = new XMLConfig(this);
                 break;
         }
 
         const wrapper = document.createElement('div');
         this.shadowRoot?.appendChild(wrapper);
-        config.getConfig(this)
+        this._config.getConfig()
         .then((stateConfig) => {
             this._editor = new EditorView({
                 state: EditorState.create(stateConfig),
                 parent: wrapper
             });
-            this.renderToolbar(config);
+            this.renderToolbar(this._config);
         });
     }
 
@@ -58,7 +59,14 @@ export class JinnCodemirror extends HTMLElement {
         });
     }
 
-    private renderToolbar(config:EditorConfig) {
+    get content(): string {
+        return this._editor?.state.doc.toString() || '';
+    }
+
+    private renderToolbar(config?:EditorConfig) {
+        if (!config) {
+            return;
+        }
         const commands = config.getCommands();
         const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
         slot?.assignedElements().forEach((elem) => {

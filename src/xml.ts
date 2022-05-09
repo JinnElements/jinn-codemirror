@@ -5,8 +5,8 @@ import { JinnCodemirror } from "./jinn-codemirror";
 
 export class XMLConfig extends EditorConfig {
 
-    async getExtensions(editor: JinnCodemirror): Promise<Extension[]> {
-        const schemaUrl = editor.getAttribute('schema');
+    async getExtensions(): Promise<Extension[]> {
+        const schemaUrl = this.editor.getAttribute('schema');
         if (schemaUrl) {
             return this.loadSchema(schemaUrl).then((schema) => [xml(schema)]);
         }
@@ -17,5 +17,10 @@ export class XMLConfig extends EditorConfig {
         const json = await fetch(url)
             .then((response) => response.json());
         return json;
+    }
+
+    serialize(): string | Node {
+        const parser = new DOMParser();
+        return parser.parseFromString(this.editor.content, "application/xml");
     }
 }
