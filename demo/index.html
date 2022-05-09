@@ -48,7 +48,7 @@
                 const xml = document.getElementById('xml-editor');
                 const leiden = document.getElementById('leiden-editor');
                 leiden.addEventListener('update', (ev) => {
-                    xml.content = ev.detail;
+                    xml.content = ev.detail.content;
                 });
             });
         </script>
