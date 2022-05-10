@@ -57,11 +57,10 @@ export class XMLConfig extends EditorConfig {
 
     setFromValue(value: Element | string | null |undefined): string {
         console.log("setFromValue XML", value, value instanceof Element)
-        if (!value) { return '' }
-        if (value instanceof Element) {
-            const s = new XMLSerializer();
-            return s.serializeToString(value);
+        if (!(value && value instanceof Element)) { 
+            return ''
         }
-        return value?.toString();
+        const s = new XMLSerializer();
+        return s.serializeToString(value);
     }
 }
