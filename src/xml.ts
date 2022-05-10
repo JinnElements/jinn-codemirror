@@ -1,16 +1,42 @@
 import { xml } from "@codemirror/lang-xml";
 import { Extension } from "@codemirror/state";
 import { EditorConfig } from "./config";
-import { JinnCodemirror } from "./jinn-codemirror";
+import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
+import { EditorView } from "@codemirror/view";
+import { syntaxTree } from "@codemirror/language";
+import { TreeCursor } from "@lezer/common";
+
+const xmlParserLinter = () => (view: EditorView): Diagnostic[] => {
+    const diagnostics:Diagnostic[] = [];
+    const tree = syntaxTree(view.state);
+    tree.iterate({
+        enter: (node:TreeCursor) => {
+            if (node.type.isError) {
+                diagnostics.push({
+                    message: 'Syntaxfehler',
+                    severity: 'error',
+                    from: node.from,
+                    to: node.to
+                });
+            }
+        }
+    });
+    return diagnostics;
+}
 
 export class XMLConfig extends EditorConfig {
+
+    private getDefaultExtensions (): Extension[] {
+        return [linter(xmlParserLinter()), lintGutter()];
+    }
 
     async getExtensions(): Promise<Extension[]> {
         const schemaUrl = this.editor.getAttribute('schema');
         if (schemaUrl) {
-            return this.loadSchema(schemaUrl).then((schema) => [xml(schema)]);
+            const schema = this.loadSchema(schemaUrl)
+                .then((schema) => this.getDefaultExtensions().concat(xml(schema)));
         }
-        return [xml()];
+        return this.getDefaultExtensions().concat(xml());
     }
 
     private async loadSchema(url: string) {
