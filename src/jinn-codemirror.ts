@@ -66,6 +66,10 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     set value(value: Element | string | null | undefined) {
+        if (this._value === value) {
+            console.log(this._value, value)
+            return
+        }
         this._value = value
         if (!this._config) {
             return
