@@ -16,8 +16,13 @@ function testTransform(name, input, output) {
 describe('inline', () => {
     testTransform(
         'expands abbreviations',
-        `<=(T(itus)) (Fl(avius)) Severus=>`,
+        `(T(itus)) (Fl(avius)) Severus`,
         '<ab><expan>T<ex>itus</ex></expan> <expan>Fl<ex>avius</ex></expan> Severus</ab>'
+    );
+    testTransform(
+        'wraps div around multiple blocks',
+        `<=Titus=><=Antonius=>`,
+        '<div><ab>Titus</ab><ab>Antonius</ab></div>'
     );
     testTransform(
         'expands abbreviation in nested supplied',

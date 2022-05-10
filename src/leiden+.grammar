@@ -10,10 +10,10 @@ block {
     Verso { "<D=.v" ( block )+ "=D>" } |
     Part { "<D=." PartId ( block )+ "=D>"} |
     Fragment { "<D=." FragmentNum ( block )+ "=D>"} |
-    inline
+    Inline
 }
 
-inline {
+Inline {
     LineBreakWrapped |
     LineBreak |
     Number |
@@ -32,21 +32,21 @@ Text {
 }
 
 Abbrev {
-    "(" inline+ ")"
+    "(" Inline+ ")"
 }
 
 Supplied {
-    "<" inline* CertLow? ">"
+    "<" Inline* CertLow? ">"
 }
 
 lost {
     GapUnknown { "[.?]" } |
     Gap { "[." Number "]" } |
-    SuppliedLost { "[" inline+ CertLow? "]" }
+    SuppliedLost { "[" Inline+ CertLow? "]" }
 }
 
 Erasure {
-    "〚" inline+ "〛"
+    "〚" Inline+ "〛"
 }
 
 LostLines {

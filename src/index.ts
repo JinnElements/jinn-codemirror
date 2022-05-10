@@ -1,4 +1,4 @@
-import { Tree, TreeCursor } from "@lezer/common";
+import { Tree, TreeCursor, SyntaxNodeRef } from "@lezer/common";
 import { parser } from "./parser.js";
 
 export function leiden2epiDoc(input: string) {
@@ -6,12 +6,16 @@ export function leiden2epiDoc(input: string) {
     return syntax2epiDoc(tree, input);
 }
 
+const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
+
 export function syntax2epiDoc(root: Tree, input: string) {
     function text(node:TreeCursor) {
         return input.substring(node.from, node.to);
     }
     const stack:string[] = [];
     const xml:string[] = [];
+    let needsWrap = false;
+    let wrapper = 'ab';
     let value;
     root.iterate({
         enter: (node:TreeCursor) => {
@@ -21,6 +25,23 @@ export function syntax2epiDoc(root: Tree, input: string) {
             }
             const name = node.name;
             switch (name) {
+                case 'Document':
+                    let count = 0;
+                    if (node.firstChild()) {
+                        do {
+                            count++;
+                            if (blockElements.includes(node.type.name)) {
+                                wrapper = 'div';
+                            }
+                            needsWrap = needsWrap || node.type.name === 'Inline';
+                        } while (node.nextSibling());
+                    }
+                    needsWrap = count > 1 || needsWrap;
+                    if (needsWrap) {
+                        xml.push(`<${wrapper}>`);
+                    }
+                    node.parent();
+                    break;
                 case 'Text':
                 case 'Number':
                     xml.push(text(node));
@@ -34,8 +55,6 @@ export function syntax2epiDoc(root: Tree, input: string) {
                     node.firstChild();
                     value = /^([0-9]+)\..*$/.exec(text(node));
                     xml.push(`<lb n="${value ? value[1] : ''}" break="no"/>`);
-                    break;
-                case 'Document':
                     break;
                 case 'Div':
                     xml.push('<ab>');
@@ -139,6 +158,8 @@ export function syntax2epiDoc(root: Tree, input: string) {
                         xml.push('?');
                     }
                     return false;
+                case 'Inline':
+                    break;
                 default:
                     xml.push(`<${name}>`);
                     break;
@@ -146,6 +167,11 @@ export function syntax2epiDoc(root: Tree, input: string) {
         },
         leave: (node) => {
             switch (node.name) {
+                case 'Document':
+                    if (needsWrap) {
+                        xml.push(`</${wrapper}>`);
+                    }
+                    break;
                 case 'Abbrev':
                     if (stack.length > 1) {
                         const last = xml[xml.length - 1];
@@ -177,5 +203,8 @@ export function syntax2epiDoc(root: Tree, input: string) {
             }
         }
     });
+    if (root.type.name === 'Inline') {
+        xml.push('</ab>');
+    }
     return xml.join('');
 }
