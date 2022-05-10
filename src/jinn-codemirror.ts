@@ -55,9 +55,10 @@ export class JinnCodemirror extends HTMLElement {
             console.log('no editor');
             return;
         }
-        this._editor.dispatch({
-            changes: {from: 0, to: this._editor.state.doc.length, insert: text}
-        });
+        const tx = this._editor.state.update({
+            changes: {from: 0, to: this._editor.state.doc.length, insert: text}})
+
+        this._editor.dispatch(tx);
     }
 
     get content(): string {
