@@ -19,7 +19,7 @@ export class XMLConfig extends EditorConfig {
         return json;
     }
 
-    serialize(): null | string | Element {
+    serialize(): Element | string | null {
         const parser = new DOMParser();
         const parsed = parser.parseFromString(this.editor.content, "application/xml");
         const errors = parsed.getElementsByTagName("parsererror")
@@ -28,5 +28,15 @@ export class XMLConfig extends EditorConfig {
             return null;
         }
         return parsed.firstElementChild
+    }
+
+    setFromValue(value: Element | string | null |undefined): string {
+        console.log("setFromValue XML", value, value instanceof Element)
+        if (!value) { return '' }
+        if (value instanceof Element) {
+            const s = new XMLSerializer();
+            return s.serializeToString(value);
+        }
+        return value?.toString();
     }
 }

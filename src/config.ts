@@ -64,7 +64,7 @@ export abstract class EditorConfig {
                     
                     // save content to property `value` on editor parent
                     const serialized = self.serialize();
-                    self.editor.value = serialized;
+                    self.editor._value = serialized;
                     self.editor.dispatchEvent(new CustomEvent('update', {
                         detail: {content, serialized},
                         composed: true,
@@ -88,5 +88,7 @@ export abstract class EditorConfig {
         return content;
     }
 
-    abstract serialize(): null | Element | string;
+    abstract setFromValue(value: Element|string|null|undefined): string;
+
+    abstract serialize(): Element | string | null;
 }

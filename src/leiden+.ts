@@ -81,7 +81,14 @@ export class LeidenConfig extends EditorConfig {
         return syntax2epiDoc(tree, content);
     }
 
-    serialize(): null | string | Element {
+    serialize(): Element | string | null {
         return this.editor.content;
+    }
+    setFromValue(value: Element | string | null|undefined) {
+        if (!value) { return ''}
+        if (!(typeof value === 'string')) {
+            throw new Error("cannot set value")
+        }
+        return value;
     }
 }

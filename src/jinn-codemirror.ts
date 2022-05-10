@@ -6,8 +6,8 @@ import { EditorConfig } from "./config";
 export class JinnCodemirror extends HTMLElement {
 
     public mode?: string;
-    public value?: Element|string|null;
 
+    _value?: Element | string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
 
@@ -46,6 +46,7 @@ export class JinnCodemirror extends HTMLElement {
                 parent: wrapper
             });
             this.renderToolbar(this._config);
+            this.value = this._config?.setFromValue(this._value)
         });
     }
 
@@ -61,6 +62,19 @@ export class JinnCodemirror extends HTMLElement {
 
     get content(): string {
         return this._editor?.state.doc.toString() || '';
+    }
+
+    set value(value: Element | string | null | undefined) {
+        this._value = value
+        if (!this._config) {
+            return
+        }
+        this.content = this._config.setFromValue(value)
+    }
+
+    get value(): Element | string | null {
+        if (!this._value) { return null }
+        return this._value;
     }
 
     private renderToolbar(config?:EditorConfig) {
