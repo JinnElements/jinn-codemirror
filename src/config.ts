@@ -5,6 +5,7 @@ import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state
 import { snippet } from "@codemirror/autocomplete";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
+import { selectCharRight } from "@codemirror/commands";
 
 export interface EditorCommands {
     [index:string]: Command
@@ -66,6 +67,10 @@ export abstract class EditorConfig {
                     try {
                         const serialized = self.serialize();
                         self.editor._value = serialized;
+                        if (self.editor._remote) {
+                            self.editor._remote = false
+                            return
+                        }
                         self.editor.dispatchEvent(new CustomEvent('update', {
                             detail: {content, serialized},
                             composed: true,
@@ -73,7 +78,7 @@ export abstract class EditorConfig {
                         }));
                     }
                     catch (e) {
-                        // suppress updates
+                        // suppress updates (invalid data)
                         return
                     }
                 }

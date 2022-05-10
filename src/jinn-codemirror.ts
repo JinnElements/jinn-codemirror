@@ -10,6 +10,7 @@ export class JinnCodemirror extends HTMLElement {
     _value?: Element | string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
+    _remote?: boolean;
 
     constructor() {
         super();
@@ -46,7 +47,10 @@ export class JinnCodemirror extends HTMLElement {
                 parent: wrapper
             });
             this.renderToolbar(this._config);
-            this.value = this._config?.setFromValue(this._value)
+            if (!this._config) {
+                return
+            }
+            this.content = this._config.setFromValue(this._value);
         });
     }
 
@@ -56,7 +60,8 @@ export class JinnCodemirror extends HTMLElement {
             return;
         }
         const tx = this._editor.state.update({
-            changes: {from: 0, to: this._editor.state.doc.length, insert: text}})
+            changes: {from: 0, to: this._editor.state.doc.length, insert: text}
+        })
 
         this._editor.dispatch(tx);
     }
@@ -67,13 +72,14 @@ export class JinnCodemirror extends HTMLElement {
 
     set value(value: Element | string | null | undefined) {
         if (this._value === value) {
-            console.log(this._value, value)
+            console.debug("value unchanged")
             return
         }
         this._value = value
         if (!this._config) {
             return
         }
+        this._remote = true;
         this.content = this._config.setFromValue(value)
     }
 
