@@ -50,8 +50,7 @@ export class XMLConfig extends EditorConfig {
         const parsed = parser.parseFromString(this.editor.content, "application/xml");
         const errors = parsed.getElementsByTagName("parsererror")
         if (errors.length) {
-            console.error(errors)
-            return null;
+            throw new TypeError("Invalid XML");
         }
         return parsed.firstElementChild
     }

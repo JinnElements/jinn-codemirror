@@ -63,13 +63,19 @@ export abstract class EditorConfig {
                     const content = self.onUpdate(tree, lines.join('\n'));
                     
                     // save content to property `value` on editor parent
-                    const serialized = self.serialize();
-                    self.editor._value = serialized;
-                    self.editor.dispatchEvent(new CustomEvent('update', {
-                        detail: {content, serialized},
-                        composed: true,
-                        bubbles: true
-                    }));
+                    try {
+                        const serialized = self.serialize();
+                        self.editor._value = serialized;
+                        self.editor.dispatchEvent(new CustomEvent('update', {
+                            detail: {content, serialized},
+                            composed: true,
+                            bubbles: true
+                        }));
+                    }
+                    catch (e) {
+                        // suppress updates
+                        return
+                    }
                 }
             }
         });
