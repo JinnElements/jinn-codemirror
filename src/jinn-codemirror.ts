@@ -71,16 +71,17 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     set value(value: Element | string | null | undefined) {
-        if (this._value === value) {
-            console.debug("value unchanged")
-            return
-        }
-        this._value = value
         if (!this._config) {
-            return
+            return;
+        }
+        const newContent = this._config.setFromValue(value)
+        if (this.content === newContent) {
+            console.debug("value unchanged");
+            return;
         }
         this._remote = true;
-        this.content = this._config.setFromValue(value)
+        this._value = value;
+        this.content = newContent;
     }
 
     get value(): Element | string | null {
