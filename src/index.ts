@@ -7,6 +7,7 @@ export function leiden2epiDoc(input: string) {
 }
 
 const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
+const teiNS = 'xmlns="http://www.tei-c.org/ns/1.0"'
 
 export function syntax2epiDoc(root: Tree, input: string) {
     function text(node:TreeCursor) {
@@ -15,6 +16,7 @@ export function syntax2epiDoc(root: Tree, input: string) {
     const stack:string[] = [];
     const xml:string[] = [];
     let needsWrap = false;
+    let needsNS = true;
     let wrapper = 'ab';
     let value;
     root.iterate({
@@ -38,7 +40,8 @@ export function syntax2epiDoc(root: Tree, input: string) {
                     }
                     needsWrap = count > 1 || needsWrap;
                     if (needsWrap) {
-                        xml.push(`<${wrapper}>`);
+                        needsNS = false;
+                        xml.push(`<${wrapper} ${teiNS}>`);
                     }
                     node.parent();
                     break;
@@ -57,23 +60,45 @@ export function syntax2epiDoc(root: Tree, input: string) {
                     xml.push(`<lb n="${value ? value[1] : ''}" break="no"/>`);
                     break;
                 case 'Div':
-                    xml.push('<ab>');
+                    let abStr = "<ab";
+                    if (needsNS) {
+                        abStr += " " + teiNS;
+                        needsNS = false;
+                    }
+                    abStr += '>';
+                    xml.push(abStr)
                     break;
                 case 'Recto':
-                    xml.push('<div n="r" type="textpart">');
-                    break;
                 case 'Verso':
-                    xml.push('<div n="r" type="textpart">');
+                    let rectoVersoStr = '<div n="r" type="textpart"'
+                    if (needsNS) {
+                        rectoVersoStr += " " + teiNS;
+                        needsNS = false
+                    }
+                    rectoVersoStr += ">";
+                    xml.push(rectoVersoStr)
                     break;
                 case 'Fragment':
                     node.firstChild();
                     value = /^([0-9]+)\..*$/.exec(text(node));
-                    xml.push(`<div n="${value ? value[1] : ''}" subtype="fragment" type="textpart">`);
+                    let fragStr = `<div n="${value ? value[1] : ''}" subtype="fragment" type="textpart"`;                    
+                    if (needsNS) {
+                        fragStr += " " + teiNS;
+                        needsNS = false;
+                    }
+                    fragStr += ">";
+                    xml.push(fragStr)
                     break;
                 case 'Part':
                     node.firstChild();
                     value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
-                    xml.push(`<div n="${value ? value[1] : ''}" subtype="part" type="textpart">`);
+                    let partStr = `<div n="${value ? value[1] : ''}" subtype="part" type="textpart"`;
+                    if (needsNS) {
+                        partStr += " " + teiNS;
+                        needsNS = false;
+                    }
+                    partStr += ">";
+                    xml.push(partStr)
                     break;
                 case 'Unclear':
                     const content = text(node);

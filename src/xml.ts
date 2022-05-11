@@ -6,14 +6,48 @@ import { EditorView } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
 
-const xmlParserLinter = () => (view: EditorView): Diagnostic[] => {
+const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
+    return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
+}
+
+/**
+ * Highlights SyntaxErrors, missing TEI or wrong namespace
+ * 
+ * @returns {function} linter
+ */
+const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
     const diagnostics:Diagnostic[] = [];
     const tree = syntaxTree(view.state);
+    let hasNamespace = false;
     tree.iterate({
         enter: (node:TreeCursor) => {
+            if (isNamespaceNode(view, node)) {
+                hasNamespace = true;
+                node.nextSibling()
+                node.nextSibling()
+                const ns = view.state.sliceDoc(node.from+1, node.to-1)
+                if (ns !== 'http://www.tei-c.org/ns/1.0') {
+                    diagnostics.push({
+                        message: 'Invalid namespace',
+                        severity: 'error',
+                        from: node.from,
+                        to: node.to
+                    });    
+                }
+            }
             if (node.type.isError) {
                 diagnostics.push({
                     message: 'Syntaxfehler',
+                    severity: 'error',
+                    from: node.from,
+                    to: node.to
+                });
+            }
+        },
+        leave: (node:TreeCursor) => {
+            if (node.type.name === "Document" && !hasNamespace) {
+                diagnostics.push({
+                    message: 'Missing namespace',
                     severity: 'error',
                     from: node.from,
                     to: node.to
@@ -27,7 +61,7 @@ const xmlParserLinter = () => (view: EditorView): Diagnostic[] => {
 export class XMLConfig extends EditorConfig {
 
     private getDefaultExtensions (): Extension[] {
-        return [linter(xmlParserLinter()), lintGutter()];
+        return [linter(teiFragmentLinter()), lintGutter()];
     }
 
     async getExtensions(): Promise<Extension[]> {
@@ -56,11 +90,11 @@ export class XMLConfig extends EditorConfig {
     }
 
     setFromValue(value: Element | string | null |undefined): string {
-        console.log("setFromValue XML", value, value instanceof Element)
         if (!(value && value instanceof Element)) { 
             return ''
         }
         const s = new XMLSerializer();
-        return s.serializeToString(value);
+        const serializedXML = s.serializeToString(value)
+        return serializedXML;
     }
 }
