@@ -31,6 +31,7 @@ export class JinnCodemirror extends HTMLElement {
 
         switch(this.mode) {
             case 'leiden':
+            case 'leiden+':
                 this._config = new LeidenConfig(this);
                 break;
             default:
@@ -61,7 +62,7 @@ export class JinnCodemirror extends HTMLElement {
         }
         const tx = this._editor.state.update({
             changes: {from: 0, to: this._editor.state.doc.length, insert: text}
-        })
+        });
 
         this._editor.dispatch(tx);
     }

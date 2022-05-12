@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "lezer-generator src/leiden+.grammar -o src/parser & rollup -c",
+    "build": "lezer-generator src/parser/leiden+/leiden+.grammar -o src/parser/leiden+/parser & lezer-generator src/parser/leiden/leiden.grammar -o src/parser/leiden/parser & rollup -c",
     "prepare": "npm run build",
     "test": "npm run build && mocha test/test-*.js",
     "start": "web-dev-server --open demo/ --watch --node-resolve"

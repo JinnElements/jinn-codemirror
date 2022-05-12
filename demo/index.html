@@ -25,8 +25,11 @@
         <script type="module" src="../src/jinn-codemirror.ts"></script>
     </head>
     <body>
+        <h2>Leiden</h2>
+        <jinn-codemirror id="leiden-editor" mode="leiden" class="source"></jinn-codemirror>
+
         <h2>Leiden+</h2>
-        <jinn-codemirror id="leiden-editor" mode="leiden">
+        <jinn-codemirror id="leiden-plus-editor" mode="leiden+" class="source">
             <div slot="toolbar">
                 <button data-command="expan">(a(bcd))</button>
                 <button data-command="erasure">〚abc〛</button>
@@ -46,9 +49,10 @@
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 const xml = document.getElementById('xml-editor');
-                const leiden = document.getElementById('leiden-editor');
-                leiden.addEventListener('update', (ev) => {
-                    xml.content = ev.detail.content;
+                document.querySelectorAll('jinn-codemirror.source').forEach((editor) => {
+                    editor.addEventListener('update', (ev) => {
+                        xml.content = ev.detail.content;
+                    });
                 });
             });
         </script>

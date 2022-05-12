@@ -1,13 +1,13 @@
 import chai from 'chai';
 import chaiXml from "chai-xml";
-import {leiden2epiDoc} from "../dist/index.js";
+import {leidenPlus2epiDoc} from "../dist/index.js";
 
 chai.use(chaiXml);
 
 function testTransform(name, input, output) {
     input = input.split(/\n\s+/).join('\n');
     it(name, () => {
-        const xml = leiden2epiDoc(input);
+        const xml = leidenPlus2epiDoc(input);
         chai.expect(xml, xml).xml.to.be.valid();
         chai.expect(xml).xml.to.equal(output);
     });

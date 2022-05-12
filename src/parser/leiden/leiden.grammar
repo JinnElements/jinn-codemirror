@@ -1,0 +1,21 @@
+@top Document {
+    (
+        inline
+    )+
+}
+
+inline {
+    Abbrev |
+    Text
+}
+
+Text {
+    chars | "." | "?" | "="
+}
+
+Abbrev {
+    Abbreviation Expan
+}
+
+@external tokens leidenCharsOrAbbreviation from "../tokens" { chars, Abbreviation }
+@external tokens leidenExpan from "../tokens" { Expan }
