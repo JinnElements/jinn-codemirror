@@ -43,13 +43,31 @@
         <jinn-codemirror id="xml-editor" mode="xml" schema="../src/epidoc.json">
         </jinn-codemirror>
 
+        <button id="mybutton">set value</button>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
+                console.log('DOMContentLoaded start')
                 const xml = document.getElementById('xml-editor');
                 const leiden = document.getElementById('leiden-editor');
+                const button = document.getElementById('mybutton');
+
                 leiden.addEventListener('update', (ev) => {
                     xml.content = ev.detail.content;
                 });
+                xml.addEventListener('invalid', (ev) => {
+                    console.log("XML INVALID", ev)
+                });
+                xml.addEventListener('valid', (ev) => {
+                    console.log("XML VALID", ev)
+                });
+                xml.addEventListener('update', (ev) => {
+                    console.log("XML UPDATE", ev.detail.serialized)
+                });
+                button.addEventListener('click', function (ev) {
+                    xml.value = document.createElementNS("http://www.tei-c.org/ns/1.0", "ab")
+                })
+
+                xml.value = document.createElementNS("http://www.tei-c.org/ns/1.0", "ab")
             });
         </script>
     </body>
