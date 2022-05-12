@@ -13,6 +13,9 @@ const isErrorComment = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "Comment" && /\<\!\-\- Error\:([^ ])* \-\-\>/.test(view.state.sliceDoc(node.from, node.to))
 }
 
+// linter config settings
+const delay = 100;
+const markerFilter = (dias:readonly Diagnostic[]):Diagnostic[] => dias.filter(dia => dia.severity !== 'info');
 /**
  * Highlights SyntaxErrors, missing TEI or wrong namespace
  * 
@@ -31,7 +34,7 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
                 const ns = view.state.sliceDoc(node.from+1, node.to-1)
                 if (ns !== 'http://www.tei-c.org/ns/1.0') {
                     diagnostics.push({
-                        message: 'Invalid namespace',
+                        message: 'Document must be in TEI namespace but is: "' + ns + '"',
                         severity: 'error',
                         from: node.from,
                         to: node.to
@@ -41,7 +44,7 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
             if (isErrorComment(view, node)) {
                 diagnostics.push({
                     message: 'Enthält einen Fehler',
-                    severity: 'error',
+                    severity: 'warning',
                     from: node.from,
                     to: node.to
                 });
@@ -58,7 +61,7 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
         leave: (node:TreeCursor) => {
             if (node.type.name === "Document" && !hasNamespace) {
                 diagnostics.push({
-                    message: 'Missing namespace',
+                    message: 'Missing TEI namespace',
                     severity: 'error',
                     from: node.from,
                     to: node.to
@@ -80,7 +83,7 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
 export class XMLConfig extends EditorConfig {
 
     private getDefaultExtensions (): Extension[] {
-        return [linter(teiFragmentLinter()), lintGutter()];
+        return [linter(teiFragmentLinter(), {delay, markerFilter}), lintGutter({markerFilter})];
     }
 
     async getExtensions(): Promise<Extension[]> {
