@@ -1,7 +1,7 @@
 import { xml } from "@codemirror/lang-xml";
 import { Extension } from "@codemirror/state";
 import { EditorConfig } from "./config";
-import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
+import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
 import { EditorView } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
@@ -13,8 +13,21 @@ const isErrorComment = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "Comment" && /\<\!\-\- Error\:([^ ])* \-\-\>/.test(view.state.sliceDoc(node.from, node.to))
 }
 
+const teiNamespaceURI = 'http://www.tei-c.org/ns/1.0';
+const fixNamespaceAction:Action = {
+    name: "Fix",
+    apply: (view:EditorView, from: number, to:number) => {
+        const tx = view.state.update({
+            changes: {from, to, insert: teiNamespaceURI}
+        });
+        view.dispatch(tx);
+    }
+};
+
 // linter config settings
-const delay = 100;
+// how long to wait before running linter
+const delay = 300;
+// do not show info messages in gutter nor in content
 const markerFilter = (dias:readonly Diagnostic[]):Diagnostic[] => dias.filter(dia => dia.severity !== 'info');
 /**
  * Highlights SyntaxErrors, missing TEI or wrong namespace
@@ -32,12 +45,13 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
                 node.nextSibling()
                 node.nextSibling()
                 const ns = view.state.sliceDoc(node.from+1, node.to-1)
-                if (ns !== 'http://www.tei-c.org/ns/1.0') {
+                if (ns !== teiNamespaceURI) {
                     diagnostics.push({
-                        message: 'Document must be in TEI namespace but is: "' + ns + '"',
+                        message: 'Wrong Namespace',
                         severity: 'error',
-                        from: node.from,
-                        to: node.to
+                        from: node.from+1,
+                        to: node.to-1,
+                        actions: [ fixNamespaceAction ]
                     });
                 }
             }
