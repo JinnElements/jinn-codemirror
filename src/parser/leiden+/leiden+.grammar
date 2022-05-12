@@ -53,8 +53,8 @@ LostLines {
     lostLinesStart ( Number | QuestionMark ) "lin"
 }
 
-@external tokens charsToken from "./tokens" { chars, lostLinesStart }
-@external tokens unclearToken from "./tokens" { Unclear }
+@external tokens charsToken from "../tokens" { chars, lostLinesStart }
+@external tokens unclearToken from "../tokens" { Unclear }
 
 @tokens {
     space { " " }

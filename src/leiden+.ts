@@ -3,9 +3,8 @@ import { Tree, TreeCursor } from "@lezer/common";
 import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
-import { syntax2epiDoc } from ".";
+import { leiden2epiDoc, leidenPlus2epiDoc } from ".";
 import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
-import { JinnCodemirror } from "./jinn-codemirror";
 import { leiden } from "./language";
 
 const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {
@@ -69,8 +68,9 @@ const leidenKeymap: readonly KeyBinding[] = [
 ];
 
 export class LeidenConfig extends EditorConfig {
+    
     async getExtensions(): Promise<Extension[]> {
-        return [leiden(), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
+        return [leiden(this.editor.mode), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
     }
 
     getCommands():EditorCommands {
@@ -78,7 +78,9 @@ export class LeidenConfig extends EditorConfig {
     }
 
     onUpdate(tree: Tree, content: string): string {
-        return syntax2epiDoc(tree, content);
+        return this.editor.mode === 'leiden+' ? 
+            leidenPlus2epiDoc(content, tree) : 
+            leiden2epiDoc(content, tree);
     }
 
     serialize(): Element | string | null {

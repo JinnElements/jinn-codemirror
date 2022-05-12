@@ -1,18 +1,58 @@
-import { Tree, TreeCursor, SyntaxNodeRef } from "@lezer/common";
-import { parser } from "./parser.js";
-
-export function leiden2epiDoc(input: string) {
-    const tree = parser.parse(input);
-    return syntax2epiDoc(tree, input);
-}
+import { Tree, TreeCursor } from "@lezer/common";
+import { parser } from "./parser/leiden+/parser.js";
 
 const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
 const teiNS = 'xmlns="http://www.tei-c.org/ns/1.0"'
 
-export function syntax2epiDoc(root: Tree, input: string) {
+export function leiden2epiDoc(input: string, root: Tree = parser.parse(input)) {
     function text(node:TreeCursor) {
         return input.substring(node.from, node.to);
     }
+
+    const xml:string[] = [];
+    root.iterate({
+        enter: (node:TreeCursor) => {
+            if (node.type.isError) {
+                xml.push(`<!-- Error:${text(node)} -->`);
+                return;
+            }
+            const name = node.name;
+            switch (name) {
+                case 'Document':
+                    break;
+                case 'Text':
+                    xml.push(text(node));
+                    break;
+                case 'Abbreviation':
+                    xml.push('<expan>');
+                    break;
+                case 'Abbrev':
+                    xml.push('<ex>');
+                    break;
+                default:
+                    xml.push(`<${name}>`);
+                    break;
+            }
+        },
+        leave: (node) => {
+            switch (node.name) {
+                case 'Abbreviation':
+                    xml.push('</expan>');
+                    break;
+                case 'Abbrev':
+                    xml.push('</ex>');
+                    break;
+            }
+        }
+    });
+    return xml.join('');
+}
+
+export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input)) {
+    function text(node:TreeCursor) {
+        return input.substring(node.from, node.to);
+    }
+
     const stack:string[] = [];
     const xml:string[] = [];
     let needsWrap = false;
