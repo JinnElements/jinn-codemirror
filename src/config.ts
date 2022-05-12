@@ -5,7 +5,7 @@ import { EditorStateConfig, Extension, EditorSelection, StateEffect } from "@cod
 import { snippet } from "@codemirror/autocomplete";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
-import { selectCharRight } from "@codemirror/commands";
+import { Diagnostic, setDiagnosticsEffect } from "@codemirror/lint";
 
 export interface EditorCommands {
     [index:string]: Command
@@ -86,21 +86,13 @@ export abstract class EditorConfig {
                     const firstTransaction = update.transactions[0]
                     if (firstTransaction) {
                         // linter messages have a severity
-                        const linterMessages = firstTransaction.effects.filter(effect => {
-                            return effect.value && effect.value.length 
-                                && effect.value.filter((value: { severity?: string; }) => {
-                                return value.severity;
-                            })
-                        })
+                        const linterMessages:StateEffect<Diagnostic[]>[] = firstTransaction.effects.filter(effect => effect.is(setDiagnosticsEffect))
                         if (linterMessages) {
-                            const check:{valid:boolean, errors:string[]} = linterMessages.reduce((result:{valid:boolean, errors:string[]}, effect:StateEffect<any>) => {
-                                if (!effect.value || !effect.value.length) {
-                                    return result;
-                                }
-                                const error:{message:string, severity:string}[] = effect.value.filter((value: { severity: string, message: string}) => {
+                            const check:{valid:boolean, errors:string[]} = linterMessages.reduce((result:{valid:boolean, errors:string[]}, effect:StateEffect<Diagnostic[]>) => {
+                                const error:Diagnostic[] = effect.value.filter((value: Diagnostic) => {
                                     return value.severity === "error";
                                 })
-                                const info:{message:string, severity:string}[] = effect.value.filter((value: { severity: string; }) => {
+                                const info:Diagnostic[] = effect.value.filter((value: Diagnostic) => {
                                     return value.severity === "info";
                                 })
                                 if (error.length) {
