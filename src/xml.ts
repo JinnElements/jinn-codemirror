@@ -9,6 +9,9 @@ import { TreeCursor } from "@lezer/common";
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
 }
+const isErrorComment = (view:EditorView, node:TreeCursor): boolean => {
+    return node.type.name === "Comment" && /\<\!\-\- Error\:([^ ])* \-\-\>/.test(view.state.sliceDoc(node.from, node.to))
+}
 
 /**
  * Highlights SyntaxErrors, missing TEI or wrong namespace
@@ -32,8 +35,16 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
                         severity: 'error',
                         from: node.from,
                         to: node.to
-                    });    
+                    });
                 }
+            }
+            if (isErrorComment(view, node)) {
+                diagnostics.push({
+                    message: 'Enthält einen Fehler',
+                    severity: 'error',
+                    from: node.from,
+                    to: node.to
+                });
             }
             if (node.type.isError) {
                 diagnostics.push({
@@ -49,6 +60,14 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
                 diagnostics.push({
                     message: 'Missing namespace',
                     severity: 'error',
+                    from: node.from,
+                    to: node.to
+                });
+            }
+            if (node.type.name === "Document" && !diagnostics.length) {
+                diagnostics.push({
+                    message: 'All fine',
+                    severity: 'info',
                     from: node.from,
                     to: node.to
                 });

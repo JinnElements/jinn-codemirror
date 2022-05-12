@@ -55,6 +55,14 @@ export class JinnCodemirror extends HTMLElement {
         });
     }
 
+    set valid(value:boolean) {
+        this.setAttribute('valid', value.toString());
+    }
+      
+    get valid():boolean {
+        return Boolean(this.hasAttribute('valid'))
+    }
+
     set content(text:string) {
         if (!this._editor) {
             console.log('no editor');

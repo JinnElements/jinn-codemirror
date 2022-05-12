@@ -1,7 +1,7 @@
 import { EditorView, basicSetup } from "@codemirror/basic-setup";
 import { Command, ViewPlugin, ViewUpdate } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
-import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state";
+import { EditorStateConfig, Extension, EditorSelection, StateEffect } from "@codemirror/state";
 import { snippet } from "@codemirror/autocomplete";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
@@ -80,6 +80,56 @@ export abstract class EditorConfig {
                     catch (e) {
                         // suppress updates (invalid data)
                         return
+                    }
+                }
+                else {
+                    const firstTransaction = update.transactions[0]
+                    if (firstTransaction) {
+                        // linter messages have a severity
+                        const linterMessages = firstTransaction.effects.filter(effect => {
+                            return effect.value && effect.value.length 
+                                && effect.value.filter((value: { severity?: string; }) => {
+                                return value.severity;
+                            })
+                        })
+                        if (linterMessages) {
+                            const check:{valid:boolean, errors:string[]} = linterMessages.reduce((result:{valid:boolean, errors:string[]}, effect:StateEffect<any>) => {
+                                if (!effect.value || !effect.value.length) {
+                                    return result;
+                                }
+                                const error:{message:string, severity:string}[] = effect.value.filter((value: { severity: string, message: string}) => {
+                                    return value.severity === "error";
+                                })
+                                const info:{message:string, severity:string}[] = effect.value.filter((value: { severity: string; }) => {
+                                    return value.severity === "info";
+                                })
+                                if (error.length) {
+                                    result.valid = false
+                                    for (let e of error) {
+                                        result.errors.push(e?.message);
+                                    }
+                                }
+                                result.valid = result.valid || (error.length === 0 && info.length > 0)
+                                return result;
+
+                            }, {valid: self.editor.valid, errors: []})
+                            if (check.valid === self.editor.valid) {
+                                return
+                            }
+                            self.editor.valid = check.valid
+                            if (check.valid) {
+                                self.editor.dispatchEvent(new CustomEvent('valid', {
+                                    composed: true,
+                                    bubbles: true
+                                }));
+                                return;
+                            }
+                            self.editor.dispatchEvent(new CustomEvent('invalid', {
+                                detail: check.errors,
+                                composed: true,
+                                bubbles: true
+                            }));
+                        }
                     }
                 }
             }
