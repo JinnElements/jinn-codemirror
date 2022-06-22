@@ -1,12 +1,12 @@
 import {EditorState, EditorView} from "@codemirror/basic-setup";
 import { XMLConfig } from "./xml";
 import { LeidenConfig } from "./leiden+";
-import { EditorConfig } from "./config";
+import { AncientTextConfig } from "./ancientText";
+import { EditorConfig, SourceType } from "./config";
 
 export class JinnCodemirror extends HTMLElement {
 
-    public mode?: string;
-
+    _mode: SourceType = SourceType.xml;
     _value?: Element | string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
@@ -20,18 +20,43 @@ export class JinnCodemirror extends HTMLElement {
         css.innerHTML = this.styles();
         this.shadowRoot?.appendChild(css);
 
+        const modesSlot = document.createElement('slot');
+        modesSlot.name = 'modes';
+        this.shadowRoot?.appendChild(modesSlot);
+
         const toolbarSlot = document.createElement('slot');
         toolbarSlot.name = 'toolbar';
         this.shadowRoot?.appendChild(toolbarSlot);
     }
 
     connectedCallback() {
-        this.mode = this.getAttribute('mode') || 'xml';
-        console.log(`<jinn-codemirror> mode: ${this.mode}`);
+        const wrapper = document.createElement('div');
+        wrapper.id = 'editor';
+        this.shadowRoot?.appendChild(wrapper);
 
-        switch(this.mode) {
-            case 'leiden':
-            case 'leiden+':
+        this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
+
+        console.log(`<jinn-codemirror> mode: ${this.mode}`);
+    }
+
+    set mode(mode:string) {
+        const wrapper = this.shadowRoot?.getElementById('editor');
+        if (!wrapper) {
+            return;
+        }
+
+        if (this._editor) {
+            this._editor.destroy();
+        }
+
+        this._mode = SourceType[mode as keyof typeof SourceType];
+        switch(this._mode) {
+            case SourceType.default:
+            case SourceType.edcs:
+            case SourceType.phi:
+                this._config = new AncientTextConfig(this, this._mode);
+                break;
+            case SourceType.leiden_plus:
                 this._config = new LeidenConfig(this);
                 break;
             default:
@@ -39,8 +64,6 @@ export class JinnCodemirror extends HTMLElement {
                 break;
         }
 
-        const wrapper = document.createElement('div');
-        this.shadowRoot?.appendChild(wrapper);
         this._config.getConfig()
         .then((stateConfig) => {
             this._editor = new EditorView({
@@ -53,6 +76,10 @@ export class JinnCodemirror extends HTMLElement {
             }
             this.content = this._config.setFromValue(this._value);
         });
+    }
+
+    get mode(): string {
+        return this._mode;
     }
 
     set valid(value:boolean) {
@@ -98,6 +125,16 @@ export class JinnCodemirror extends HTMLElement {
         return this._value;
     }
 
+    private initModes(): string | null {
+        const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=modes]');
+        slot?.assignedElements().forEach((elem) => {
+            if (elem instanceof HTMLSelectElement) {
+                return (<HTMLSelectElement>elem).value;
+            }
+        });
+        return null;
+    }
+
     private renderToolbar(config?:EditorConfig) {
         if (!config) {
             return;
@@ -110,7 +147,7 @@ export class JinnCodemirror extends HTMLElement {
                 const command = commands[cmdName];
                 if (command) {
                     btn.addEventListener('click', () => {
-                        command(<EditorView>this._editor)
+                        command(<EditorView>this._editor);
                         this._editor?.focus();
                     });
                 }

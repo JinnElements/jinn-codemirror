@@ -25,11 +25,12 @@
         <script type="module" src="../src/jinn-codemirror.ts"></script>
     </head>
     <body>
-        <h2>Leiden</h2>
-        <jinn-codemirror id="leiden-editor" mode="leiden" class="source"></jinn-codemirror>
-
         <h2>Leiden+</h2>
-        <jinn-codemirror id="leiden-plus-editor" mode="leiden+" class="source">
+        <jinn-codemirror id="leiden-plus-editor" mode="leiden_plus" class="source">
+            <select slot="modes">
+                <option value="edcs" selected>EDCS/EDH</option>
+                <option value="leiden_plus">Leiden+</option>
+            </select>
             <div slot="toolbar">
                 <button data-command="expan">(a(bcd))</button>
                 <button data-command="erasure">〚abc〛</button>

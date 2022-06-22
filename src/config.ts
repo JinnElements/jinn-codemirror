@@ -7,6 +7,17 @@ import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
 import { Diagnostic, setDiagnosticsEffect } from "@codemirror/lint";
 
+/**
+ * Supported editor modes
+ */
+ export enum SourceType {
+    xml = 'xml',
+    leiden_plus = 'leiden+',
+    edcs = "edcs",
+    phi = "phi",
+    default = "default"
+};
+
 export interface EditorCommands {
     [index:string]: Command
 }
