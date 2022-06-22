@@ -13,12 +13,12 @@
                 width: 100%;
                 margin-bottom: 10px;
             }
-            [slot=toolbar] button {
+            [slot=toolbar] * {
                 font-size: .85rem;
                 border: 1px solid transparent;
                 background-color: inherit;
             }
-            [slot=toolbar] button:hover {
+            [slot=toolbar] *:hover {
                 border: 1px solid orange;
             }
         </style>
@@ -26,16 +26,21 @@
     </head>
     <body>
         <h2>Leiden+</h2>
-        <jinn-codemirror id="leiden-editor" mode="leiden">
+        <jinn-codemirror id="leiden-plus-editor" class="source">
             <div slot="toolbar">
-                <button data-command="expan">(a(bcd))</button>
-                <button data-command="erasure">〚abc〛</button>
-                <button data-command="unclear">ạ</button>
-                <button data-command="div">&lt;=...</button>
-                <button data-command="fragment">&lt;D=.1.fragment...</button>
-                <button data-command="part">&lt;D=.A.part...</button>
-                <button data-command="recto">&lt;D=.r...</button>
-                <button data-command="verso">&lt;D=.v...</button>
+                <select name="modes">
+                    <option value="edcs" selected>EDCS/EDH</option>
+                    <option value="default">Petrae</option>
+                    <option value="leiden_plus">Leiden+</option>
+                </select>
+                <button data-command="expan" class="leiden_plus">(a(bcd))</button>
+                <button data-command="erasure" class="leiden_plus">〚abc〛</button>
+                <button data-command="unclear" class="leiden_plus">ạ</button>
+                <button data-command="div" class="leiden_plus">&lt;=...</button>
+                <button data-command="fragment" class="leiden_plus">&lt;D=.1.fragment...</button>
+                <button data-command="part" class="leiden_plus">&lt;D=.A.part...</button>
+                <button data-command="recto" class="leiden_plus">&lt;D=.r...</button>
+                <button data-command="verso" class="leiden_plus">&lt;D=.v...</button>
             </div>
         </jinn-codemirror>
 
@@ -43,12 +48,29 @@
         <jinn-codemirror id="xml-editor" mode="xml" schema="dist/epidoc.json">
         </jinn-codemirror>
 
+        <button id="mybutton">set value</button>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 const xml = document.getElementById('xml-editor');
-                const leiden = document.getElementById('leiden-editor');
-                leiden.addEventListener('update', (ev) => {
-                    xml.content = ev.detail.content;
+                const button = document.getElementById('mybutton');
+
+                document.querySelectorAll('jinn-codemirror.source').forEach((editor) => {
+                    editor.addEventListener('update', (ev) => {
+                        xml.content = ev.detail.content;
+                    });
+                });
+
+                xml.addEventListener('invalid', (ev) => {
+                    console.log("XML INVALID", ev)
+                });
+                xml.addEventListener('valid', (ev) => {
+                    console.log("XML VALID", ev)
+                });
+                xml.addEventListener('update', (ev) => {
+                    console.log("XML UPDATE", ev.detail.serialized)
+                });
+                button.addEventListener('click', function (ev) {
+                    xml.value = document.createElementNS("http://www.tei-c.org/ns/1.0", "ab")
                 });
             });
         </script>

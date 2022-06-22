@@ -1,1 +1,1 @@
-export{l as leiden2epiDoc,s as syntax2epiDoc}from"./index-92306718.js";
+export{c as leiden2epiDoc,l as leidenPlus2epiDoc}from"./index-5e07ef59.js";

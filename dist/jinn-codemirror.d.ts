@@ -2,6 +2,16 @@ import { EditorView } from "@codemirror/basic-setup";
 import { Command } from "@codemirror/view";
 import { EditorStateConfig, Extension } from "@codemirror/state";
 import { Tree } from "@lezer/common";
+/**
+ * Supported editor modes
+ */
+declare enum SourceType {
+    xml = "xml",
+    leiden_plus = "leiden_plus",
+    edcs = "edcs",
+    phi = "phi",
+    default = "default"
+}
 interface EditorCommands {
     [index: string]: Command;
 }
@@ -12,18 +22,28 @@ declare abstract class EditorConfig {
     abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;
     getCommands(): EditorCommands;
     onUpdate(tree: Tree, content: string): string;
-    abstract serialize(): null | Element | string;
+    abstract setFromValue(value: Element | string | null | undefined): string;
+    abstract serialize(): Element | string | null;
 }
 declare class JinnCodemirror extends HTMLElement {
-    mode?: string;
-    value?: Element | string | null;
+    _mode: SourceType;
+    _value?: Element | string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
+    _remote?: boolean;
     constructor();
     connectedCallback(): void;
+    set mode(mode: string);
+    get mode(): string;
+    set valid(value: boolean);
+    get valid(): boolean;
     set content(text: string);
     get content(): string;
-    private renderToolbar;
+    set value(value: Element | string | null | undefined);
+    get value(): Element | string | null;
+    private initModes;
+    private registerToolbar;
+    private activateToolbar;
     styles(): string;
 }
 export { JinnCodemirror };
