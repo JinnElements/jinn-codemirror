@@ -1,6 +1,6 @@
 import { SourceType } from "../config";
 
-function pointedCharacters2Epidoc(text) {
+function pointedCharacters2Epidoc(text: string): string {
     // var text = text.replace(/([aA-zZ])\x{323}/g, '<unclear>$1</unclear>');    //a
     //text = text.replace(/\u1E5B\/u/g, '<unclear>r</unclear>');    //r
     /*        console.log("Texte dot ---:" + text);*/

@@ -50,6 +50,7 @@ export class JinnCodemirror extends HTMLElement {
         }
 
         this._mode = SourceType[mode as keyof typeof SourceType];
+        console.log('mode: %s; in: %s', this._mode, mode);
         switch(this._mode) {
             case SourceType.default:
             case SourceType.edcs:
@@ -127,11 +128,16 @@ export class JinnCodemirror extends HTMLElement {
 
     private initModes(): string | null {
         const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=modes]');
-        slot?.assignedElements().forEach((elem) => {
-            if (elem instanceof HTMLSelectElement) {
-                return (<HTMLSelectElement>elem).value;
-            }
-        });
+        const assigned = slot?.assignedElements();
+        
+        if (assigned && assigned.length > 0 && assigned[0] instanceof HTMLSelectElement) {
+            const select: HTMLSelectElement = assigned[0];
+            select.addEventListener('change', () => {
+                this.mode = select.value;
+            });
+            return select.value;
+        }
+        
         return null;
     }
 
