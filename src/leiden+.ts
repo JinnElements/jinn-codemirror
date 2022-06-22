@@ -78,7 +78,7 @@ export class LeidenConfig extends EditorConfig {
     }
 
     onUpdate(tree: Tree, content: string): string {
-        return this.editor.mode === 'leiden+' ? 
+        return this.editor.mode === 'leiden_plus' ? 
             leidenPlus2epiDoc(content, tree) : 
             leiden2epiDoc(content, tree);
     }

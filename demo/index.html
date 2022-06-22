@@ -13,12 +13,12 @@
                 width: 100%;
                 margin-bottom: 10px;
             }
-            [slot=toolbar] button {
+            [slot=toolbar] * {
                 font-size: .85rem;
                 border: 1px solid transparent;
                 background-color: inherit;
             }
-            [slot=toolbar] button:hover {
+            [slot=toolbar] *:hover {
                 border: 1px solid orange;
             }
         </style>
@@ -27,20 +27,20 @@
     <body>
         <h2>Leiden+</h2>
         <jinn-codemirror id="leiden-plus-editor" class="source">
-            <select slot="modes">
-                <option value="edcs" selected>EDCS/EDH</option>
-                <option value="default">Petrae</option>
-                <option value="leiden_plus">Leiden+</option>
-            </select>
             <div slot="toolbar">
-                <button data-command="expan">(a(bcd))</button>
-                <button data-command="erasure">〚abc〛</button>
-                <button data-command="unclear">ạ</button>
-                <button data-command="div">&lt;=...</button>
-                <button data-command="fragment">&lt;D=.1.fragment...</button>
-                <button data-command="part">&lt;D=.A.part...</button>
-                <button data-command="recto">&lt;D=.r...</button>
-                <button data-command="verso">&lt;D=.v...</button>
+                <select name="modes">
+                    <option value="edcs" selected>EDCS/EDH</option>
+                    <option value="default">Petrae</option>
+                    <option value="leiden_plus">Leiden+</option>
+                </select>
+                <button data-command="expan" class="leiden_plus">(a(bcd))</button>
+                <button data-command="erasure" class="leiden_plus">〚abc〛</button>
+                <button data-command="unclear" class="leiden_plus">ạ</button>
+                <button data-command="div" class="leiden_plus">&lt;=...</button>
+                <button data-command="fragment" class="leiden_plus">&lt;D=.1.fragment...</button>
+                <button data-command="part" class="leiden_plus">&lt;D=.A.part...</button>
+                <button data-command="recto" class="leiden_plus">&lt;D=.r...</button>
+                <button data-command="verso" class="leiden_plus">&lt;D=.v...</button>
             </div>
         </jinn-codemirror>
 

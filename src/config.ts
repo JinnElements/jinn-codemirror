@@ -12,7 +12,7 @@ import { Diagnostic, setDiagnosticsEffect } from "@codemirror/lint";
  */
  export enum SourceType {
     xml = 'xml',
-    leiden_plus = 'leiden+',
+    leiden_plus = 'leiden_plus',
     edcs = "edcs",
     phi = "phi",
     default = "default"

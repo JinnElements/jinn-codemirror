@@ -20,10 +20,6 @@ export class JinnCodemirror extends HTMLElement {
         css.innerHTML = this.styles();
         this.shadowRoot?.appendChild(css);
 
-        const modesSlot = document.createElement('slot');
-        modesSlot.name = 'modes';
-        this.shadowRoot?.appendChild(modesSlot);
-
         const toolbarSlot = document.createElement('slot');
         toolbarSlot.name = 'toolbar';
         this.shadowRoot?.appendChild(toolbarSlot);
@@ -33,10 +29,9 @@ export class JinnCodemirror extends HTMLElement {
         const wrapper = document.createElement('div');
         wrapper.id = 'editor';
         this.shadowRoot?.appendChild(wrapper);
+        this.registerToolbar();
 
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
-
-        console.log(`<jinn-codemirror> mode: ${this.mode}`);
     }
 
     set mode(mode:string) {
@@ -50,7 +45,8 @@ export class JinnCodemirror extends HTMLElement {
         }
 
         this._mode = SourceType[mode as keyof typeof SourceType];
-        console.log('mode: %s; in: %s', this._mode, mode);
+        console.log(`<jinn-codemirror> mode: ${this.mode}`);
+        this.activateToolbar();
         switch(this._mode) {
             case SourceType.default:
             case SourceType.edcs:
@@ -71,7 +67,6 @@ export class JinnCodemirror extends HTMLElement {
                 state: EditorState.create(stateConfig),
                 parent: wrapper
             });
-            this.renderToolbar(this._config);
             if (!this._config) {
                 return
             }
@@ -127,11 +122,9 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     private initModes(): string | null {
-        const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=modes]');
-        const assigned = slot?.assignedElements();
-        
-        if (assigned && assigned.length > 0 && assigned[0] instanceof HTMLSelectElement) {
-            const select: HTMLSelectElement = assigned[0];
+        const select = this.querySelector('[name=modes]');
+
+        if (select && select instanceof HTMLSelectElement) {
             select.addEventListener('change', () => {
                 this.mode = select.value;
             });
@@ -141,21 +134,35 @@ export class JinnCodemirror extends HTMLElement {
         return null;
     }
 
-    private renderToolbar(config?:EditorConfig) {
-        if (!config) {
-            return;
-        }
-        const commands = config.getCommands();
+    private registerToolbar() {
         const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
         slot?.assignedElements().forEach((elem) => {
             elem.querySelectorAll('[data-command]').forEach((btn) => {
                 const cmdName = <string>(<HTMLElement>btn).dataset.command;
-                const command = commands[cmdName];
-                if (command) {
-                    btn.addEventListener('click', () => {
+
+                btn.addEventListener('click', () => {
+                    if (!this._config) {
+                        return;
+                    }
+                    const commands = this._config.getCommands();
+                    const command = commands[cmdName];
+                    if (command) {
                         command(<EditorView>this._editor);
                         this._editor?.focus();
-                    });
+                    }
+                });
+            });
+        });
+    }
+
+    private activateToolbar() {
+        const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
+        slot?.assignedElements().forEach((elem) => {
+            elem.querySelectorAll('[data-command]').forEach((btn) => {
+                if (btn.classList.contains(this._mode)) {
+                    (<HTMLElement>btn).style.display = 'inline';
+                } else {
+                    (<HTMLElement>btn).style.display = 'none';
                 }
             });
         });

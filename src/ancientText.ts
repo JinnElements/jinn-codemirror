@@ -19,7 +19,8 @@ export class AncientTextConfig extends EditorConfig {
     }
 
     onUpdate(tree: Tree, content: string): string {
-        return convertAncientText(content, this._sourceType);
+        const converted = convertAncientText(content, this._sourceType);
+        return `<ab xmlns="http://www.tei-c.org/ns/1.0">${converted}</ab>`
     }
 
     serialize(): Element | string | null {
