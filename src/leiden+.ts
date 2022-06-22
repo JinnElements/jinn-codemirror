@@ -70,7 +70,7 @@ const leidenKeymap: readonly KeyBinding[] = [
 export class LeidenConfig extends EditorConfig {
     
     async getExtensions(): Promise<Extension[]> {
-        return [leiden(this.editor.mode), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
+        return [leiden(), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
     }
 
     getCommands():EditorCommands {
@@ -78,9 +78,7 @@ export class LeidenConfig extends EditorConfig {
     }
 
     onUpdate(tree: Tree, content: string): string {
-        return this.editor.mode === 'leiden_plus' ? 
-            leidenPlus2epiDoc(content, tree) : 
-            leiden2epiDoc(content, tree);
+        return leidenPlus2epiDoc(content, tree);
     }
 
     serialize(): Element | string | null {
