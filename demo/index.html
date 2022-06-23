@@ -25,7 +25,7 @@
         <script type="module" src="../src/jinn-codemirror.ts"></script>
     </head>
     <body>
-        <h2>Leiden+</h2>
+        <h2>Leiden</h2>
         <jinn-codemirror id="leiden-plus-editor" class="source">
             <div slot="toolbar">
                 <select name="modes">
@@ -46,6 +46,9 @@
 
         <h2>EpiDoc</h2>
         <jinn-codemirror id="xml-editor" mode="xml" schema="../src/epidoc.json">
+            <div slot="toolbar">
+                <button data-command="selectElement" class="xml"><|></button>
+            </div>
         </jinn-codemirror>
 
         <button id="mybutton">set value</button>

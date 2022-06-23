@@ -3,7 +3,7 @@ import { Tree, TreeCursor } from "@lezer/common";
 import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
-import { leiden2epiDoc, leidenPlus2epiDoc } from ".";
+import { leidenPlus2epiDoc } from ".";
 import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
 import { leiden } from "./language";
 
