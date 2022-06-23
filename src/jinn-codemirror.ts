@@ -8,6 +8,7 @@ export class JinnCodemirror extends HTMLElement {
 
     _mode: SourceType = SourceType.xml;
     _value?: Element | string | null;
+    _namespace?: string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
     _remote?: boolean;
@@ -31,6 +32,7 @@ export class JinnCodemirror extends HTMLElement {
         this.shadowRoot?.appendChild(wrapper);
         this.registerToolbar();
 
+        this._namespace = this.getAttribute('namespace');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
     }
 
@@ -57,7 +59,7 @@ export class JinnCodemirror extends HTMLElement {
                 this._config = new LeidenConfig(this);
                 break;
             default:
-                this._config = new XMLConfig(this);
+                this._config = new XMLConfig(this, this._namespace);
                 break;
         }
 

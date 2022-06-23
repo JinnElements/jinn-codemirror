@@ -45,9 +45,10 @@
         </jinn-codemirror>
 
         <h2>EpiDoc</h2>
-        <jinn-codemirror id="xml-editor" mode="xml" schema="../src/epidoc.json">
+        <jinn-codemirror id="xml-editor" mode="xml" schema="../src/epidoc.json" namespace="http://www.tei-c.org/ns/1.0">
             <div slot="toolbar">
-                <button data-command="selectElement" class="xml"><|></button>
+                <button data-command="selectElement" class="xml">&lt;|></button>
+                <button data-command="removeEnclosing" class="xml">&lt;X></button>
             </div>
         </jinn-codemirror>
 

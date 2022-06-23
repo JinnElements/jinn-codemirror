@@ -5,6 +5,7 @@ import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
 import { Command, EditorView } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
+import { JinnCodemirror } from "./jinn-codemirror";
 
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
@@ -13,16 +14,6 @@ const isErrorComment = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "Comment" && /\<\!\-\- Error\:([^ ])* \-\-\>/.test(view.state.sliceDoc(node.from, node.to))
 }
 
-const teiNamespaceURI = 'http://www.tei-c.org/ns/1.0';
-const fixNamespaceAction:Action = {
-    name: "Fix",
-    apply: (view:EditorView, from: number, to:number) => {
-        const tx = view.state.update({
-            changes: {from, to, insert: teiNamespaceURI}
-        });
-        view.dispatch(tx);
-    }
-};
 
 // linter config settings
 // how long to wait before running linter
@@ -30,12 +21,24 @@ const delay = 300;
 // do not show info messages in gutter nor in content
 const markerFilter = (dias:readonly Diagnostic[]):Diagnostic[] => dias.filter(dia => dia.severity !== 'info');
 
+const fixNamespaceAction = (namespace:string):Action => {
+    return {
+        name: "Fix",
+        apply: (view:EditorView, from: number, to:number) => {
+            const tx = view.state.update({
+                changes: {from, to, insert: namespace}
+            });
+            view.dispatch(tx);
+        }
+    }
+};
+
 /**
  * Highlights SyntaxErrors, missing TEI or wrong namespace
  * 
  * @returns {function} linter
  */
-const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
+const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagnostic[] => {
     const diagnostics:Diagnostic[] = [];
     const tree = syntaxTree(view.state);
     let hasNamespace = false;
@@ -46,13 +49,13 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
                 node.nextSibling()
                 node.nextSibling()
                 const ns = view.state.sliceDoc(node.from+1, node.to-1)
-                if (ns !== teiNamespaceURI) {
+                if (namespace && ns !== namespace) {
                     diagnostics.push({
                         message: 'Wrong Namespace',
                         severity: 'error',
                         from: node.from+1,
                         to: node.to-1,
-                        actions: [ fixNamespaceAction ]
+                        actions: [ fixNamespaceAction(namespace) ]
                     });
                 }
             }
@@ -74,7 +77,7 @@ const teiFragmentLinter = () => (view: EditorView): Diagnostic[] => {
             }
         },
         leave: (node:TreeCursor) => {
-            if (node.type.name === "Document" && !hasNamespace) {
+            if (node.type.name === "Document" && namespace && !hasNamespace) {
                 diagnostics.push({
                     message: 'Missing TEI namespace',
                     severity: 'error',
@@ -108,7 +111,6 @@ export const selectElementCommand:Command = (editor) => {
             }
         }
         if (inTag) {
-            console.log(inTag);
             return {
                 selection: EditorSelection.range(inTag.from, inTag.to),
                 range: EditorSelection.range(inTag.from, inTag.to)
@@ -121,14 +123,60 @@ export const selectElementCommand:Command = (editor) => {
     return true;
 };
 
+export const removeEnclosingCommand:Command = (editor) => {
+    editor.dispatch(editor.state.changeByRange(range => {
+        const at = syntaxTree(editor.state).resolveInner(range.from);
+        let inTag = null;
+        for (let cur = at; !inTag && cur.parent; cur = cur.parent) {
+            if (cur.name == "Element") {
+                inTag = cur;
+            }
+        }
+        if (inTag) {
+            const startTag = inTag.firstChild;
+            const endTag = inTag.lastChild;
+            if (startTag && endTag) {
+                if (startTag.name === 'SelfClosingTag') {
+                    return {
+                        range: EditorSelection.range(startTag.from, startTag.from),
+                        changes: [
+                            { from: startTag.from, to: startTag.to, insert: '' }
+                        ]
+                    }
+                } else {
+                    return {
+                        range: EditorSelection.range(startTag.from, endTag.from - (startTag.to - startTag.from)),
+                        changes: [
+                            { from: startTag.from, to: startTag.to, insert: '' },
+                            { from: endTag.from, to: endTag.to, insert: '' }
+                        ]
+                    }
+                }
+            }
+        }
+        return {
+            range
+        };
+    }));
+    return true;
+}
+
 const commands:EditorCommands = {
-    selectElement: selectElementCommand
+    selectElement: selectElementCommand,
+    removeEnclosing: removeEnclosingCommand
 };
 
 export class XMLConfig extends EditorConfig {
 
+    private namespace: string|null;
+
+    constructor(editor: JinnCodemirror, namespace: string|null = null) {
+        super(editor);
+        this.namespace = namespace;
+    }
+
     private getDefaultExtensions (): Extension[] {
-        return [linter(teiFragmentLinter(), {delay, markerFilter}), lintGutter({markerFilter})];
+        return [linter(teiFragmentLinter(this.namespace), {delay, markerFilter}), lintGutter({markerFilter})];
     }
 
     async getExtensions(): Promise<Extension[]> {
