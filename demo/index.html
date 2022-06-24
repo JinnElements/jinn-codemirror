@@ -84,6 +84,9 @@
 
                 toggle.addEventListener('click', () => {
                     leiden.classList.toggle('hidden');
+                    if (!leiden.classList.contains('hidden')) {
+                        leiden.focus();
+                    }
                 });
 
                 leiden.addEventListener('update', (ev) => {

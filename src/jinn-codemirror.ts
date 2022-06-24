@@ -36,6 +36,12 @@ export class JinnCodemirror extends HTMLElement {
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
     }
 
+    focus() {
+        if (this._editor) {
+            this._editor.focus();
+        }
+    }
+
     set mode(mode:string) {
         const wrapper = this.shadowRoot?.getElementById('editor');
         if (!wrapper) {
