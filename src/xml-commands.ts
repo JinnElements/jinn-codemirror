@@ -32,6 +32,7 @@ function createInputPanel(view: EditorView) {
                 const tag = input.value;
                 if (tag !== '') {
                     wrapCommand(`<${tag}>`, `</${tag}>`)(view);
+                    view.focus();
                 }
             case 'Esc':
             case 'Escape':

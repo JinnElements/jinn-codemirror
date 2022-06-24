@@ -1,5 +1,6 @@
 import { lintGutter } from "@codemirror/lint";
 import { Extension } from "@codemirror/state";
+import { KeyBinding, keymap } from "@codemirror/view";
 import { Tree } from "@lezer/common";
 import { EditorCommands, EditorConfig, insertCommand, SourceType, wrapCommand } from "./config";
 import { convertAncientText } from "./import/ancientText2xml.js";
@@ -7,8 +8,13 @@ import { JinnCodemirror } from "./jinn-codemirror";
 
 const commands:EditorCommands = {
     erasure: wrapCommand('[[', ']]'),
-    leiden_gap: insertCommand('[---]')
+    gap: insertCommand('[---]')
 };
+
+const leidenKeymap: readonly KeyBinding[] = [
+    { key: "Ctrl-Shift-d", mac: "Cmd-Shift-d", run: commands.erasure },
+    { key: "Ctrl-Shift-l", mac: "Cmd-Shift-l", run: commands.gap }
+];
 
 export class AncientTextConfig extends EditorConfig {
     
@@ -20,7 +26,7 @@ export class AncientTextConfig extends EditorConfig {
     }
     
     async getExtensions(): Promise<Extension[]> {
-        return [lintGutter()];
+        return [keymap.of(leidenKeymap), lintGutter()];
     }
 
     getCommands():EditorCommands {

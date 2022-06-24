@@ -99,9 +99,9 @@ const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagno
 }
 
 const xmlKeymap: readonly KeyBinding[] = [
-    { key: "Ctrl-l Ctrl-s", mac: "Cmd-l Cmd-s", run: commands.selectElement },
-    { key: "Ctrl-l Ctrl-x", mac: "Cmd-l Cmd-x", run: commands.removeEnclosing },
-    { key: "Ctrl-l Ctrl-e", mac: "Cmd-Shift-e", run: commands.encloseWith }
+    { key: "Ctrl-Shift-s", mac: "Cmd-Shift-s", run: commands.selectElement },
+    { key: "Ctrl-Shift-x", mac: "Cmd-Shift-x", run: commands.removeEnclosing },
+    { key: "Ctrl-Shift-e", mac: "Cmd-Shift-e", run: commands.encloseWith }
 ];
 
 export class XMLConfig extends EditorConfig {

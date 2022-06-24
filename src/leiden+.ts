@@ -57,14 +57,14 @@ const commands:EditorCommands = {
 };
 
 const leidenKeymap: readonly KeyBinding[] = [
-    { key: "Ctrl-l Ctrl-e", mac: "Cmd-l Cmd-e", run: commands.expan },
-    { key: "Ctrl-l Ctrl-a", mac: "Cmd-l Cmd-a", run: commands.div },
-    { key: "Ctrl-l Ctrl-f", mac: "Cmd-l Cmd-f", run: commands.fragment },
-    { key: "Ctrl-l Ctrl-p", mac: "Cmd-l Cmd-p", run: commands.part },
-    { key: "Ctrl-l Ctrl-r", mac: "Cmd-l Cmd-r", run: commands.recto },
-    { key: "Ctrl-l Ctrl-v", mac: "Cmd-l Cmd-v", run: commands.verso },
-    { key: "Ctrl-l Ctrl-d", mac: "Cmd-l Cmd-d", run: commands.erasure },
-    { key: "Ctrl-l Ctrl-u", mac: "Cmd-l Cmd-u", run: commands.unclear }
+    { key: "Ctrl-Shift-e", mac: "Cmd-Shift-e", run: commands.expan },
+    { key: "Ctrl-Shift-a", mac: "Cmd-Shift-a", run: commands.div },
+    { key: "Ctrl-Shift-f", mac: "Cmd-Shift-f", run: commands.fragment },
+    { key: "Ctrl-Shift-p", mac: "Cmd-Shift-p", run: commands.part },
+    { key: "Ctrl-Shift-r", mac: "Cmd-Shift-r", run: commands.recto },
+    { key: "Ctrl-Shift-v", mac: "Cmd-Shift-v", run: commands.verso },
+    { key: "Ctrl-Shift-d", mac: "Cmd-Shift-d", run: commands.erasure },
+    { key: "Ctrl-Shift-u", mac: "Cmd-Shift-u", run: commands.unclear }
 ];
 
 export class LeidenConfig extends EditorConfig {
