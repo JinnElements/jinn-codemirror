@@ -27,6 +27,7 @@
             }
             [slot=toolbar] {
                 display: flex;
+                column-gap: 4px;
                 width: 100%;
                 margin-bottom: 10px;
             }
@@ -55,17 +56,20 @@
                     <button data-command="erasure" class="leiden_plus">〚abc〛</button>
                     <button data-command="unclear" class="leiden_plus">ạ</button>
                     <button data-command="div" class="leiden_plus">&lt;=...</button>
-                    <button data-command="fragment" class="leiden_plus">&lt;D=.1.fragment...</button>
+                    <!--button data-command="fragment" class="leiden_plus">&lt;D=.1.fragment...</button-->
                     <button data-command="part" class="leiden_plus">&lt;D=.A.part...</button>
                     <button data-command="recto" class="leiden_plus">&lt;D=.r...</button>
                     <button data-command="verso" class="leiden_plus">&lt;D=.v...</button>
+                    <button data-command="erasure" class="edcs">〚abc〛</button>
+                    <button data-command="leiden_gap" class="edcs">[...]</button>
                 </div>
             </jinn-codemirror>
             <jinn-codemirror id="xml-editor" mode="xml" schema="../src/epidoc.json" namespace="http://www.tei-c.org/ns/1.0">
                 <div slot="toolbar">
-                    <button id="import">Import Leiden</button>
-                    <button data-command="selectElement">&lt;|></button>
-                    <button data-command="removeEnclosing">&lt;X></button>
+                    <button id="import" title="Import from Leiden markup">Import Leiden</button>
+                    <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
+                    <buttom data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</buttom>
+                    <button data-command="removeEnclosing" title="Remove enclosing tags">&lt;X></button>
                 </div>
             </jinn-codemirror>
         </main>

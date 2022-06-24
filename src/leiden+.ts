@@ -4,7 +4,7 @@ import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { leidenPlus2epiDoc } from ".";
-import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
+import { EditorConfig, EditorCommands, snippetCommand, wrapCommand, insertCommand } from "./config";
 import { leiden } from "./language";
 
 const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {

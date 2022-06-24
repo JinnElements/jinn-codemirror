@@ -1,11 +1,12 @@
 import { xml } from "@codemirror/lang-xml";
-import { EditorSelection, Extension } from "@codemirror/state";
+import { Extension } from "@codemirror/state";
 import { EditorCommands, EditorConfig } from "./config";
 import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
-import { Command, EditorView } from "@codemirror/view";
+import { EditorView, KeyBinding, keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
+import { commands, inputPanel } from "./xml-commands";
 
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
@@ -13,7 +14,6 @@ const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
 const isErrorComment = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "Comment" && /\<\!\-\- Error\:([^ ])* \-\-\>/.test(view.state.sliceDoc(node.from, node.to))
 }
-
 
 // linter config settings
 // how long to wait before running linter
@@ -98,73 +98,11 @@ const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagno
     return diagnostics;
 }
 
-/**
- * Select the surrounding parent element.
- */
-export const selectElementCommand:Command = (editor) => {
-    editor.dispatch(editor.state.changeByRange(range => {
-        const at = syntaxTree(editor.state).resolveInner(range.from);
-        let inTag = null;
-        for (let cur = at; !inTag && cur.parent; cur = cur.parent) {
-            if (cur.name == "Element") {
-                inTag = cur;
-            }
-        }
-        if (inTag) {
-            return {
-                selection: EditorSelection.range(inTag.from, inTag.to),
-                range: EditorSelection.range(inTag.from, inTag.to)
-            };
-        }
-        return {
-            range
-        };
-    }));
-    return true;
-};
-
-export const removeEnclosingCommand:Command = (editor) => {
-    editor.dispatch(editor.state.changeByRange(range => {
-        const at = syntaxTree(editor.state).resolveInner(range.from);
-        let inTag = null;
-        for (let cur = at; !inTag && cur.parent; cur = cur.parent) {
-            if (cur.name == "Element") {
-                inTag = cur;
-            }
-        }
-        if (inTag) {
-            const startTag = inTag.firstChild;
-            const endTag = inTag.lastChild;
-            if (startTag && endTag) {
-                if (startTag.name === 'SelfClosingTag') {
-                    return {
-                        range: EditorSelection.range(startTag.from, startTag.from),
-                        changes: [
-                            { from: startTag.from, to: startTag.to, insert: '' }
-                        ]
-                    }
-                } else {
-                    return {
-                        range: EditorSelection.range(startTag.from, endTag.from - (startTag.to - startTag.from)),
-                        changes: [
-                            { from: startTag.from, to: startTag.to, insert: '' },
-                            { from: endTag.from, to: endTag.to, insert: '' }
-                        ]
-                    }
-                }
-            }
-        }
-        return {
-            range
-        };
-    }));
-    return true;
-}
-
-const commands:EditorCommands = {
-    selectElement: selectElementCommand,
-    removeEnclosing: removeEnclosingCommand
-};
+const xmlKeymap: readonly KeyBinding[] = [
+    { key: "Ctrl-l Ctrl-s", mac: "Cmd-l Cmd-s", run: commands.selectElement },
+    { key: "Ctrl-l Ctrl-x", mac: "Cmd-l Cmd-x", run: commands.removeEnclosing },
+    { key: "Ctrl-l Ctrl-e", mac: "Cmd-Shift-e", run: commands.encloseWith }
+];
 
 export class XMLConfig extends EditorConfig {
 
@@ -176,7 +114,12 @@ export class XMLConfig extends EditorConfig {
     }
 
     private getDefaultExtensions (): Extension[] {
-        return [linter(teiFragmentLinter(this.namespace), {delay, markerFilter}), lintGutter({markerFilter})];
+        return [
+            inputPanel(),
+            keymap.of(xmlKeymap), 
+            linter(teiFragmentLinter(this.namespace), {delay, markerFilter}), 
+            lintGutter({markerFilter})
+        ];
     }
 
     async getExtensions(): Promise<Extension[]> {

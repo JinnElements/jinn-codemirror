@@ -40,6 +40,23 @@ export const wrapCommand = (start:string, end:string):Command => (editor) => {
 }
 
 /**
+ * Creates a command which wraps the current selection with a prefix and suffix.
+ * 
+ * @param start prefix to insert before selection
+ * @param end suffix to insert after selection
+ * @returns command to execute
+ */
+export const insertCommand = (insert:string):Command => (editor) => {
+    editor.dispatch(editor.state.changeByRange(range => {
+        return {
+            changes: [{from: range.from, insert}],
+            range: EditorSelection.range(range.from, range.from)
+        };
+    }));
+    return true;
+}
+
+/**
  * Creates a command which inserts a snippet in place of the current selection.
  * '${_}' will be replaced by the selection text.
  * 
