@@ -161,7 +161,7 @@ export class JinnCodemirror extends HTMLElement {
         const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
         slot?.assignedElements().forEach((elem) => {
             elem.querySelectorAll('[data-command]').forEach((btn) => {
-                if (btn.classList.contains(this._mode)) {
+                if (btn.className === '' || btn.classList.contains(this._mode)) {
                     (<HTMLElement>btn).style.display = 'inline';
                 } else {
                     (<HTMLElement>btn).style.display = 'none';
