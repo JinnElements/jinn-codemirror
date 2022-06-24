@@ -28,11 +28,13 @@ declare abstract class EditorConfig {
 declare class JinnCodemirror extends HTMLElement {
     _mode: SourceType;
     _value?: Element | string | null;
+    _namespace?: string | null;
     _editor?: EditorView;
     _config?: EditorConfig;
     _remote?: boolean;
     constructor();
     connectedCallback(): void;
+    focus(): void;
     set mode(mode: string);
     get mode(): string;
     set valid(value: boolean);
