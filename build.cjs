@@ -20,7 +20,7 @@ function docs(inPath) {
     const code = fs.readFileSync(path.join(__dirname, inPath), "utf-8");
     const { results, program } = analyzeText(code);
     const markdown = transformAnalyzerResult('markdown', results, program, {markdown: {titleLevel: 3}});
-    replace('README.md', '.', [{regex: /## API.*/, replacement: `## API\n\n${markdown}`}]);
+    replace('README.md', '.', [{regex: /## API.*$/g, replacement: `## API\n\n${markdown}`}]);
 }
 
 async function bundle() {
