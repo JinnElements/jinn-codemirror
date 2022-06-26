@@ -1,6 +1,6 @@
-# Leiden+ Parser
+# Text Editor Webcomponent
 
-A grammar and parser for Leiden+, based on the lezer parser generator. It also provides a language definition to be used with the codemirror editor.
+A plain javascript web component based on [codemirror](https://codemirror.net/) with language definitions for XML and Leiden+.
 
 ## API
 
