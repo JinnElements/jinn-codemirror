@@ -4,11 +4,21 @@ import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
 import { EditorConfig, SourceType } from "./config";
 
+/**
+ * Source code editor component based on [codemirror](https://codemirror.net/).
+ * Features extended support for XML and Leiden+ code.
+ */
 export class JinnCodemirror extends HTMLElement {
 
     _mode: SourceType = SourceType.xml;
     _value?: Element | string | null;
-    _namespace?: string | null;
+
+    /**
+     * Default element namespace to enforce on the root element in
+     * XML mode
+     */
+    public namespace?: string | null;
+
     _editor?: EditorView;
     _config?: EditorConfig;
     _remote?: boolean;
@@ -36,12 +46,18 @@ export class JinnCodemirror extends HTMLElement {
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
     }
 
+    /**
+     * Move keyboard focus to the editor
+     */
     focus() {
         if (this._editor) {
             this._editor.focus();
         }
     }
 
+    /**
+     * The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'.
+     */
     set mode(mode:string) {
         const wrapper = this.shadowRoot?.getElementById('editor');
         if (!wrapper) {
@@ -94,6 +110,9 @@ export class JinnCodemirror extends HTMLElement {
         return Boolean(this.hasAttribute('valid'))
     }
 
+    /**
+     * The content edited in the editor as a string.
+     */
     set content(text:string) {
         if (!this._editor) {
             console.log('no editor');
@@ -110,6 +129,10 @@ export class JinnCodemirror extends HTMLElement {
         return this._editor?.state.doc.toString() || '';
     }
 
+    /**
+     * The value edited in the editor as either an Element or string -
+     * depending on the mode set.
+     */
     set value(value: Element | string | null | undefined) {
         if (!this._config) {
             return;
