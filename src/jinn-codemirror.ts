@@ -7,6 +7,10 @@ import { EditorConfig, SourceType } from "./config";
 /**
  * Source code editor component based on [codemirror](https://codemirror.net/).
  * Features extended support for XML and Leiden+ code.
+ * 
+ * @fires update - fired when the content of the editor has changed
+ * @fires valid - fired if the content of the editor is valid (requires a linting to be supported)
+ * @fires invalid - fired if the content of the editor is invalid (requires a linting to be supported)
  */
 export class JinnCodemirror extends HTMLElement {
 
@@ -42,7 +46,7 @@ export class JinnCodemirror extends HTMLElement {
         this.shadowRoot?.appendChild(wrapper);
         this.registerToolbar();
 
-        this._namespace = this.getAttribute('namespace');
+        this.namespace = this.getAttribute('namespace');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
     }
 
@@ -81,7 +85,7 @@ export class JinnCodemirror extends HTMLElement {
                 this._config = new LeidenConfig(this);
                 break;
             default:
-                this._config = new XMLConfig(this, this._namespace);
+                this._config = new XMLConfig(this, this.namespace);
                 break;
         }
 

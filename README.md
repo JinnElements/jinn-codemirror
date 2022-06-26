@@ -25,3 +25,11 @@ Features extended support for XML and Leiden+ code.
 |----------|--------------|-----------------------------------|
 | `focus`  | `(): void`   | Move keyboard focus to the editor |
 | `styles` | `(): string` |                                   |
+
+#### Events
+
+| Event     | Description                                      |
+|-----------|--------------------------------------------------|
+| `invalid` | fired if the content of the editor is invalid (requires a linting to be supported) |
+| `update`  | fired when the content of the editor has changed |
+| `valid`   | fired if the content of the editor is valid (requires a linting to be supported) |

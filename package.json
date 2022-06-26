@@ -1,7 +1,7 @@
 {
-  "name": "leiden-grammar",
+  "name": "jinn-codemirror",
   "version": "1.0.0",
-  "description": "lezer-based grammar for Leiden+",
+  "description": "Source code editor component based on codemirror with language support for XML and Leiden+",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
