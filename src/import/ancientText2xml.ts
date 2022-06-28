@@ -16,7 +16,7 @@ function pointedCharacters2Epidoc(text: string): string {
  * @param importSource the type of the input
  * @returns resulting epiDoc XML
  */
-export function convertAncientText(text: string, importSource: SourceType): string {
+export function ancientText2XML(text: string, importSource: SourceType): string {
     const textImportMode = 'newText';
     const startingLineNumber = 1;
 

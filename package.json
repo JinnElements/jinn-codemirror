@@ -12,7 +12,7 @@
     "start": "web-dev-server --open demo/ --watch --node-resolve",
     "demo": "web-dev-server --open index.html"
   },
-  "author": "Wolfgang Meier",
+  "author": "JinnTec GmbH",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@lezer/generator": "^0.16.0",

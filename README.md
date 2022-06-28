@@ -2,6 +2,8 @@
 
 A plain javascript web component based on [codemirror](https://codemirror.net/) with language definitions for XML and Leiden+.
 
+[Demo](https://jinnelements.github.io/jinn-codemirror/)
+
 ## API
 
 ### jinn-codemirror

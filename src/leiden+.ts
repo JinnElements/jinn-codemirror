@@ -6,6 +6,7 @@ import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { leidenPlus2epiDoc } from ".";
 import { EditorConfig, EditorCommands, snippetCommand, wrapCommand, insertCommand } from "./config";
 import { leiden } from "./language";
+import { xml2leidenPlus } from "./import/xml2leiden+";
 
 const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {
     const diagnostics:Diagnostic[] = [];
@@ -84,8 +85,12 @@ export class LeidenConfig extends EditorConfig {
     serialize(): Element | string | null {
         return this.editor.content;
     }
+
     setFromValue(value: Element | string | null|undefined): string {
         if (!value) { return '' }
+        if (value instanceof Element) {
+            return xml2leidenPlus(value);
+        }
         if (!(typeof value === 'string')) {
             throw new Error("cannot set value")
         }
