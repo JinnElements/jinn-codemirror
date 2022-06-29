@@ -16,6 +16,7 @@ function transform(node: Node|null, output: string[]) {
             break;
         case Node.ELEMENT_NODE:
             const elem = <Element>node;
+            let n;
             switch (elem.localName) {
                 case 'ab':
                     output.push('<=');
@@ -29,6 +30,12 @@ function transform(node: Node|null, output: string[]) {
                     output.push('〚');
                     transformElem(elem, output);
                     output.push('〛');
+                    break;
+                case 'div':
+                    n = elem.getAttribute('n');
+                    output.push(`<D=.${n}.column`);
+                    transformElem(elem, output);
+                    output.push(`=D>`);
                     break;
                 case 'expan':
                 case 'ex':
@@ -44,7 +51,7 @@ function transform(node: Node|null, output: string[]) {
                     transformGap(elem, output);
                     break;
                 case 'lb':
-                    const n = elem.getAttribute('n');
+                    n = elem.getAttribute('n');
                     output.push(`\n${n}. `);
                     break;
                 case 'supplied':
@@ -128,8 +135,33 @@ function transformSupplied(elem: Element, output: string[]) {
     }
 }
 
-export function xml2leidenPlus(root: Node): string {
+export function xml2leidenPlus(root: Element): string {
     const output:string[] = [];
-    transform(root, output);
+    const columnBreaks = root.querySelectorAll('cb');
+    if (columnBreaks.length > 0) {
+        for (let i = 0; i <= columnBreaks.length; i++) {
+            const range = document.createRange();
+            if (i === 0) {
+                range.setStart(root, 0);
+            } else {
+                range.setStartAfter(columnBreaks[i - 1]);
+            }
+            if (i === columnBreaks.length) {
+                root.lastChild && range.setEndAfter(root.lastChild);
+            } else {
+                range.setEndBefore(columnBreaks[i]);
+            }
+            console.log(range);
+            const columnDiv = document.createElement('div');
+            columnDiv.setAttribute('type', 'textpart');
+            columnDiv.setAttribute('subtype', 'column');
+            columnDiv.setAttribute('n', (i + 1).toString());
+            range.surroundContents(columnDiv);
+            console.log('column: %o', columnDiv);
+            transform(columnDiv, output);
+        }
+    } else {
+        transform(root, output);
+    }
     return output.join('');
 }

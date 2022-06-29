@@ -89,6 +89,11 @@ export class JinnCodemirror extends HTMLElement {
                 break;
         }
 
+        const select = this.querySelector('[name=modes]');
+        if (select && select instanceof HTMLSelectElement) {
+            select.value = this._mode;
+        }
+
         this._config.getConfig()
         .then((stateConfig) => {
             this._editor = new EditorView({

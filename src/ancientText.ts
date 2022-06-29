@@ -13,7 +13,10 @@ export function convertToLeidenPlus(text: string, type: SourceType): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'application/xml');
     
-    return xml2leidenPlus(doc);
+    if (!doc.firstElementChild) {
+        return '';
+    }
+    return xml2leidenPlus(doc.firstElementChild);
 }
 
 export const convertToLeidenPlusCommand = (component: JinnCodemirror, type:SourceType):Command => (editor) => {

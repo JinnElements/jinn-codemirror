@@ -10,6 +10,7 @@ block {
     Verso { "<D=.v" ( block )+ "=D>" } |
     Part { "<D=." PartId ( block )+ "=D>"} |
     Fragment { "<D=." FragmentNum ( block )+ "=D>"} |
+    Column { "<D=." ColumnNum ( block )+ "=D>" } | 
     Inline
 }
 
@@ -69,6 +70,10 @@ LostLines {
         Number ".fragment"
     }
 
+    ColumnNum {
+        ( $[a-zA-Z] | std.digit )+ ".column"
+    }
+
     PartId {
         ( $[a-zA-Z] | std.digit )+ ".part"
     }
@@ -85,7 +90,7 @@ LostLines {
         "." ( Number | QuestionMark ) "lin"?
     }
 
-    @precedence { Illegible, ".", FragmentNum, LineBreakWrapped, LineBreak, Number }
+    @precedence { Illegible, ".", FragmentNum, ColumnNum, LineBreakWrapped, LineBreak, Number }
 
 }
 

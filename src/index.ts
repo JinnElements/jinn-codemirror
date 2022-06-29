@@ -96,6 +96,17 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     partStr += ">";
                     xml.push(partStr)
                     break;
+                case 'Column':
+                    node.firstChild();
+                    value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
+                    let columnStr = `<div n="${value ? value[1] : ''}" subtype="column" type="textpart"`;
+                    if (needsNS) {
+                        columnStr += " " + teiNS;
+                        needsNS = false;
+                    }
+                    columnStr += ">";
+                    xml.push(columnStr)
+                    break;
                 case 'Unclear':
                     const content = text(node);
                     let stripped = '';
@@ -212,7 +223,8 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                 case 'Verso':
                 case 'Fragment':
                 case 'Part':
-                    xml.push('</div>');
+                case 'Column':
+                    xml.push('</div>\n');
                     break;
                 case 'Supplied':
                 case 'SuppliedLost':
