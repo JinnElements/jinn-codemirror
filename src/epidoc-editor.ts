@@ -54,7 +54,6 @@ jinn-codemirror[valid="false"] {
 export class JinnEpidocEditor extends HTMLElement {
     
     _wrapper?: Element | null;
-    _value?: Element | null;
 
     xmlEditor: JinnCodemirror | null | undefined;
     // leidenEditor: JinnCodemirror | null | undefined;
@@ -73,7 +72,6 @@ export class JinnEpidocEditor extends HTMLElement {
         }
         if (!value) {
             this._wrapper = null
-            this._value = null
         }
         if (!(value instanceof Element)) { 
             throw new Error("Value is not a node")
@@ -81,10 +79,6 @@ export class JinnEpidocEditor extends HTMLElement {
     
         this._wrapper = value
         const node = value.firstElementChild
-        if (!(node && node instanceof Element)) { 
-            this._value = null
-        }
-        this._value = node;
         if (!this.xmlEditor) {
             throw new Error("XML editor not initialized")
         }
@@ -168,15 +162,15 @@ export class JinnEpidocEditor extends HTMLElement {
             for (let i = 0; i < cl; i++) {
                 this._wrapper?.removeChild(this._wrapper.children[i])
             }
-            // empty
             if (!xmlEditor.value) {
-                return this._wrapper
+                // empty
             }
-
-            if (!(xmlEditor.value instanceof Element)) {
+            else  if (!(xmlEditor.value instanceof Element)) {
                 throw new Error("XML editor value is not a node")
             }
-            this._wrapper?.appendChild(xmlEditor.value)
+            else {
+                this._wrapper?.appendChild(xmlEditor.value)
+            }
             const content = this._wrapper
 
             this.dispatchEvent(new CustomEvent('update', {
