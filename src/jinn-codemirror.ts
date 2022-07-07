@@ -1,4 +1,4 @@
-import {EditorState, EditorView} from "@codemirror/basic-setup";
+import { EditorState, EditorView } from "@codemirror/basic-setup";
 import { XMLConfig } from "./xml";
 import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
@@ -30,7 +30,9 @@ export class JinnCodemirror extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
+    }
 
+    connectedCallback() {
         const css = document.createElement('style');
         css.innerHTML = this.styles();
         this.shadowRoot?.appendChild(css);
@@ -38,9 +40,6 @@ export class JinnCodemirror extends HTMLElement {
         const toolbarSlot = document.createElement('slot');
         toolbarSlot.name = 'toolbar';
         this.shadowRoot?.appendChild(toolbarSlot);
-    }
-
-    connectedCallback() {
         const wrapper = document.createElement('div');
         wrapper.id = 'editor';
         this.shadowRoot?.appendChild(wrapper);

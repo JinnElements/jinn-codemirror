@@ -151,7 +151,7 @@ export class XMLConfig extends EditorConfig {
         return parsed.firstElementChild
     }
 
-    setFromValue(value: Element | string | null |undefined): string {
+    setFromValue(value: Element | string | null | undefined): string {
         if (!(value && value instanceof Element)) { 
             return ''
         }
