@@ -124,18 +124,16 @@ export abstract class EditorConfig {
                                     return value.severity === "info";
                                 })
                                 if (error.length) {
-                                    result.valid = false
+                                    result.valid = false;
                                     for (let e of error) {
                                         result.errors.push(e?.message);
                                     }
                                 }
-                                result.valid = result.valid || (error.length === 0 && info.length > 0)
+                                if (info.length && !result.errors.length) {
+                                    result.valid = true;
+                                }
                                 return result;
-
                             }, {valid: self.editor.valid, errors: []})
-                            if (check.valid === self.editor.valid) {
-                                return
-                            }
                             self.editor.valid = check.valid
                             if (check.valid) {
                                 self.editor.dispatchEvent(new CustomEvent('valid', {
