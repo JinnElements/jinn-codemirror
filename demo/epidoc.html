@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Leiden+ Editor Demo</title>
+        <style>
+            #showvalue {
+                width: 50ch;
+                height: 5ch;
+                font-size: 1rem;
+            }
+            #setvalue {
+                font-size: 1rem;
+            }
+        </style>
+        <script type="module" src="../src/jinn-codemirror.ts"></script>
+        <script type="module" src="../src/epidoc-editor.ts"></script>
+    </head>
+    <body>
+        <h2>EpiDoc Editor</h2>
+        <main>
+            <jinn-epidoc-editor id="test"></jinn-epidoc-editor>
+        </main>
+        <hr/>
+        <button id="setvalue">set value</button><br/>
+        <h3>Actual Value</h3>
+        <textarea id="showvalue"></textarea>
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const test = document.getElementById("test")
+                const setValueButton = document.getElementById('setvalue')
+                const showValueTextArea = document.getElementById('showvalue')
+
+                // test value
+                const div = document.createElementNS("http://www.tei-c.org/ns/1.0", "div")
+                div.setAttribute('type', 'edition')
+                const ab = document.createElementNS("http://www.tei-c.org/ns/1.0", "ab")
+                div.appendChild(ab)
+
+                setValueButton.addEventListener('click', (e) => {
+                    test.value = div
+                })
+
+                const s = new XMLSerializer();
+                test.addEventListener('update', (e) => {
+                    console.log(e.detail.content)
+                    if (!e.detail.content) { 
+                        showValueTextArea.textContent = 'EMPTY'
+                        return;
+                    }
+                    const serializedXML = s.serializeToString(e.detail.content)
+                    showValueTextArea.textContent = serializedXML
+                })
+            });
+        </script>
+    </body>
+</html>
