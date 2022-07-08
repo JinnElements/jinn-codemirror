@@ -5,50 +5,49 @@ interface LeidenEditorUpdateEvent extends Event {
 }
 
 const style = `
-:host{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-jinn-codemirror {
-    max-height: 400px;
-    min-height: 320px;
-    font-size: 16px;
-    display:block;
-}
-jinn-codemirror[valid="true"] {
-    outline: thin solid green;
-}
-jinn-codemirror[valid="false"] {
-    outline: thin solid red;
-}
-#xml-editor {
-    flex: 2;
-}
-#leiden-editor {
-    flex: 1;
-    padding-right: 10px;
-    border-right: 1px solid #CCAA00;
-    margin-right: 10px;
-}
-.hidden {
-    display: none;
-}
-[slot=toolbar] {
-    display: flex;
-    column-gap: 4px;
-    width: 100%;
-    margin-bottom: 10px;
-}
-[slot=toolbar] * {
-    font-size: .85rem;
-    border: 1px solid transparent;
-    background-color: inherit;
-}
-[slot=toolbar] *:hover {
-    border: 1px solid orange;
-}
-`;
+    :host{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+    jinn-codemirror {
+        max-height: 400px;
+        min-height: 320px;
+        font-size: 16px;
+        display:block;
+    }
+    jinn-codemirror[valid="true"] {
+        outline: thin solid green;
+    }
+    jinn-codemirror[valid="false"] {
+        outline: thin solid red;
+    }
+    #xml-editor {
+        flex: 2;
+    }
+    #leiden-editor {
+        flex: 1;
+        padding-right: 10px;
+        border-right: 1px solid #CCAA00;
+        margin-right: 10px;
+    }
+    .hidden {
+        display: none;
+    }
+    [slot=toolbar] {
+        display: flex;
+        column-gap: 4px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    [slot=toolbar] * {
+        font-size: .85rem;
+        border: 1px solid transparent;
+        background-color: inherit;
+    }
+    [slot=toolbar] *:hover {
+        border: 1px solid orange;
+    }`;
 
 
 export class JinnEpidocEditor extends HTMLElement {
@@ -60,6 +59,7 @@ export class JinnEpidocEditor extends HTMLElement {
     // toggle: HTMLButtonElement | null | undefined;
 
     public valid?: boolean;
+    private schema: string | null;
 
     /**
      * The value edited in the editor as either an Element or string -
@@ -97,6 +97,7 @@ export class JinnEpidocEditor extends HTMLElement {
         this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
+        this.schema = this.getAttribute('schema');
         this.shadowRoot.innerHTML = `
             <style>
                 ${style}
@@ -121,7 +122,7 @@ export class JinnEpidocEditor extends HTMLElement {
                     <button data-command="convert" class="edcs">Leiden+</button>
                 </div>
             </jinn-codemirror>
-            <jinn-codemirror id="xml-editor" mode="xml" schema="../src/epidoc.json"
+            <jinn-codemirror id="xml-editor" mode="xml" schema="${this.schema}"
                     namespace="http://www.tei-c.org/ns/1.0">
                 <div slot="toolbar">
                     <button id="import" title="Import from Leiden markup">Import Leiden</button>
