@@ -6,15 +6,13 @@ interface LeidenEditorUpdateEvent extends Event {
 
 const style = `
     :host{
-        display: flex;
-        flex-direction: row;
+        display: block;
         width: 100%;
     }
     jinn-codemirror {
-        max-height: 400px;
-        min-height: 320px;
-        font-size: 16px;
+        font-size: 1rem;
         display:block;
+        width:100%;
     }
     jinn-codemirror[valid="true"] {
         outline: thin solid green;
@@ -22,23 +20,16 @@ const style = `
     jinn-codemirror[valid="false"] {
         outline: thin solid red;
     }
-    #xml-editor {
-        flex: 2;
-    }
     #leiden-editor {
-        flex: 1;
-        padding-right: 10px;
-        border-right: 1px solid #CCAA00;
-        margin-right: 10px;
+        margin-bottom:0.5rem;
     }
     .hidden {
         display: none;
     }
     [slot=toolbar] {
-        display: flex;
-        column-gap: 4px;
+        display: block;
         width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 0.75rem;
     }
     [slot=toolbar] * {
         font-size: .85rem;
@@ -53,6 +44,7 @@ const style = `
 export class JinnEpidocEditor extends HTMLElement {
     
     _wrapper?: Element | null;
+    _remote: boolean;
 
     xmlEditor: JinnCodemirror | null | undefined;
     // leidenEditor: JinnCodemirror | null | undefined;
@@ -77,7 +69,8 @@ export class JinnEpidocEditor extends HTMLElement {
             throw new Error("Value is not a node")
         }
     
-        this._wrapper = value
+        this._wrapper = value;
+        this._remote = true;
         const node = value.firstElementChild
         if (!this.xmlEditor) {
             throw new Error("XML editor not initialized")
@@ -92,8 +85,10 @@ export class JinnEpidocEditor extends HTMLElement {
     constructor() {
         super()
         this._wrapper = null;
+        this._remote = false;
         this.xmlEditor = null;
         this.valid = true;
+        this.schema = null;
         this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
@@ -158,6 +153,9 @@ export class JinnEpidocEditor extends HTMLElement {
         xmlEditor.addEventListener('update', (ev) => {
             ev.stopPropagation()
             if (!this._wrapper) { return null }
+            if (this._remote) {
+                return this._remote = false
+            }
             // remove old children
             const cl = this._wrapper?.children.length || 0
             for (let i = 0; i < cl; i++) {
