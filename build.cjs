@@ -39,6 +39,22 @@ async function bundle() {
 			process.exit(1);
 		});
 }
+async function bundleEpidoc() {
+    console.log(chalk.blue('Bundling source files ...'));
+    await esbuild
+		.build({
+			entryPoints: ['./src/epidoc-editor.ts'],
+            outdir: 'dist',
+			bundle: true,
+            minify: !args.dev,
+			sourcemap: !args.dev,
+			logLevel: "info",
+		})
+		.catch((err) => {
+			console.error(err);
+			process.exit(1);
+		});
+}
 
 async function clean() {
     console.log(chalk.blue('Cleaning files ...'));
@@ -74,4 +90,5 @@ const args = commandLineArgs([
     docs('./src/jinn-codemirror.ts');
     await prepare();
     await bundle();
+    await bundleEpidoc();
 })();
