@@ -79,7 +79,8 @@ async function prepare() {
 }
 
 const args = commandLineArgs([
-    { name: "command", type: String, defaultOption: true, defaultValue: 'build' }
+    { name: "command", type: String, defaultOption: true, defaultValue: 'build' },
+    { name: "dev", type: Boolean, defaultOption: false, defaultValue: false }
 ]);
 
 (async () => {
