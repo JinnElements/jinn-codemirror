@@ -44,7 +44,6 @@ const style = `
 export class JinnEpidocEditor extends HTMLElement {
     
     _wrapper?: Element | null;
-    _remote: boolean;
 
     xmlEditor: JinnCodemirror | null | undefined;
     // leidenEditor: JinnCodemirror | null | undefined;
@@ -70,7 +69,6 @@ export class JinnEpidocEditor extends HTMLElement {
         }
     
         this._wrapper = value;
-        this._remote = true;
         const node = value.firstElementChild
         if (!this.xmlEditor) {
             throw new Error("XML editor not initialized")
@@ -85,7 +83,6 @@ export class JinnEpidocEditor extends HTMLElement {
     constructor() {
         super()
         this._wrapper = null;
-        this._remote = false;
         this.xmlEditor = null;
         this.valid = true;
         this.schema = null;
@@ -152,9 +149,9 @@ export class JinnEpidocEditor extends HTMLElement {
 
         xmlEditor.addEventListener('update', (ev) => {
             ev.stopPropagation()
-            if (!this._wrapper) { return null }
-            if (this._remote) {
-                return this._remote = false
+            if (!this._wrapper) {
+                console.log("no wrapper !!!")
+                return null
             }
             // remove old children
             const cl = this._wrapper?.children.length || 0
@@ -163,11 +160,13 @@ export class JinnEpidocEditor extends HTMLElement {
             }
             if (!xmlEditor.value) {
                 // empty
+                console.log("xml editor value is empty")
             }
             else  if (!(xmlEditor.value instanceof Element)) {
                 throw new Error("XML editor value is not a node")
             }
             else {
+                console.log("appending", xmlEditor.value)
                 this._wrapper?.appendChild(xmlEditor.value)
             }
             const content = this._wrapper
