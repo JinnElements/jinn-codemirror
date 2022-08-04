@@ -25,7 +25,6 @@ export class JinnCodemirror extends HTMLElement {
 
     _editor?: EditorView;
     _config?: EditorConfig;
-    _remote?: boolean;
 
     constructor() {
         super();
@@ -145,14 +144,11 @@ export class JinnCodemirror extends HTMLElement {
         if (!this._config) {
             return;
         }
-        const newContent = this._config.setFromValue(value)
-        if (this.content === newContent) {
-            console.debug("value unchanged");
+        const _val = this._config.setFromValue(value)
+        if (this._value === _val) {
             return;
         }
-        this._remote = true;
         this._value = value;
-        this.content = newContent;
     }
 
     get value(): Element | string | null {
