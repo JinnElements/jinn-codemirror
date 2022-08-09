@@ -1,7 +1,8 @@
 import { EditorView, basicSetup } from "@codemirror/basic-setup";
-import { Command, ViewPlugin, ViewUpdate } from "@codemirror/view";
+import { Command, ViewPlugin, ViewUpdate, keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorStateConfig, Extension, EditorSelection, StateEffect } from "@codemirror/state";
+import {indentWithTab} from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
@@ -154,7 +155,7 @@ export abstract class EditorConfig {
         });
 
         const customExtensions = await this.getExtensions(this.editor);
-        return { extensions: [basicSetup, EditorView.lineWrapping, ...customExtensions, updateListener] };
+        return { extensions: [basicSetup, EditorView.lineWrapping, keymap.of([indentWithTab]),...customExtensions, updateListener] };
     }
 
     abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;
