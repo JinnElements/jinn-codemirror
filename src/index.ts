@@ -37,7 +37,7 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     needsWrap = count > 1 || needsWrap;
                     if (needsWrap) {
                         needsNS = false;
-                        xml.push(`<${wrapper} ${teiNS}>`);
+                        xml.push(`<${wrapper} ${teiNS}>\n`);
                     }
                     node.parent();
                     break;
@@ -201,7 +201,7 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
             switch (node.name) {
                 case 'Document':
                     if (needsWrap) {
-                        xml.push(`</${wrapper}>`);
+                        xml.push(`\n</${wrapper}>`);
                     }
                     break;
                 case 'Abbrev':
