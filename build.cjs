@@ -27,23 +27,7 @@ async function bundle() {
     console.log(chalk.blue('Bundling source files ...'));
     await esbuild
 		.build({
-			entryPoints: ['./src/jinn-codemirror.ts'],
-            outdir: 'dist',
-			bundle: true,
-            minify: !args.dev,
-			sourcemap: !args.dev,
-			logLevel: "info",
-		})
-		.catch((err) => {
-			console.error(err);
-			process.exit(1);
-		});
-}
-async function bundleEpidoc() {
-    console.log(chalk.blue('Bundling source files ...'));
-    await esbuild
-		.build({
-			entryPoints: ['./src/epidoc-editor.ts'],
+			entryPoints: ['./src/jinn-codemirror.ts', './src/epidoc-editor.ts', './src/xml-editor.ts'],
             outdir: 'dist',
 			bundle: true,
             minify: !args.dev,
@@ -91,5 +75,4 @@ const args = commandLineArgs([
     docs('./src/jinn-codemirror.ts');
     await prepare();
     await bundle();
-    await bundleEpidoc();
 })();
