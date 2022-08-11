@@ -107,17 +107,21 @@ const xmlKeymap: readonly KeyBinding[] = [
 export class XMLConfig extends EditorConfig {
 
     private namespace: string|null;
+    private unwrap: boolean|null;
+    private checkNamespace: boolean|null;
 
-    constructor(editor: JinnCodemirror, namespace: string|null = null) {
+    constructor(editor: JinnCodemirror, namespace: string|null = null, checkNamespace: boolean|null = false, unwrap: boolean|null = false) {
         super(editor);
         this.namespace = namespace;
+        this.checkNamespace = checkNamespace;
+        this.unwrap = unwrap;
     }
 
     private getDefaultExtensions (): Extension[] {
         return [
             inputPanel(),
             keymap.of(xmlKeymap), 
-            linter(teiFragmentLinter(this.namespace), {delay, markerFilter}), 
+            linter(teiFragmentLinter(this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
             lintGutter({markerFilter})
         ];
     }
@@ -141,14 +145,16 @@ export class XMLConfig extends EditorConfig {
         return json;
     }
 
-    serialize(): Element | string | null {
+    serialize(): Element | NodeListOf<ChildNode> | string | null | undefined {
         const parser = new DOMParser();
-        const parsed = parser.parseFromString(this.editor.content, "application/xml");
+        const content = this.unwrap ? `<R xmlns="${this.namespace || ''}">${this.editor.content}</R>` : this.editor.content;
+        const parsed = parser.parseFromString(content, "application/xml");
         const errors = parsed.getElementsByTagName("parsererror")
         if (errors.length) {
+            // console.error(new XMLSerializer().serializeToString(parsed));
             throw new TypeError("Invalid XML");
         }
-        return parsed.firstElementChild
+        return this.unwrap ? parsed.firstElementChild?.childNodes : parsed.firstElementChild;
     }
 
     setFromValue(value: Element | string | null | undefined): string {

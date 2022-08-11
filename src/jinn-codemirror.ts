@@ -73,6 +73,27 @@ export class JinnCodemirror extends HTMLElement {
         this._mode = SourceType[mode as keyof typeof SourceType];
         console.log(`<jinn-codemirror> mode: ${this.mode}`);
         this.activateToolbar();
+        this.configure();
+
+        const select = this.querySelector('[name=modes]');
+        if (select && select instanceof HTMLSelectElement) {
+            select.value = this._mode;
+        }
+
+        this._config?.getConfig()
+        .then((stateConfig) => {
+            this._editor = new EditorView({
+                state: EditorState.create(stateConfig),
+                parent: wrapper
+            });
+            if (!this._config) {
+                return
+            }
+            this.content = this._config.setFromValue(this._value);
+        });
+    }
+
+    protected configure() {
         switch(this._mode) {
             case SourceType.default:
             case SourceType.edcs:
@@ -86,23 +107,6 @@ export class JinnCodemirror extends HTMLElement {
                 this._config = new XMLConfig(this, this.namespace);
                 break;
         }
-
-        const select = this.querySelector('[name=modes]');
-        if (select && select instanceof HTMLSelectElement) {
-            select.value = this._mode;
-        }
-
-        this._config.getConfig()
-        .then((stateConfig) => {
-            this._editor = new EditorView({
-                state: EditorState.create(stateConfig),
-                parent: wrapper
-            });
-            if (!this._config) {
-                return
-            }
-            this.content = this._config.setFromValue(this._value);
-        });
     }
 
     get mode(): string {
@@ -164,7 +168,8 @@ export class JinnCodemirror extends HTMLElement {
         return this._value;
     }
 
-    emitUpdateEvent(content: string | Element | null, serialized: string | Element | null) {
+    protected emitUpdateEvent(content: string | Element | null, serialized: string | Element | null) {
+        console.log(content);
         this.dispatchEvent(new CustomEvent('update', {
             detail: {content, serialized},
             composed: true,

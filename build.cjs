@@ -17,17 +17,19 @@ function replace(inPath, outPath, patterns) {
 }
 
 function docs(inPath) {
+    console.log(chalk.cyan(`Generating documentation for ${inPath}...`));
     const code = fs.readFileSync(path.join(__dirname, inPath), "utf-8");
     const { results, program } = analyzeText(code);
     const markdown = transformAnalyzerResult('markdown', results, program, {markdown: {titleLevel: 3}});
-    replace('README.md', '.', [{regex: /## API.*$/g, replacement: `## API\n\n${markdown}`}]);
+    const out = path.join(__dirname, 'README.md');
+    fs.writeFileSync(out, `\n${markdown}`, {encoding: 'utf8', flag: 'a'});
 }
 
 async function bundle() {
     console.log(chalk.blue('Bundling source files ...'));
     await esbuild
 		.build({
-			entryPoints: ['./src/bundle.ts'],
+			entryPoints: ['./src/jinn-codemirror-bundle.ts'],
             outdir: 'dist',
 			bundle: true,
             minify: !args.dev,
@@ -56,7 +58,7 @@ async function prepare() {
 	}
 
     replace('demo/index.html', '.', [
-        {regex: /..\/src\/bundle.ts/, replacement: 'dist/bundle.js'},
+        {regex: /..\/src\/jinn-codemirror-bundle.ts/, replacement: 'dist/jinn-codemirror-bundle.js'},
         {regex: /..\/src\/epidoc.json/, replacement: 'dist/epidoc.json'}
     ]);
     await mfs.copy('src/epidoc.json', 'dist');
@@ -72,7 +74,10 @@ const args = commandLineArgs([
         await clean();
         return;
     }
+    await mfs.copy('README.tmpl', 'README.md');
     docs('./src/jinn-codemirror.ts');
+    docs('./src/xml-editor.ts');
+    docs('./src/epidoc-editor.ts');
     await prepare();
     await bundle();
 })();

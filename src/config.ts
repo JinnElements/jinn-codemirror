@@ -166,5 +166,5 @@ export abstract class EditorConfig {
 
     abstract setFromValue(value: Element|string|null|undefined): string;
 
-    abstract serialize(): Element | string | null;
+    abstract serialize(): Element | NodeListOf<ChildNode> | string | null | undefined;
 }
