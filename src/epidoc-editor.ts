@@ -56,7 +56,7 @@ export class JinnEpidocEditor extends HTMLElement {
      * The value edited in the editor as either an Element or string -
      * depending on the mode set.
      */
-    set value(value: Element | null | undefined) {
+    set value(value: Element | string | null | undefined) {
         if (this._wrapper === value) {
             console.debug("value unchanged");
             return;

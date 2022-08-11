@@ -100,11 +100,7 @@ export abstract class EditorConfig {
                             self.editor._remote = false
                             return
                         }
-                        self.editor.dispatchEvent(new CustomEvent('update', {
-                            detail: {content, serialized},
-                            composed: true,
-                            bubbles: true
-                        }));
+                        self.editor.emitUpdateEvent(content, serialized);
                     }
                     catch (e) {
                         // suppress updates (invalid data)

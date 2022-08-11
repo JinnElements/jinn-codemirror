@@ -141,19 +141,35 @@ export class JinnCodemirror extends HTMLElement {
      * depending on the mode set.
      */
     set value(value: Element | string | null | undefined) {
+        this.setValue(value);
+    }
+
+    get value(): Element | string | null {
+        return this.getValue();
+    }
+
+    protected setValue(value: Element | string | null | undefined) {
         if (!this._config) {
             return;
         }
-        const _val = this._config.setFromValue(value)
+        const _val = this._config.setFromValue(value);
         if (this._value === _val) {
             return;
         }
         this._value = value;
     }
 
-    get value(): Element | string | null {
+    protected getValue(): Element | string | null {
         if (!this._value) { return null }
         return this._value;
+    }
+
+    emitUpdateEvent(content: string | Element | null, serialized: string | Element | null) {
+        this.dispatchEvent(new CustomEvent('update', {
+            detail: {content, serialized},
+            composed: true,
+            bubbles: true
+        }));
     }
 
     private initModes(): string | null {
