@@ -27,7 +27,7 @@ async function bundle() {
     console.log(chalk.blue('Bundling source files ...'));
     await esbuild
 		.build({
-			entryPoints: ['./src/jinn-codemirror.ts', './src/epidoc-editor.ts', './src/xml-editor.ts'],
+			entryPoints: ['./src/bundle.ts'],
             outdir: 'dist',
 			bundle: true,
             minify: !args.dev,
@@ -56,7 +56,7 @@ async function prepare() {
 	}
 
     replace('demo/index.html', '.', [
-        {regex: /..\/src\/jinn-codemirror.ts/, replacement: 'dist/jinn-codemirror.js'},
+        {regex: /..\/src\/bundle.ts/, replacement: 'dist/bundle.js'},
         {regex: /..\/src\/epidoc.json/, replacement: 'dist/epidoc.json'}
     ]);
     await mfs.copy('src/epidoc.json', 'dist');
