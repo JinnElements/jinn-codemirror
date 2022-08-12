@@ -20,7 +20,7 @@ import { Diagnostic, setDiagnosticsEffect } from "@codemirror/lint";
 };
 
 export interface EditorCommands {
-    [index:string]: Command
+    [index:string]: Command|{create: Function}
 }
 
 /**

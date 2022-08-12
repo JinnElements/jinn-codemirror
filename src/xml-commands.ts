@@ -1,7 +1,7 @@
 import { EditorSelection, StateEffect, StateField } from "@codemirror/state";
 import { Command, EditorView, showPanel } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
-import { EditorCommands, wrapCommand } from "./config";
+import { EditorCommands, wrapCommand, snippetCommand } from "./config";
 
 const toggleInputPanel = StateEffect.define<boolean>();
 
@@ -128,5 +128,8 @@ export const removeEnclosingCommand:Command = (editor) => {
 export const commands:EditorCommands = {
     selectElement: selectElementCommand,
     removeEnclosing: removeEnclosingCommand,
-    encloseWith: encloseWithCommand
+    encloseWith: encloseWithCommand,
+    snippet: {
+        create: (template:string) => snippetCommand(template)
+    }
 };

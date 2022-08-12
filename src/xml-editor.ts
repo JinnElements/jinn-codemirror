@@ -62,7 +62,6 @@ export class JinnXMLEditor extends JinnCodemirror {
                 const child = this._wrapper.ownerDocument.importNode(this._value[i], true);
                 this._wrapper?.appendChild(child);
             };
-            console.log(new XMLSerializer().serializeToString(this._wrapper));
         } else if (!(this._value instanceof Node)) {
             console.error("<xml-editor> Value is not a node");
             throw new Error('value is not a node');

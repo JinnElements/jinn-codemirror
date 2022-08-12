@@ -169,7 +169,6 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     protected emitUpdateEvent(content: string | Element | null, serialized: string | Element | null) {
-        console.log(content);
         this.dispatchEvent(new CustomEvent('update', {
             detail: {content, serialized},
             composed: true,
@@ -203,8 +202,31 @@ export class JinnCodemirror extends HTMLElement {
                     const commands = this._config.getCommands();
                     const command = commands[cmdName];
                     if (command) {
-                        command(<EditorView>this._editor);
-                        this._editor?.focus();
+                        if (command instanceof Function) {
+                            command(<EditorView>this._editor);
+                            if (command.name !== 'encloseWithCommand') {
+                                this._editor?.focus();
+                            }
+                        } else {
+                            const paramsAttr = (<HTMLElement>btn).dataset.params;
+                            const create = (<{create: Function}>command).create;
+                            if (paramsAttr) {
+                                let params;
+                                try {
+                                    params = JSON.parse(paramsAttr);
+                                } catch (e) {
+                                    params = [paramsAttr];
+                                }
+                                if (Array.isArray(params) && params.length === create.length) {
+                                    create.apply(null, params)(<EditorView>this._editor);
+                                } else {
+                                    console.error('<jinn-codemirror> Expected %d arguments for command %s', create.length, cmdName);
+                                }
+                            } else {
+                                console.error('<jinn-codemirror> No arguments specified for command %s', cmdName);
+                            }
+                            this._editor?.focus();
+                        }
                     }
                 });
             });
