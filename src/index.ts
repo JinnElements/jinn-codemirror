@@ -2,7 +2,6 @@ import { Tree, TreeCursor } from "@lezer/common";
 import { parser } from "./parser/leiden+/parser.js";
 
 const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
-const teiNS = 'xmlns="http://www.tei-c.org/ns/1.0"'
 
 export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input)) {
     function text(node:TreeCursor) {
@@ -12,7 +11,6 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
     const stack:string[] = [];
     const xml:string[] = [];
     let needsWrap = false;
-    let needsNS = true;
     let wrapper = 'ab';
     let value;
     root.iterate({
@@ -37,7 +35,7 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     needsWrap = count > 1 || needsWrap;
                     if (needsWrap) {
                         needsNS = false;
-                        xml.push(`<${wrapper} ${teiNS}>\n`);
+                        xml.push(`<${wrapper}>\n`);
                     }
                     node.parent();
                     break;
@@ -56,56 +54,26 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     xml.push(`<lb n="${value ? value[1] : ''}" break="no"/>`);
                     break;
                 case 'Div':
-                    let abStr = "<ab";
-                    if (needsNS) {
-                        abStr += " " + teiNS;
-                        needsNS = false;
-                    }
-                    abStr += '>';
-                    xml.push(abStr)
+                    xml.push("<ab>")
                     break;
                 case 'Recto':
                 case 'Verso':
-                    let rectoVersoStr = '<div n="r" type="textpart"'
-                    if (needsNS) {
-                        rectoVersoStr += " " + teiNS;
-                        needsNS = false
-                    }
-                    rectoVersoStr += ">";
-                    xml.push(rectoVersoStr)
+                    xml.push('<div n="r" type="textpart">');
                     break;
                 case 'Fragment':
                     node.firstChild();
                     value = /^([0-9]+)\..*$/.exec(text(node));
-                    let fragStr = `<div n="${value ? value[1] : ''}" subtype="fragment" type="textpart"`;                    
-                    if (needsNS) {
-                        fragStr += " " + teiNS;
-                        needsNS = false;
-                    }
-                    fragStr += ">";
-                    xml.push(fragStr)
+                    xml.push(`<div n="${value ? value[1] : ''}" subtype="fragment" type="textpart">`);
                     break;
                 case 'Part':
                     node.firstChild();
                     value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
-                    let partStr = `<div n="${value ? value[1] : ''}" subtype="part" type="textpart"`;
-                    if (needsNS) {
-                        partStr += " " + teiNS;
-                        needsNS = false;
-                    }
-                    partStr += ">";
-                    xml.push(partStr)
+                    xml.push(`<div n="${value ? value[1] : ''}" subtype="part" type="textpart">`)
                     break;
                 case 'Column':
                     node.firstChild();
                     value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
-                    let columnStr = `<div n="${value ? value[1] : ''}" subtype="column" type="textpart"`;
-                    if (needsNS) {
-                        columnStr += " " + teiNS;
-                        needsNS = false;
-                    }
-                    columnStr += ">";
-                    xml.push(columnStr)
+                    xml.push(`<div n="${value ? value[1] : ''}" subtype="column" type="textpart">`)
                     break;
                 case 'Unclear':
                     const content = text(node);

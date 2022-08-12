@@ -9,7 +9,7 @@ import { JinnCodemirror } from "./jinn-codemirror";
 
 export function convertToLeidenPlus(text: string, type: SourceType): string {
     const converted = ancientText2XML(text, type);
-    const xml = `<ab xmlns="http://www.tei-c.org/ns/1.0">${converted}\n</ab>`
+    const xml = `<ab>${converted}\n</ab>`
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'application/xml');
     
@@ -60,7 +60,7 @@ export class AncientTextConfig extends EditorConfig {
 
     onUpdate(tree: Tree, content: string): string {
         const converted = ancientText2XML(content, this._sourceType);
-        return `<ab xmlns="http://www.tei-c.org/ns/1.0">\n${converted}\n</ab>`
+        return `<ab>\n${converted}\n</ab>`
     }
 
     serialize(): Element | string | null {
