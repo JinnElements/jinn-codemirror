@@ -65,6 +65,7 @@ export const insertCommand = (insert:string):Command => (editor) => {
  * @returns command to execute
  */
 export const snippetCommand = (template:string):Command => (editor) => {
+    template = template.replace(/\$\|([^|]+)\|/g, '${$1}');
     editor.state.selection.ranges.forEach((range) => {
         const content = editor.state.doc.slice(range.from, range.to);
         const snip = snippet(template.replace(/\${_}/, `\${${content.toString()}}`));
