@@ -157,12 +157,18 @@ export class XMLConfig extends EditorConfig {
         return this.unwrap ? parsed.firstElementChild?.childNodes : parsed.firstElementChild;
     }
 
-    setFromValue(value: Element | string | null | undefined): string {
-        if (!(value && value instanceof Element)) { 
-            return ''
+    setFromValue(value: Element | NodeListOf<ChildNode> | string | null | undefined): string {
+        if (!(value && (value instanceof Element || value instanceof NodeList))) { 
+            return '';
         }
         const s = new XMLSerializer();
-        const serializedXML = s.serializeToString(value)
-        return serializedXML;
+        if (value instanceof NodeList) {
+            const buf = [];
+            for (let i = 0; i < (<NodeList>value).length; i++) {
+                buf.push(s.serializeToString(value[i]));
+            }
+            return buf.join('');
+        }
+        return s.serializeToString(value);
     }
 }

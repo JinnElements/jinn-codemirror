@@ -97,10 +97,6 @@ export abstract class EditorConfig {
                     try {
                         const serialized = self.serialize();
                         self.editor._value = serialized;
-                        if (self.editor._remote) {
-                            self.editor._remote = false
-                            return
-                        }
                         self.editor.emitUpdateEvent(content, serialized);
                     }
                     catch (e) {
@@ -165,7 +161,7 @@ export abstract class EditorConfig {
         return content;
     }
 
-    abstract setFromValue(value: Element|string|null|undefined): string;
+    abstract setFromValue(value: Element|NodeListOf<ChildNode>|string|null|undefined): string;
 
     abstract serialize(): Element | NodeListOf<ChildNode> | string | null | undefined;
 }

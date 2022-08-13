@@ -15,7 +15,7 @@ import { EditorConfig, SourceType } from "./config";
 export class JinnCodemirror extends HTMLElement {
 
     _mode: SourceType = SourceType.xml;
-    _value?: Element | string | null;
+    _value?: Element | NodeListOf<ChildNode> | string | null;
 
     /**
      * Default element namespace to enforce on the root element in
@@ -142,19 +142,19 @@ export class JinnCodemirror extends HTMLElement {
      * The value edited in the editor as either an Element or string -
      * depending on the mode set.
      */
-    set value(value: Element | string | null | undefined) {
+    set value(value: Element | NodeListOf<ChildNode> | string | null | undefined) {
         const updated = this.setValue(value);
 
-        if (updated && this._config) {
+        if (updated && this._editor && this._config) {
             this.content = this._config?.setFromValue(this._value);
         }
     }
 
-    get value(): Element | string | null {
+    get value(): Element | NodeListOf<ChildNode> | string | null {
         return this.getValue();
     }
 
-    protected setValue(value: Element | string | null | undefined): boolean {
+    protected setValue(value: Element | NodeListOf<ChildNode> | string | null | undefined): boolean {
         if (!this._config) {
             return false;
         }
@@ -166,7 +166,7 @@ export class JinnCodemirror extends HTMLElement {
         return true;
     }
 
-    protected getValue(): Element | string | null {
+    protected getValue(): Element | NodeListOf<ChildNode> | string | null {
         if (!this._value) { return null }
         return this._value;
     }

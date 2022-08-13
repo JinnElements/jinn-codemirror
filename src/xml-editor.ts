@@ -89,11 +89,11 @@ export class JinnXMLEditor extends JinnCodemirror {
         }
         
         this._wrapper = value;
-        this._value = value.firstElementChild;
+        this._value = value.childNodes;
         return true;
     }
 
-    protected getValue(): Element | string | null {
+    protected getValue(): Element | NodeListOf<ChildNode> | string | null {
         if (!this.unwrap) {
             return super.getValue();
         }
