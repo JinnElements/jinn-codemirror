@@ -38,6 +38,10 @@ const style = `
     }
     [slot=toolbar] *:hover {
         border: 1px solid orange;
+    }
+    #close-leiden {
+        margin-left: .75rem;
+        font-weight: bold;
     }`;
 
 
@@ -112,12 +116,12 @@ export class JinnEpidocEditor extends HTMLElement {
                     <button data-command="erasure" class="edcs">〚abc〛</button>
                     <button data-command="gap" class="edcs">[...]</button>
                     <button data-command="convert" class="edcs">Leiden+</button>
+                    <button id="close-leiden">Close</button>
                 </div>
             </jinn-codemirror>
-            <jinn-codemirror id="xml-editor" mode="xml" schema="${this.schema}"
-                    namespace="http://www.tei-c.org/ns/1.0">
+            <jinn-codemirror id="xml-editor" mode="xml" schema="${this.schema}">
                 <div slot="toolbar">
-                    <button id="import" title="Import from Leiden markup">Import Leiden</button>
+                    <button id="import" title="Import from Leiden markup">Show Leiden Editor</button>
                     <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
                     <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
                     <button data-command="removeEnclosing" title="Remove enclosing tags">&lt;X></button>
@@ -127,17 +131,30 @@ export class JinnEpidocEditor extends HTMLElement {
          
         const xmlEditor:JinnCodemirror | null | undefined = this.shadowRoot?.querySelector('#xml-editor');
         const leidenEditor:JinnCodemirror | null | undefined = this.shadowRoot?.querySelector('#leiden-editor');
-        const toggle:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#import');
+        const openLeiden:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#import');
+        const closeLeiden:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#close-leiden');
 
-        if (!(xmlEditor && leidenEditor && toggle)) {
+        if (!(xmlEditor && leidenEditor && openLeiden && closeLeiden)) {
             throw new Error('One or more components were not initialized')
         }
 
-        toggle.addEventListener('click', () => {
-            const hidden = leidenEditor.classList.toggle('hidden');
-            if (!hidden) { 
+        openLeiden.addEventListener('click', () => {
+            const hidden = leidenEditor.classList.contains('hidden');
+            if (hidden) {
+                leidenEditor.classList.remove('hidden');
                 leidenEditor.focus();
+                openLeiden.innerHTML = 'Close Leiden Editor';
+            } else {
+                leidenEditor.classList.add('hidden');
+                openLeiden.innerHTML = 'Open Leiden Editor';
+                xmlEditor.focus();
             }
+        });
+
+        closeLeiden.addEventListener('click', () => {
+            openLeiden.innerHTML = 'Open Leiden Editor';
+            leidenEditor.classList.add('hidden');
+            xmlEditor.focus();
         });
 
         leidenEditor.addEventListener('update', (ev) => {
