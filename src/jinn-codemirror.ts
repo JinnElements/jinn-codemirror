@@ -129,11 +129,9 @@ export class JinnCodemirror extends HTMLElement {
             console.log('no editor');
             return;
         }
-        const tx = this._editor.state.update({
+        this._editor.dispatch({
             changes: {from: 0, to: this._editor.state.doc.length, insert: text}
         });
-
-        this._editor.dispatch(tx);
     }
 
     get content(): string {
@@ -145,22 +143,27 @@ export class JinnCodemirror extends HTMLElement {
      * depending on the mode set.
      */
     set value(value: Element | string | null | undefined) {
-        this.setValue(value);
+        const updated = this.setValue(value);
+
+        if (updated && this._config) {
+            this.content = this._config?.setFromValue(this._value);
+        }
     }
 
     get value(): Element | string | null {
         return this.getValue();
     }
 
-    protected setValue(value: Element | string | null | undefined) {
+    protected setValue(value: Element | string | null | undefined): boolean {
         if (!this._config) {
-            return;
+            return false;
         }
         const _val = this._config.setFromValue(value);
         if (this._value === _val) {
-            return;
+            return false;
         }
         this._value = value;
+        return true;
     }
 
     protected getValue(): Element | string | null {

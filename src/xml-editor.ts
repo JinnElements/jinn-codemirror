@@ -72,14 +72,14 @@ export class JinnXMLEditor extends JinnCodemirror {
         super.emitUpdateEvent(this._wrapper, new XMLSerializer().serializeToString(this._wrapper));
     }
 
-    protected setValue(value: Element | string | null | undefined) {
+    protected setValue(value: Element | string | null | undefined): boolean {
         if (!this.unwrap) {
             return super.setValue(value);
         }
 
-        if (this._wrapper === value) {
+        if (this._config?.setFromValue(this._wrapper) === this._config?.setFromValue(value)) {
             console.debug("value unchanged");
-            return;
+            return false;
         }
         if (!value) {
             this._wrapper = null;
@@ -87,9 +87,10 @@ export class JinnXMLEditor extends JinnCodemirror {
         if (!(value instanceof Element)) { 
             throw new Error("Value is not a node");
         }
-    
+        
         this._wrapper = value;
         this._value = value.firstElementChild;
+        return true;
     }
 
     protected getValue(): Element | string | null {
