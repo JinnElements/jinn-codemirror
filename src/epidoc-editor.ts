@@ -61,7 +61,7 @@ export class JinnEpidocEditor extends HTMLElement {
      * depending on the mode set.
      */
     set value(value: Element | string | null | undefined) {
-        if (this._wrapper === value) {
+        if (this._wrapper === value || this.xmlEditor?._config?.setFromValue(this._wrapper) === this.xmlEditor?._config?.setFromValue(value)) {
             console.debug("value unchanged");
             return;
         }
@@ -69,12 +69,14 @@ export class JinnEpidocEditor extends HTMLElement {
             this._wrapper = null
         }
         if (!(value instanceof Element)) { 
+            console.error('value is not a node');
             throw new Error("Value is not a node")
         }
     
         this._wrapper = value;
         const node = value.firstElementChild
         if (!this.xmlEditor) {
+            console.error('editor not initialized');
             throw new Error("XML editor not initialized")
         }
         this.xmlEditor.value = node
@@ -183,7 +185,6 @@ export class JinnEpidocEditor extends HTMLElement {
                 throw new Error("XML editor value is not a node")
             }
             else {
-                console.log("appending", xmlEditor.value)
                 this._wrapper?.appendChild(xmlEditor.value)
             }
             const content = this._wrapper

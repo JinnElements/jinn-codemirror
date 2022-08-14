@@ -47,7 +47,7 @@ export class AncientTextConfig extends EditorConfig {
         this._sourceType = sourceType;
     }
     
-    async getExtensions(): Promise<Extension[]> {
+    getExtensions(): Extension[] {
         return [keymap.of(leidenKeymap), lintGutter()];
     }
 

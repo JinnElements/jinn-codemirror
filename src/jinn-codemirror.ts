@@ -80,17 +80,16 @@ export class JinnCodemirror extends HTMLElement {
             select.value = this._mode;
         }
 
-        this._config?.getConfig()
-        .then((stateConfig) => {
-            this._editor = new EditorView({
-                state: EditorState.create(stateConfig),
-                parent: wrapper
-            });
-            if (!this._config) {
-                return
-            }
-            this.content = this._config.setFromValue(this._value);
+        const stateConfig = this._config?.getConfig();
+        
+        this._editor = new EditorView({
+            state: EditorState.create(stateConfig),
+            parent: wrapper
         });
+        if (!this._config) {
+            return
+        }
+        this.content = this._config.setFromValue(this._value);
     }
 
     protected configure() {

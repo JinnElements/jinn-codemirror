@@ -126,12 +126,12 @@ export class XMLConfig extends EditorConfig {
         ];
     }
 
-    async getExtensions(): Promise<Extension[]> {
-        const schemaUrl = this.editor.getAttribute('schema');
-        if (schemaUrl) {
-            const schema = await this.loadSchema(schemaUrl);
-            return this.getDefaultExtensions().concat(xml(schema));
-        }
+    getExtensions(): Extension[] {
+        // const schemaUrl = this.editor.getAttribute('schema');
+        // if (schemaUrl) {
+        //     const schema = await this.loadSchema(schemaUrl);
+        //     return this.getDefaultExtensions().concat(xml(schema));
+        // }
         return this.getDefaultExtensions().concat(xml());
     }
 
