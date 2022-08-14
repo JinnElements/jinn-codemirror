@@ -70,7 +70,7 @@ const leidenKeymap: readonly KeyBinding[] = [
 
 export class LeidenConfig extends EditorConfig {
     
-    async getExtensions(): Promise<Extension[]> {
+    getExtensions(): Extension[] {
         return [leiden(), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
     }
 
