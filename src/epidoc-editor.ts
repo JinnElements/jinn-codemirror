@@ -143,6 +143,10 @@ export class JinnEpidocEditor extends HTMLElement {
         openLeiden.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
+                if (xmlEditor.content.length > 0) {
+                    leidenEditor.mode = 'leiden_plus';
+                    leidenEditor.value = xmlEditor.value;
+                }
                 leidenEditor.classList.remove('hidden');
                 leidenEditor.focus();
                 openLeiden.innerHTML = 'Close Leiden Editor';
