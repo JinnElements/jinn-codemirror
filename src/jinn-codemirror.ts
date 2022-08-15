@@ -240,7 +240,7 @@ export class JinnCodemirror extends HTMLElement {
         slot?.assignedElements().forEach((elem) => {
             elem.querySelectorAll('[data-command]').forEach((elem) => {
                 const btn = <HTMLElement>elem;
-                if (btn.dataset.mode === this._mode) {
+                if (!btn.dataset.mode || btn.dataset.mode === this._mode) {
                     (<HTMLElement>btn).style.display = 'inline';
                 } else {
                     (<HTMLElement>btn).style.display = 'none';
