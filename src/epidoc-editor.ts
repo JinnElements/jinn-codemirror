@@ -126,7 +126,20 @@ export class JinnEpidocEditor extends HTMLElement {
                     <button id="import" title="Import from Leiden markup">Show Leiden Editor</button>
                     <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
                     <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
-                    <button data-command="removeEnclosing" title="Remove enclosing tags">&lt;X></button>
+                    <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
+                    <button data-command="snippet" data-params='&lt;ab>$|_|&lt;/ab>'
+                        title="Insert ab">&lt;ab&gt;
+                    </button>
+                    <button data-command="snippet" data-params='&lt;supplied reason="lost">$|_|&lt;/supplied>'
+                        title="Insert supplied">&lt;supplied&gt;
+                    </button>
+                    <button data-command="snippet" data-params='&lt;expan>&lt;abbr>$|1|&lt;/abbr>&lt;ex>$|2|&lt;/ex>&lt;/expan>$|3|'
+                        title="Insert expan/abbr">&lt;expan&gt;
+                    </button>
+                    <button data-command="snippet" data-params='<gap reason="lost" extent="unknown" unit="character"/>$|1|'
+                        title="Gap extent unknown">&lt;gap/unknown&gt;</button>
+                    <button data-command="snippet" data-params='<gap reason="lost" quantity="$|1|" unit="$|2:line|"/>$|3|'
+                        title="Gap extent known">&lt;gap&gt;</button>
                 </div>
             </jinn-codemirror>
         `;
