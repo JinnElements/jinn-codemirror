@@ -45,15 +45,17 @@ export class JinnXMLEditor extends JinnCodemirror {
         if (!this.unwrap) {
             return super.emitUpdateEvent(content);
         }
+        this.updateValue();
+        super.emitUpdateEvent(this._wrapper);
+    }
+
+    protected updateValue() {
         if (!this._wrapper) {
             console.log("no wrapper !!!");
             return null;
         }
         // remove old children
-        const cl = this._wrapper?.childNodes.length || 0;
-        for (let i = 0; i < cl; i++) {
-            this._wrapper?.removeChild(this._wrapper.childNodes[i]);
-        }
+        this._wrapper.replaceChildren();
         if (!this._value) {
             // empty
             console.log("xml editor value is empty");
@@ -66,10 +68,8 @@ export class JinnXMLEditor extends JinnCodemirror {
             console.error("<xml-editor> Value is not a node");
             throw new Error('value is not a node');
         } else {
-            console.log("appending", this._value)
             this._wrapper?.appendChild(this._value);
         }
-        super.emitUpdateEvent(this._wrapper);
     }
 
     protected setValue(value: Element | string | null | undefined): boolean {
@@ -105,6 +105,7 @@ export class JinnXMLEditor extends JinnCodemirror {
         if (!(this._wrapper instanceof Element)) {
             throw new Error("Value is not a node");
         }
+        this.updateValue();
         return this._wrapper;
     }
 }

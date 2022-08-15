@@ -34,7 +34,6 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     }
                     needsWrap = count > 1 || needsWrap;
                     if (needsWrap) {
-                        needsNS = false;
                         xml.push(`<${wrapper}>\n`);
                     }
                     node.parent();

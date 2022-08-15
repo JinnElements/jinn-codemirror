@@ -151,8 +151,8 @@ export class XMLConfig extends EditorConfig {
         const parsed = parser.parseFromString(content, "application/xml");
         const errors = parsed.getElementsByTagName("parsererror")
         if (errors.length) {
-            // console.error(new XMLSerializer().serializeToString(parsed));
-            throw new TypeError("Invalid XML");
+            return null;
+            // throw new TypeError("Invalid XML");
         }
         return this.unwrap ? parsed.firstElementChild?.childNodes : parsed.firstElementChild;
     }

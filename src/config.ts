@@ -96,6 +96,9 @@ export abstract class EditorConfig {
                     // save content to property `value` on editor parent
                     try {
                         const serialized = self.serialize();
+                        if (!serialized) {
+                            return;
+                        }
                         self.editor._value = serialized;
                         self.editor.emitUpdateEvent(content);
                     }
