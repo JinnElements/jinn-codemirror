@@ -62,17 +62,17 @@
                         <option value="default">Petrae</option>
                         <option value="leiden_plus">Leiden+</option>
                     </select>
-                    <button data-command="expan" class="leiden_plus">(a(bcd))</button>
-                    <button data-command="erasure" class="leiden_plus">〚abc〛</button>
-                    <button data-command="unclear" class="leiden_plus">ạ</button>
-                    <button data-command="div" class="leiden_plus">&lt;=...</button>
-                    <!--button data-command="fragment" class="leiden_plus">&lt;D=.1.fragment...</button-->
-                    <button data-command="part" class="leiden_plus">&lt;D=.A.part...</button>
-                    <button data-command="recto" class="leiden_plus">&lt;D=.r...</button>
-                    <button data-command="verso" class="leiden_plus">&lt;D=.v...</button>
-                    <button data-command="erasure" class="edcs">〚abc〛</button>
-                    <button data-command="gap" class="edcs">[...]</button>
-                    <button data-command="convert" class="edcs">Leiden+</button>
+                    <button data-command="expan" data-mode="leiden_plus">(a(bcd))</button>
+                    <button data-command="erasure" data-mode="leiden_plus">〚abc〛</button>
+                    <button data-command="unclear" data-mode="leiden_plus">ạ</button>
+                    <button data-command="div" data-mode="leiden_plus">&lt;=...</button>
+                    <!--button data-command="fragment" data-mode="leiden_plus">&lt;D=.1.fragment...</button-->
+                    <button data-command="part" data-mode="leiden_plus">&lt;D=.A.part...</button>
+                    <button data-command="recto" data-mode="leiden_plus">&lt;D=.r...</button>
+                    <button data-command="verso" data-mode="leiden_plus">&lt;D=.v...</button>
+                    <button data-command="erasure" data-mode="edcs">〚abc〛</button>
+                    <button data-command="gap" data-mode="edcs">[...]</button>
+                    <button data-command="convert" data-mode="edcs">Leiden+</button>
                 </div>
             </jinn-codemirror>
             <jinn-codemirror id="epidoc-editor" mode="xml" schema="dist/epidoc.json" namespace="http://www.tei-c.org/ns/1.0">

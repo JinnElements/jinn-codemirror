@@ -23,10 +23,11 @@ Features extended support for XML and Leiden+ code.
 
 #### Methods
 
-| Method   | Type         | Description                       |
-|----------|--------------|-----------------------------------|
-| `focus`  | `(): void`   | Move keyboard focus to the editor |
-| `styles` | `(): string` |                                   |
+| Method            | Type                   | Description                       |
+|-------------------|------------------------|-----------------------------------|
+| `emitUpdateEvent` | `(content: any): void` |                                   |
+| `focus`           | `(): void`             | Move keyboard focus to the editor |
+| `styles`          | `(): string`           |                                   |
 
 #### Events
 
