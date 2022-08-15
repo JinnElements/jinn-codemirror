@@ -170,9 +170,9 @@ export class JinnCodemirror extends HTMLElement {
         return this._value;
     }
 
-    protected emitUpdateEvent(content: string | Element | null, serialized: string | Element | null) {
+    emitUpdateEvent(content: string | NodeListOf<ChildNode> | Element | null | undefined) {
         this.dispatchEvent(new CustomEvent('update', {
-            detail: {content, serialized},
+            detail: {content},
             composed: true,
             bubbles: true
         }));
@@ -238,8 +238,9 @@ export class JinnCodemirror extends HTMLElement {
     private activateToolbar() {
         const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
         slot?.assignedElements().forEach((elem) => {
-            elem.querySelectorAll('[data-command]').forEach((btn) => {
-                if (btn.className === '' || btn.classList.contains(this._mode)) {
+            elem.querySelectorAll('[data-command]').forEach((elem) => {
+                const btn = <HTMLElement>elem;
+                if (btn.dataset.mode === this._mode) {
                     (<HTMLElement>btn).style.display = 'inline';
                 } else {
                     (<HTMLElement>btn).style.display = 'none';

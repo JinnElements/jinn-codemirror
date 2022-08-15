@@ -97,7 +97,7 @@ export abstract class EditorConfig {
                     try {
                         const serialized = self.serialize();
                         self.editor._value = serialized;
-                        self.editor.emitUpdateEvent(content, serialized);
+                        self.editor.emitUpdateEvent(content);
                     }
                     catch (e) {
                         // suppress updates (invalid data)

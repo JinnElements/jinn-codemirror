@@ -41,9 +41,9 @@ export class JinnXMLEditor extends JinnCodemirror {
         this._config = new XMLConfig(this, this.namespace, checkNamespace, this.unwrap);
     }
 
-    protected emitUpdateEvent(content: string, serialized: string | Element | null) {
+    protected emitUpdateEvent(content: string) {
         if (!this.unwrap) {
-            return super.emitUpdateEvent(content, serialized);
+            return super.emitUpdateEvent(content);
         }
         if (!this._wrapper) {
             console.log("no wrapper !!!");
@@ -69,7 +69,7 @@ export class JinnXMLEditor extends JinnCodemirror {
             console.log("appending", this._value)
             this._wrapper?.appendChild(this._value);
         }
-        super.emitUpdateEvent(this._wrapper, new XMLSerializer().serializeToString(this._wrapper));
+        super.emitUpdateEvent(this._wrapper);
     }
 
     protected setValue(value: Element | string | null | undefined): boolean {
