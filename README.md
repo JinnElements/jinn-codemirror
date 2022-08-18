@@ -37,6 +37,12 @@ Features extended support for XML and Leiden+ code.
 | `update`  | fired when the content of the editor has changed |
 | `valid`   | fired if the content of the editor is valid (requires a linting to be supported) |
 
+#### Slots
+
+| Name      | Description         |
+|-----------|---------------------|
+| `toolbar` | toolbar to be shown |
+
 ### jinn-xml-editor
 
 Extends jinn-codemirror for XML editing: adds a boolean property "unwrap" to
@@ -48,32 +54,29 @@ content. Setting the property requires that a DOM element is passed via value.
 | Attribute         | Type      | Description                                      |
 |-------------------|-----------|--------------------------------------------------|
 | `check-namespace` | `boolean` | if enabled, a missing namespace will be reported as error |
-| `wrapper`         | `String`  | an XML fragment to specify an element which will be used as container |
 
 #### Properties
 
-| Property | Type              | Default | Description                                      |
-|----------|-------------------|---------|--------------------------------------------------|
-| `unwrap` | `boolean \| null` | false   | Set to indicate that the content of the node should be edited rather<br />than the root node itself. |
+| Property | Attribute | Type      | Default | Description                                      |
+|----------|-----------|-----------|---------|--------------------------------------------------|
+| `unwrap` | `unwrap`  | `boolean` | false   | Set to indicate that the content of the node should be edited rather<br />than the root node itself. |
 
 #### Methods
 
-| Method      | Type       |
-|-------------|------------|
-| `configure` | `(): void` |
+| Method            | Type                     |
+|-------------------|--------------------------|
+| `configure`       | `(): void`               |
+| `emitUpdateEvent` | `(content: string): any` |
 
 ### jinn-epidoc-editor
 
+Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
+
 #### Properties
 
-| Property    | Type                   | Default | Description                                      |
-|-------------|------------------------|---------|--------------------------------------------------|
-| `valid`     | `boolean \| undefined` | true    |                                                  |
-| `value`     |                        |         | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
-| `xmlEditor` |                        | null    |                                                  |
-
-#### Events
-
-| Event    |
-|----------|
-| `update` |
+| Property    | Attribute | Type                   | Default | Description                                      |
+|-------------|-----------|------------------------|---------|--------------------------------------------------|
+| `unwrap`    | `unwrap`  | `boolean`              | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `valid`     |           | `boolean \| undefined` | true    |                                                  |
+| `value`     |           |                        |         | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `xmlEditor` |           |                        | null    |                                                  |
