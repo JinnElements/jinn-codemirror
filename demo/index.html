@@ -5,11 +5,9 @@
         <style>
             section {
                 margin-bottom: 1em;
-            }
-            section.epidoc {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
+                max-width: 1024px;
+                margin-left: auto;
+                margin-right: auto;
             }
             jinn-codemirror, jinn-xml-editor {
                 max-height: 400px;
@@ -17,10 +15,10 @@
                 font-size: 16px;
                 display:block;
             }
-            jinn-codemirror[valid="true"], jinn-xml-editor[valid="true"] {
+            jinn-codemirror[valid="true"], jinn-xml-editor[valid="true"], jinn-epidoc-editor[valid="true"] {
                 outline: thin solid green;
             }
-            jinn-codemirror[valid="false"], jinn-xml-editor[valid="false"] {
+            jinn-codemirror[valid="false"], jinn-xml-editor[valid="false"], jinn-epidoc-editor[valid="false"] {
                 outline: thin solid red;
             }
             #epidoc-editor {
@@ -35,33 +33,31 @@
             .hidden {
                 display: none;
             }
-            [slot=toolbar] {
+            [slot] {
                 display: flex;
                 column-gap: 4px;
                 width: 100%;
                 margin-bottom: 10px;
             }
-            [slot=toolbar] * {
+            [slot] *, jinn-epidoc-editor::part(button) {
                 font-size: .85rem;
                 border: 1px solid transparent;
                 background-color: inherit;
             }
-            [slot=toolbar] *:hover {
+            [slot] *:hover, jinn-epidoc-editor::part(button):hover {
                 border: 1px solid orange;
+            }
+            [slot] .sep {
+                border-right: 1px solid #D0D0D0;
             }
         </style>
         <script type="module" src="../src/jinn-codemirror-bundle.ts"></script>
     </head>
     <body>
-        <h2>EpiDoc Editor</h2>
         <section class="epidoc">
-            <jinn-codemirror id="leiden-editor" class="leiden hidden">
-                <div slot="toolbar">
-                    <select name="modes">
-                        <option value="edcs" selected>EDCS/EDH</option>
-                        <option value="default">Petrae</option>
-                        <option value="leiden_plus">Leiden+</option>
-                    </select>
+            <h2>EpiDoc Editor</h2>
+            <jinn-epidoc-editor id="test" schema="../src/epidoc.json">
+                <div slot="leiden-toolbar">
                     <button data-command="expan" data-mode="leiden_plus">(a(bcd))</button>
                     <button data-command="erasure" data-mode="leiden_plus">〚abc〛</button>
                     <button data-command="unclear" data-mode="leiden_plus">ạ</button>
@@ -74,15 +70,25 @@
                     <button data-command="gap" data-mode="edcs">[...]</button>
                     <button data-command="convert" data-mode="edcs">Leiden+</button>
                 </div>
-            </jinn-codemirror>
-            <jinn-codemirror id="epidoc-editor" mode="xml" schema="../src/epidoc.json" namespace="http://www.tei-c.org/ns/1.0">
-                <div slot="toolbar">
-                    <button id="import" title="Import from Leiden markup">Import Leiden</button>
+                <div slot="xml-toolbar">
                     <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
                     <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
-                    <button data-command="removeEnclosing" title="Remove enclosing tags">&lt;X></button>
+                    <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
+                    <button data-command="snippet" data-params='&lt;ab&gt;$|_|&lt;/ab>'
+                        title="Insert ab">&lt;ab&gt;
+                    </button>
+                    <button data-command="snippet" data-params='&lt;supplied reason="lost">$|_|&lt;/supplied>'
+                        title="Insert supplied">&lt;supplied&gt;
+                    </button>
+                    <button data-command="snippet" data-params='&lt;expan>&lt;abbr>$|1|&lt;/abbr>&lt;ex>$|2|&lt;/ex>&lt;/expan>$|3|'
+                        title="Insert expan/abbr">&lt;expan&gt;
+                    </button>
+                    <button data-command="snippet" data-params='&lt;gap reason="lost" extent="unknown" unit="character"/&gt;$|1|'
+                        title="Gap extent unknown">&lt;gap/unknown&gt;</button>
+                    <button data-command="snippet" data-params='&lt;gap reason="lost" quantity="$|1|" unit="$|2:line|"/&gt;$|3|'
+                        title="Gap extent known">&lt;gap&gt;</button>
                 </div>
-            </jinn-codemirror>
+            </jinn-epidoc-editor>
         </section>
 
         <section>

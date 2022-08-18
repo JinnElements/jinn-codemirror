@@ -1,3 +1,5 @@
+import "./xml-editor";
+import { JinnXMLEditor } from "./xml-editor";
 import { JinnCodemirror } from "./jinn-codemirror";
 
 interface LeidenEditorUpdateEvent extends Event {
@@ -23,21 +25,11 @@ const style = `
     #leiden-editor {
         margin-bottom:0.5rem;
     }
+    [slot=toolbar] {
+        display: flex;
+    }
     .hidden {
         display: none;
-    }
-    [slot=toolbar] {
-        display: block;
-        width: 100%;
-        margin-bottom: 0.75rem;
-    }
-    [slot=toolbar] * {
-        font-size: .85rem;
-        border: 1px solid transparent;
-        background-color: inherit;
-    }
-    [slot=toolbar] *:hover {
-        border: 1px solid orange;
     }
     #close-leiden {
         margin-left: .75rem;
@@ -45,15 +37,18 @@ const style = `
     }`;
 
 
+/**
+ * Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
+ * 
+ * @attr {boolean} unwrap - If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.
+ * The wrapper element itself will not be shown in the editor.
+ */
 export class JinnEpidocEditor extends HTMLElement {
-    
-    _wrapper?: Element | null;
 
-    xmlEditor: JinnCodemirror | null | undefined;
-    // leidenEditor: JinnCodemirror | null | undefined;
-    // toggle: HTMLButtonElement | null | undefined;
+    xmlEditor: JinnXMLEditor | null | undefined;
 
     public valid?: boolean;
+    public unwrap?: boolean;
     private schema: string | null;
 
     /**
@@ -61,104 +56,68 @@ export class JinnEpidocEditor extends HTMLElement {
      * depending on the mode set.
      */
     set value(value: Element | string | null | undefined) {
-        if (this._wrapper === value || this.xmlEditor?._config?.setFromValue(this._wrapper) === this.xmlEditor?._config?.setFromValue(value)) {
-            console.debug("value unchanged");
-            return;
-        }
-        if (!value) {
-            this._wrapper = null
-        }
-        if (!(value instanceof Element)) { 
-            console.error('value is not a node');
-            throw new Error("Value is not a node")
-        }
-    
-        this._wrapper = value;
-        const node = value.firstElementChild
-        if (!this.xmlEditor) {
-            console.error('editor not initialized');
-            throw new Error("XML editor not initialized")
-        }
-        this.xmlEditor.value = node
+        this.xmlEditor.value = value;
     }
     
     get value(): Element | null | undefined {
-        return this._wrapper;
+        return this.xmlEditor.value;
     }
     
     constructor() {
         super()
-        this._wrapper = null;
         this.xmlEditor = null;
         this.valid = true;
+        this.unwrap = false;
         this.schema = null;
         this.attachShadow({ mode: 'open' });
     }
+
     connectedCallback() {
+        this.unwrap = this.hasAttribute('unwrap');
         this.schema = this.getAttribute('schema');
         this.shadowRoot.innerHTML = `
             <style>
                 ${style}
             </style>
-            <jinn-codemirror id="leiden-editor" class="leiden hidden">
+            <jinn-codemirror id="leiden-editor" class="hidden">
                 <div slot="toolbar">
                     <select name="modes">
                         <option value="edcs" selected>EDCS/EDH</option>
                         <option value="default">Petrae</option>
                         <option value="leiden_plus">Leiden+</option>
                     </select>
-                    <button data-command="expan" data-mode="leiden_plus">(a(bcd))</button>
-                    <button data-command="erasure" data-mode="leiden_plus">〚abc〛</button>
-                    <button data-command="unclear" data-mode="leiden_plus">ạ</button>
-                    <button data-command="div" data-mode="leiden_plus">&lt;=...</button>
-                    <!--button data-command="fragment" data-mode="leiden_plus">&lt;D=.1.fragment...</button-->
-                    <button data-command="part" data-mode="leiden_plus">&lt;D=.A.part...</button>
-                    <button data-command="recto" data-mode="leiden_plus">&lt;D=.r...</button>
-                    <button data-command="verso" data-mode="leiden_plus">&lt;D=.v...</button>
-                    <button data-command="erasure" data-mode="edcs">〚abc〛</button>
-                    <button data-command="gap" data-mode="edcs">[...]</button>
-                    <button data-command="convert" data-mode="edcs">Leiden+</button>
-                    <button id="close-leiden">Close</button>
+                    <slot name="leiden-toolbar"></slot>
+                    <button part="button" id="close-leiden">Close</button>
                 </div>
             </jinn-codemirror>
-            <jinn-codemirror id="xml-editor" mode="xml" schema="${this.schema}">
+            <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}">
                 <div slot="toolbar">
-                    <button id="import" title="Import from Leiden markup">Show Leiden Editor</button>
-                    <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
-                    <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
-                    <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
-                    <button data-command="snippet" data-params='&lt;ab>$|_|&lt;/ab>'
-                        title="Insert ab">&lt;ab&gt;
-                    </button>
-                    <button data-command="snippet" data-params='&lt;supplied reason="lost">$|_|&lt;/supplied>'
-                        title="Insert supplied">&lt;supplied&gt;
-                    </button>
-                    <button data-command="snippet" data-params='&lt;expan>&lt;abbr>$|1|&lt;/abbr>&lt;ex>$|2|&lt;/ex>&lt;/expan>$|3|'
-                        title="Insert expan/abbr">&lt;expan&gt;
-                    </button>
-                    <button data-command="snippet" data-params='<gap reason="lost" extent="unknown" unit="character"/>$|1|'
-                        title="Gap extent unknown">&lt;gap/unknown&gt;</button>
-                    <button data-command="snippet" data-params='<gap reason="lost" quantity="$|1|" unit="$|2:line|"/>$|3|'
-                        title="Gap extent known">&lt;gap&gt;</button>
+                    <button part="button" id="import" title="Import from Leiden markup">Show Leiden Editor</button>
+                    <slot name="xml-toolbar"></slot>
                 </div>
-            </jinn-codemirror>
+            </jinn-xml-editor>
         `;
          
-        const xmlEditor:JinnCodemirror | null | undefined = this.shadowRoot?.querySelector('#xml-editor');
+        this.xmlEditor = this.shadowRoot?.querySelector('#xml-editor');
         const leidenEditor:JinnCodemirror | null | undefined = this.shadowRoot?.querySelector('#leiden-editor');
         const openLeiden:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#import');
         const closeLeiden:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#close-leiden');
 
-        if (!(xmlEditor && leidenEditor && openLeiden && closeLeiden)) {
+        if (!(this.xmlEditor && leidenEditor && openLeiden && closeLeiden)) {
             throw new Error('One or more components were not initialized')
         }
+
+        leidenEditor.addEventListener('update', (ev) => {
+            ev.stopPropagation()
+            this.xmlEditor.content = ev.detail.content;
+        });
 
         openLeiden.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
-                if (xmlEditor.content.length > 0) {
+                if (this.xmlEditor.content.length > 0) {
                     leidenEditor.mode = 'leiden_plus';
-                    leidenEditor.value = xmlEditor.value;
+                    leidenEditor.value = this.xmlEditor.value;
                 }
                 leidenEditor.classList.remove('hidden');
                 leidenEditor.focus();
@@ -166,59 +125,25 @@ export class JinnEpidocEditor extends HTMLElement {
             } else {
                 leidenEditor.classList.add('hidden');
                 openLeiden.innerHTML = 'Open Leiden Editor';
-                xmlEditor.focus();
+                this.xmlEditor.focus();
             }
         });
 
         closeLeiden.addEventListener('click', () => {
             openLeiden.innerHTML = 'Open Leiden Editor';
             leidenEditor.classList.add('hidden');
-            xmlEditor.focus();
+            this.xmlEditor.focus();
         });
 
-        leidenEditor.addEventListener('update', (ev) => {
-            ev.stopPropagation()
-            xmlEditor.content = ev.detail.content;
+        this.xmlEditor.addEventListener('invalid', (ev) => {
+            ev.stopPropagation();
+            this.valid = false;
+            this.setAttribute('valid', this.valid.toString());
         });
-
-        this.xmlEditor = xmlEditor
-
-        xmlEditor.addEventListener('update', (ev) => {
+        this.xmlEditor.addEventListener('valid', (ev) => {
             ev.stopPropagation()
-            if (!this._wrapper) {
-                console.log("no wrapper !!!")
-                return null
-            }
-            // remove old children
-            const cl = this._wrapper?.children.length || 0
-            for (let i = 0; i < cl; i++) {
-                this._wrapper?.removeChild(this._wrapper.children[i])
-            }
-            if (!xmlEditor.value) {
-                // empty
-                console.log("xml editor value is empty")
-            }
-            else  if (!(xmlEditor.value instanceof Element)) {
-                throw new Error("XML editor value is not a node")
-            }
-            else {
-                this._wrapper?.appendChild(xmlEditor.value)
-            }
-            const content = this._wrapper
-
-            this.dispatchEvent(new CustomEvent('update', {
-                detail: { content },
-                composed: true,
-                bubbles: true
-            }))
-        })
-        xmlEditor.addEventListener('invalid', (ev) => {
-            ev.stopPropagation()
-            this.valid = false
-        });
-        xmlEditor.addEventListener('valid', (ev) => {
-            ev.stopPropagation()
-            this.valid = true
+            this.valid = true;
+            this.setAttribute('valid', this.valid.toString());
         });
     }
 }

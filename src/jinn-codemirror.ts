@@ -8,6 +8,7 @@ import { EditorConfig, SourceType } from "./config";
  * Source code editor component based on [codemirror](https://codemirror.net/).
  * Features extended support for XML and Leiden+ code.
  * 
+ * @slot toolbar - toolbar to be shown
  * @fires update - fired when the content of the editor has changed
  * @fires valid - fired if the content of the editor is valid (requires a linting to be supported)
  * @fires invalid - fired if the content of the editor is invalid (requires a linting to be supported)

@@ -6,7 +6,8 @@ import { XMLConfig } from "./xml";
  * indicate if the entire root node passed in as value should be edited or just its
  * content. Setting the property requires that a DOM element is passed via value.
  * 
- * @attr {String} wrapper - an XML fragment to specify an element which will be used as container
+ * @attr {boolean} unwrap - If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.
+ * The wrapper element itself will not be shown in the editor.
  * @attr {boolean} check-namespace - if enabled, a missing namespace will be reported as error 
  */
 export class JinnXMLEditor extends JinnCodemirror {
@@ -41,7 +42,7 @@ export class JinnXMLEditor extends JinnCodemirror {
         this._config = new XMLConfig(this, this.namespace, checkNamespace, this.unwrap);
     }
 
-    protected emitUpdateEvent(content: string) {
+    emitUpdateEvent(content: string) {
         if (!this.unwrap) {
             return super.emitUpdateEvent(content);
         }
