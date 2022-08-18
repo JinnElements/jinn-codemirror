@@ -40,11 +40,42 @@ const fixNamespaceAction = (namespace:string):Action => {
  */
 const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagnostic[] => {
     const diagnostics:Diagnostic[] = [];
+    
+    if (view.state.doc.length === 0) {
+        return diagnostics;
+    }
+
     const tree = syntaxTree(view.state);
     let hasNamespace = false;
+    const stack:string[] = [];
     tree.iterate({
         enter: (node:TreeCursor) => {
-            if (isNamespaceNode(view, node)) {
+            if (node.type.isError) {
+                diagnostics.push({
+                    message: 'Syntax error',
+                    severity: 'error',
+                    from: node.from,
+                    to: node.to
+                });
+            }
+            if (node.type.name === 'StartTag') {
+                node.nextSibling();
+                stack.push(view.state.sliceDoc(node.from, node.to));
+            } else if (node.type.name === 'StartCloseTag') {
+                node.nextSibling();
+                const closeTag = view.state.sliceDoc(node.from, node.to);
+                const openTag = stack.pop();
+                if (closeTag !== openTag) {
+                    diagnostics.push({
+                        message: `Expected closing tag for ${openTag}`,
+                        severity: 'error',
+                        from: node.from,
+                        to: node.to
+                    });
+                }
+            } else if (node.type.name === 'SelfCloseEndTag') {
+                stack.pop();
+            } else if (isNamespaceNode(view, node)) {
                 hasNamespace = true;
                 node.nextSibling()
                 node.nextSibling()
@@ -58,23 +89,15 @@ const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagno
                         actions: [ fixNamespaceAction(namespace) ]
                     });
                 }
-            }
-            if (isErrorComment(view, node)) {
+            } else if (isErrorComment(view, node)) {
                 diagnostics.push({
-                    message: 'Enthält einen Fehler',
+                    message: 'Syntax error in source input',
                     severity: 'warning',
                     from: node.from,
                     to: node.to
                 });
             }
-            if (node.type.isError) {
-                diagnostics.push({
-                    message: 'Syntaxfehler',
-                    severity: 'error',
-                    from: node.from,
-                    to: node.to
-                });
-            }
+            
         },
         leave: (node:TreeCursor) => {
             if (node.type.name === "Document" && namespace && !hasNamespace) {
@@ -93,8 +116,17 @@ const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagno
                     to: node.to
                 });
             }
+            if (node.type.isError) {
+                diagnostics.push({
+                    message: 'Syntaxfehler',
+                    severity: 'error',
+                    from: node.from,
+                    to: node.to
+                });
+            }
         }
     });
+
     return diagnostics;
 }
 
