@@ -43,10 +43,25 @@ export class JinnCodemirror extends HTMLElement {
         const wrapper = document.createElement('div');
         wrapper.id = 'editor';
         this.shadowRoot?.appendChild(wrapper);
-        this.registerToolbar();
+        this.registerToolbar(this.shadowRoot?.querySelector('[name=toolbar]'));
 
         this.namespace = this.getAttribute('namespace');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
+
+        this.addEventListener('blur', (ev) => {
+            const target = ev.relatedTarget;
+            if (target) {
+                let parent = (<Element>target).parentNode;
+                while (parent) {
+                    if (parent === this) {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        return;
+                    }
+                    parent = parent.parentNode;
+                }
+            }
+        });
     }
 
     /**
@@ -73,7 +88,7 @@ export class JinnCodemirror extends HTMLElement {
 
         this._mode = SourceType[mode as keyof typeof SourceType];
         console.log(`<jinn-codemirror> mode: ${this.mode}`);
-        this.activateToolbar();
+        this.activateToolbar(this.shadowRoot?.querySelector('[name=toolbar]'));
         this.configure();
 
         const select = this.querySelector('[name=modes]');
@@ -192,9 +207,9 @@ export class JinnCodemirror extends HTMLElement {
         return null;
     }
 
-    private registerToolbar() {
-        const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
+    private registerToolbar(slot:HTMLSlotElement|null|undefined) {
         slot?.assignedElements().forEach((elem) => {
+            elem.querySelectorAll('slot').forEach(sl => this.registerToolbar(sl));
             elem.querySelectorAll('[data-command]').forEach((btn) => {
                 const cmdName = <string>(<HTMLElement>btn).dataset.command;
 
@@ -236,8 +251,7 @@ export class JinnCodemirror extends HTMLElement {
         });
     }
 
-    private activateToolbar() {
-        const slot:HTMLSlotElement|null|undefined = this.shadowRoot?.querySelector('[name=toolbar]');
+    private activateToolbar(slot:HTMLSlotElement|null|undefined) {
         slot?.assignedElements().forEach((elem) => {
             elem.querySelectorAll('[data-command]').forEach((elem) => {
                 const btn = <HTMLElement>elem;
