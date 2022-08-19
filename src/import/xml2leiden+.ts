@@ -135,7 +135,10 @@ function transformSupplied(elem: Element, output: string[]) {
     }
 }
 
-export function xml2leidenPlus(root: Element): string {
+export function xml2leidenPlus(root: Node): string {
+    if (!(root instanceof Element)) {
+        return '';
+    }
     const output:string[] = [];
     const columnBreaks = root.querySelectorAll('cb');
     if (columnBreaks.length > 0) {

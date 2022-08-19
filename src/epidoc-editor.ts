@@ -117,7 +117,12 @@ export class JinnEpidocEditor extends HTMLElement {
             if (hidden) {
                 if (this.xmlEditor.content.length > 0) {
                     leidenEditor.mode = 'leiden_plus';
-                    leidenEditor.value = this.xmlEditor.value;
+                    const value = this.xmlEditor?.value;
+                    if (this.unwrap && value instanceof Element) {
+                        leidenEditor.value = value.childNodes;
+                    } else {
+                        leidenEditor.value = value;
+                    }
                 }
                 leidenEditor.classList.remove('hidden');
                 leidenEditor.focus();

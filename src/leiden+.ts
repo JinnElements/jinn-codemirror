@@ -86,10 +86,15 @@ export class LeidenConfig extends EditorConfig {
         return this.editor.content;
     }
 
-    setFromValue(value: Element | string | null|undefined): string {
+    setFromValue(value: Element | NodeListOf<ChildNode> | string | null|undefined): string {
         if (!value) { return '' }
+        if (value instanceof NodeList) {
+            const result:string[] = [];
+            value.forEach((node) => result.push(xml2leidenPlus(node)));
+            return result.join('');
+        }
         if (value instanceof Element) {
-            return xml2leidenPlus(value);
+            return xml2leidenPlus(value); 
         }
         if (!(typeof value === 'string')) {
             throw new Error("cannot set value")
