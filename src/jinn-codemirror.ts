@@ -253,6 +253,7 @@ export class JinnCodemirror extends HTMLElement {
 
     private activateToolbar(slot:HTMLSlotElement|null|undefined) {
         slot?.assignedElements().forEach((elem) => {
+            elem.querySelectorAll('slot').forEach(sl => this.activateToolbar(sl));
             elem.querySelectorAll('[data-command]').forEach((elem) => {
                 const btn = <HTMLElement>elem;
                 if (!btn.dataset.mode || btn.dataset.mode === this._mode) {
