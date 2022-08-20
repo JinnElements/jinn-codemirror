@@ -52,7 +52,10 @@ function transform(node: Node|null, output: string[]) {
                     break;
                 case 'lb':
                     n = elem.getAttribute('n');
-                    output.push(`\n${n}. `);
+                    if (output.length > 0 && !/\n+$/.test(output[output.length - 1])) {
+                        output.push('\n');
+                    }
+                    output.push(`${n}. `);
                     break;
                 case 'supplied':
                     transformSupplied(elem, output);
