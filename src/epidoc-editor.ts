@@ -92,7 +92,7 @@ export class JinnEpidocEditor extends HTMLElement {
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}">
                 <div slot="toolbar">
-                    <button part="button" id="import" title="Import from Leiden markup">Show Leiden Editor</button>
+                    <button part="button" id="import" title="Import from Leiden markup">Leiden Editor</button>
                     <slot name="xml-toolbar"></slot>
                 </div>
             </jinn-xml-editor>
@@ -126,16 +126,16 @@ export class JinnEpidocEditor extends HTMLElement {
                 }
                 leidenEditor.classList.remove('hidden');
                 leidenEditor.focus();
-                openLeiden.innerHTML = 'Close Leiden Editor';
+                openLeiden.classList.add('hidden');
             } else {
                 leidenEditor.classList.add('hidden');
-                openLeiden.innerHTML = 'Open Leiden Editor';
+                openLeiden.classList.remove('hidden');
                 this.xmlEditor.focus();
             }
         });
 
         closeLeiden.addEventListener('click', () => {
-            openLeiden.innerHTML = 'Open Leiden Editor';
+            openLeiden.classList.remove('hidden');
             leidenEditor.classList.add('hidden');
             this.xmlEditor.focus();
         });
