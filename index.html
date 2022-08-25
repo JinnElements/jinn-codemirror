@@ -56,8 +56,9 @@
     <body>
         <section class="epidoc">
             <h2>EpiDoc Editor</h2>
-            <jinn-epidoc-editor id="test" schema="dist/epidoc.json">
-                <div slot="leiden-toolbar">
+            <p>Combines an XML Editor with an option to import and convert a transcription following Leiden conventions.</p>
+            <jinn-epidoc-editor id="epidoc-editor" schema="dist/epidoc.json">
+                <div slot="leiden-toolbar" class="toolbar">
                     <button data-command="expan" data-mode="leiden_plus">(a(bcd))</button>
                     <button data-command="erasure" data-mode="leiden_plus">〚abc〛</button>
                     <button data-command="unclear" data-mode="leiden_plus">ạ</button>
@@ -68,15 +69,16 @@
                     <button data-command="verso" data-mode="leiden_plus">&lt;D=.v...</button>
                     <button data-command="erasure" data-mode="edcs">〚abc〛</button>
                     <button data-command="gap" data-mode="edcs">[...]</button>
-                    <button data-command="convert" data-mode="edcs">Leiden+</button>
+                    <button data-command="convert" data-mode="edcs">Convert to Leiden+</button>
                 </div>
-                <div slot="xml-toolbar">
+                <div slot="xml-toolbar" class="toolbar">
                     <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
                     <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
                     <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
                     <button data-command="snippet" data-params='&lt;ab&gt;$|_|&lt;/ab>'
                         title="Insert ab">&lt;ab&gt;
                     </button>
+                    <button data-command="snippet" data-params='&lt;lb n="$|1|"/>$|2|' title="Line break">&lt;lb&gt;</button>
                     <button data-command="snippet" data-params='&lt;supplied reason="lost">$|_|&lt;/supplied>'
                         title="Insert supplied">&lt;supplied&gt;
                     </button>
@@ -98,7 +100,7 @@
                 <div slot="toolbar">
                     <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
                     <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
-                    <button data-command="removeEnclosing" title="Remove enclosing tags">&lt;X></button>
+                    <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
                     <button data-command="snippet" data-params="<div>${_}</div>" title="Insert <div>">&lt;div&gt;</button>
                     <button data-command="snippet" data-params="<p>${_}</p>" title="Insert <p>">&lt;p&gt;</button>
                 </div>
@@ -111,20 +113,7 @@
                 const epidoc = document.getElementById('epidoc-editor');
                 const xml = document.getElementById('xml-editor');
                 const xmlOutput = document.getElementById('xml-output');
-                const leiden = document.getElementById('leiden-editor');
-                const toggle = document.getElementById('import');
                 const button = document.getElementById('mybutton');
-
-                toggle.addEventListener('click', () => {
-                    leiden.classList.toggle('hidden');
-                    if (!leiden.classList.contains('hidden')) {
-                        leiden.focus();
-                    }
-                });
-
-                leiden.addEventListener('update', (ev) => {
-                    epidoc.content = ev.detail.content;
-                });
 
                 epidoc.addEventListener('invalid', (ev) => {
                     console.log("XML INVALID", ev)
@@ -139,9 +128,6 @@
                     // console.log("UPDATE");
                     xmlOutput.innerText = new XMLSerializer().serializeToString(ev.detail.content);
                 });
-                // button.addEventListener('click', function (ev) {
-                //     xml.value = document.createElementNS("http://www.tei-c.org/ns/1.0", "ab")
-                // });
             });
         </script>
     </body>

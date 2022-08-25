@@ -80,3 +80,10 @@ Combines an XML editor with an option to import and convert markup following var
 | `valid`     |           | `boolean \| undefined` | true    |                                                  |
 | `value`     |           |                        |         | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
 | `xmlEditor` |           |                        | null    |                                                  |
+
+#### Events
+
+| Event     |
+|-----------|
+| `invalid` |
+| `valid`   |
