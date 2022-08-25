@@ -38,7 +38,7 @@ const fixNamespaceAction = (namespace:string):Action => {
  * 
  * @returns {function} linter
  */
-const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagnostic[] => {
+const teiFragmentLinter = (editor: JinnCodemirror, namespace: string|null) => (view: EditorView): Diagnostic[] => {
     const diagnostics:Diagnostic[] = [];
     
     if (view.state.doc.length === 0) {
@@ -108,14 +108,6 @@ const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagno
                     to: node.to
                 });
             }
-            if (node.type.name === "Document" && !diagnostics.length) {
-                diagnostics.push({
-                    message: 'All fine',
-                    severity: 'info',
-                    from: node.from,
-                    to: node.to
-                });
-            }
             if (node.type.isError) {
                 diagnostics.push({
                     message: 'Syntaxfehler',
@@ -126,7 +118,21 @@ const teiFragmentLinter = (namespace: string|null) => (view: EditorView): Diagno
             }
         }
     });
-
+    if (diagnostics.length > 0) {
+        editor.valid = false;
+        editor.dispatchEvent(new CustomEvent('invalid', {
+            detail: diagnostics,
+            composed: true,
+            bubbles: true
+        }));
+    } else {
+        editor.valid = true;
+        editor.dispatchEvent(new CustomEvent('valid', {
+            detail: diagnostics,
+            composed: true,
+            bubbles: true
+        }));
+    }
     return diagnostics;
 }
 
@@ -153,7 +159,7 @@ export class XMLConfig extends EditorConfig {
         return [
             inputPanel(),
             keymap.of(xmlKeymap), 
-            linter(teiFragmentLinter(this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
+            linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
             lintGutter({markerFilter})
         ];
     }

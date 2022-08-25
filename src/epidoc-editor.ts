@@ -144,11 +144,21 @@ export class JinnEpidocEditor extends HTMLElement {
             ev.stopPropagation();
             this.valid = false;
             this.setAttribute('valid', this.valid.toString());
+            this.dispatchEvent(new CustomEvent('invalid', {
+                detail: ev.detail,
+                composed: true,
+                bubbles: true
+            }));
         });
         this.xmlEditor.addEventListener('valid', (ev) => {
             ev.stopPropagation()
             this.valid = true;
             this.setAttribute('valid', this.valid.toString());
+            this.dispatchEvent(new CustomEvent('valid', {
+                detail: ev.detail,
+                composed: true,
+                bubbles: true
+            }));
         });
     }
 }

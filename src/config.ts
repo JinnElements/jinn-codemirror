@@ -6,7 +6,6 @@ import {indentWithTab} from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
-import { Diagnostic, setDiagnosticsEffect } from "@codemirror/lint";
 
 /**
  * Supported editor modes
@@ -96,55 +95,12 @@ export abstract class EditorConfig {
                     // save content to property `value` on editor parent
                     try {
                         const serialized = self.serialize();
-                        if (!serialized) {
-                            return;
+                        if (serialized) {
+                            self.editor._value = serialized;
+                            self.editor.emitUpdateEvent(content);
                         }
-                        self.editor._value = serialized;
-                        self.editor.emitUpdateEvent(content);
-                    }
-                    catch (e) {
+                    } catch (e) {
                         // suppress updates (invalid data)
-                        return
-                    }
-                }
-                else {
-                    const firstTransaction = update.transactions[0]
-                    if (firstTransaction) {
-                        // linter messages have a severity
-                        const linterMessages:StateEffect<Diagnostic[]>[] = firstTransaction.effects.filter(effect => effect.is(setDiagnosticsEffect))
-                        if (linterMessages) {
-                            const check:{valid:boolean, errors:string[]} = linterMessages.reduce((result:{valid:boolean, errors:string[]}, effect:StateEffect<Diagnostic[]>) => {
-                                const error:Diagnostic[] = effect.value.filter((value: Diagnostic) => {
-                                    return value.severity === "error";
-                                })
-                                const info:Diagnostic[] = effect.value.filter((value: Diagnostic) => {
-                                    return value.severity === "info";
-                                })
-                                if (error.length) {
-                                    result.valid = false;
-                                    for (let e of error) {
-                                        result.errors.push(e?.message);
-                                    }
-                                }
-                                if (info.length && !result.errors.length) {
-                                    result.valid = true;
-                                }
-                                return result;
-                            }, {valid: self.editor.valid, errors: []})
-                            self.editor.valid = check.valid
-                            if (check.valid) {
-                                self.editor.dispatchEvent(new CustomEvent('valid', {
-                                    composed: true,
-                                    bubbles: true
-                                }));
-                                return;
-                            }
-                            self.editor.dispatchEvent(new CustomEvent('invalid', {
-                                detail: check.errors,
-                                composed: true,
-                                bubbles: true
-                            }));
-                        }
                     }
                 }
             }

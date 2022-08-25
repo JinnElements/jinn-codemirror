@@ -7,8 +7,9 @@ import { leidenPlus2epiDoc } from ".";
 import { EditorConfig, EditorCommands, snippetCommand, wrapCommand, insertCommand } from "./config";
 import { leiden } from "./language";
 import { xml2leidenPlus } from "./import/xml2leiden+";
+import { JinnCodemirror } from "./jinn-codemirror";
 
-const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {
+const leidenParseLinter = (editor: JinnCodemirror) => (view: EditorView): Diagnostic[] => {
     const diagnostics:Diagnostic[] = [];
     const tree = syntaxTree(view.state);
     tree.iterate({
@@ -23,6 +24,21 @@ const leidenParseLinter = () => (view: EditorView): Diagnostic[] => {
             }
         }
     });
+    if (diagnostics.length > 0) {
+        editor.valid = false;
+        editor.dispatchEvent(new CustomEvent('invalid', {
+            detail: diagnostics,
+            composed: true,
+            bubbles: true
+        }));
+    } else {
+        editor.valid = true;
+        editor.dispatchEvent(new CustomEvent('valid', {
+            detail: diagnostics,
+            composed: true,
+            bubbles: true
+        }));
+    }
     return diagnostics;
 }
 
@@ -71,7 +87,7 @@ const leidenKeymap: readonly KeyBinding[] = [
 export class LeidenConfig extends EditorConfig {
     
     getExtensions(): Extension[] {
-        return [leiden(), linter(leidenParseLinter()), keymap.of(leidenKeymap), lintGutter()];
+        return [leiden(), linter(leidenParseLinter(this.editor)), keymap.of(leidenKeymap), lintGutter()];
     }
 
     getCommands():EditorCommands {

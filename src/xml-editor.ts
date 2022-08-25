@@ -79,7 +79,6 @@ export class JinnXMLEditor extends JinnCodemirror {
         }
 
         if (this._config?.setFromValue(this._wrapper) === this._config?.setFromValue(value)) {
-            console.debug("value unchanged");
             return false;
         }
         if (!value) {
