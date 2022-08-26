@@ -10,6 +10,16 @@ import { xml2leidenPlus } from "./import/xml2leiden+";
 import { JinnCodemirror } from "./jinn-codemirror";
 
 const leidenParseLinter = (editor: JinnCodemirror) => (view: EditorView): Diagnostic[] => {
+
+    function emitEvent(valid: boolean) {
+        editor.valid = valid;
+        editor.dispatchEvent(new CustomEvent(valid ? 'valid' : 'invalid', {
+            detail: diagnostics,
+            composed: true,
+            bubbles: true
+        }));
+    }
+
     const diagnostics:Diagnostic[] = [];
     const tree = syntaxTree(view.state);
     tree.iterate({
@@ -24,21 +34,8 @@ const leidenParseLinter = (editor: JinnCodemirror) => (view: EditorView): Diagno
             }
         }
     });
-    if (diagnostics.length > 0) {
-        editor.valid = false;
-        editor.dispatchEvent(new CustomEvent('invalid', {
-            detail: diagnostics,
-            composed: true,
-            bubbles: true
-        }));
-    } else {
-        editor.valid = true;
-        editor.dispatchEvent(new CustomEvent('valid', {
-            detail: diagnostics,
-            composed: true,
-            bubbles: true
-        }));
-    }
+    
+    emitEvent(diagnostics.length === 0);
     return diagnostics;
 }
 

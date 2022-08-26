@@ -34,14 +34,28 @@ const fixNamespaceAction = (namespace:string):Action => {
 };
 
 /**
- * Highlights SyntaxErrors, missing TEI or wrong namespace
+ * Highlights SyntaxErrors, missing TEI or wrong namespace.
+ * 
+ * @fires valid - if no errors were found
+ * @fires invalid - if errors found
  * 
  * @returns {function} linter
  */
 const teiFragmentLinter = (editor: JinnCodemirror, namespace: string|null) => (view: EditorView): Diagnostic[] => {
+
+    function emitEvent(valid: boolean) {
+        editor.valid = valid;
+        editor.dispatchEvent(new CustomEvent(valid ? 'valid' : 'invalid', {
+            detail: diagnostics,
+            composed: true,
+            bubbles: true
+        }));
+    }
+
     const diagnostics:Diagnostic[] = [];
     
     if (view.state.doc.length === 0) {
+        emitEvent(true);
         return diagnostics;
     }
 
@@ -110,7 +124,7 @@ const teiFragmentLinter = (editor: JinnCodemirror, namespace: string|null) => (v
             }
             if (node.type.isError) {
                 diagnostics.push({
-                    message: 'Syntaxfehler',
+                    message: 'Syntax error in input',
                     severity: 'error',
                     from: node.from,
                     to: node.to
@@ -118,21 +132,8 @@ const teiFragmentLinter = (editor: JinnCodemirror, namespace: string|null) => (v
             }
         }
     });
-    if (diagnostics.length > 0) {
-        editor.valid = false;
-        editor.dispatchEvent(new CustomEvent('invalid', {
-            detail: diagnostics,
-            composed: true,
-            bubbles: true
-        }));
-    } else {
-        editor.valid = true;
-        editor.dispatchEvent(new CustomEvent('valid', {
-            detail: diagnostics,
-            composed: true,
-            bubbles: true
-        }));
-    }
+
+    emitEvent(diagnostics.length === 0);
     return diagnostics;
 }
 
