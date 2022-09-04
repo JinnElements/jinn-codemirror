@@ -267,9 +267,10 @@ export class JinnCodemirror extends HTMLElement {
 
     styles() {
         return `
-            > div, .cm-editor {
+            :host > div, .cm-editor {
                 height: 100%;
                 width: 100%;
+                background-color: var(--jinn-codemirror-background-color, #fff);
             }
         `;
     }
