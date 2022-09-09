@@ -1,0 +1,8 @@
+.vscode/
+.editorconfig
+tsconfig.json
+README.tmpl
+build.cjs
+tsconfig.json
+web-dev-server.config.mjs
+test/
