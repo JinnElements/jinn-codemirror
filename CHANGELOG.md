@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.0.0...v1.0.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** do not update XML after opening leiden editor ([7cc0d90](https://github.com/JinnElements/jinn-codemirror/commit/7cc0d90f03ff4586066673558e9d8c20cb0e3f07))
+
 # 1.0.0 (2022-09-09)
 
 
