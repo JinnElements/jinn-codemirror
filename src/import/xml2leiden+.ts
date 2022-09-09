@@ -60,6 +60,9 @@ function transform(node: Node|null, output: string[]) {
                 case 'supplied':
                     transformSupplied(elem, output);
                     break;
+                default:
+                    transformElem(elem, output);
+                    break;
             }
             break;
         case Node.TEXT_NODE:

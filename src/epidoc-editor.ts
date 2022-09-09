@@ -7,7 +7,7 @@ interface LeidenEditorUpdateEvent extends Event {
 }
 
 const style = `
-    :host{
+    :host {
         display: block;
         width: 100%;
     }
@@ -107,15 +107,21 @@ export class JinnEpidocEditor extends HTMLElement {
             throw new Error('One or more components were not initialized')
         }
 
+        let noUpdate = false;
         leidenEditor.addEventListener('update', (ev) => {
-            ev.stopPropagation()
-            this.xmlEditor.content = ev.detail.content;
+            ev.stopPropagation();
+            console.log('no update %s', noUpdate);
+            if (!noUpdate) {
+                this.xmlEditor.content = ev.detail.content;
+            }
+            noUpdate = false;
         });
 
         openLeiden.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
                 if (this.xmlEditor.content.length > 0) {
+                    noUpdate = true;
                     leidenEditor.mode = 'leiden_plus';
                     const value = this.xmlEditor?.value;
                     if (this.unwrap && value instanceof Element) {
