@@ -1,7 +1,7 @@
-import { EditorView, basicSetup } from "@codemirror/basic-setup";
+import { basicSetup, EditorView } from "codemirror";
 import { Command, ViewPlugin, ViewUpdate, keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
-import { EditorStateConfig, Extension, EditorSelection, StateEffect } from "@codemirror/state";
+import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state";
 import {indentWithTab} from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
 import { Tree } from "@lezer/common";
@@ -68,9 +68,7 @@ export const snippetCommand = (template:string):Command => (editor) => {
     editor.state.selection.ranges.forEach((range) => {
         const content = editor.state.doc.slice(range.from, range.to);
         const snip = snippet(template.replace(/\${_}/, `\${${content.toString()}}`));
-        snip(editor, {
-            label: ''
-        }, range.from, range.to);
+        snip(editor, {label: ''}, range.from, range.to);
     });
     return true;
 }

@@ -25,27 +25,23 @@
   "author": "JinnTec GmbH",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@lezer/generator": "^0.16.0",
-    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@lezer/generator": "^1.1.1",
+    "@rollup/plugin-node-resolve": "^14.0.1",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
-    "@web/dev-server": "^0.1.30",
-    "@web/dev-server-esbuild": "^0.3.0",
+    "@web/dev-server": "^0.1.34",
+    "@web/dev-server-esbuild": "^0.3.2",
     "chai": "^4.3.6",
     "chai-xml": "^0.4.0",
     "micro-fs": "^1.0.3",
-    "mocha": "^9.0.1",
+    "mocha": "^10.0.0",
     "semantic-release": "^19.0.5",
     "web-component-analyzer": "^2.0.0-next.4"
   },
   "dependencies": {
-    "@codemirror/basic-setup": "^0.20.0",
-    "@codemirror/commands": "^0.20.0",
-    "@codemirror/lang-xml": "^0.20.0",
-    "@codemirror/lint": "^0.20.2",
-    "@codemirror/state": "^0.20.0",
-    "@codemirror/view": "^0.20.2",
-    "@lezer/highlight": "^0.16.0",
-    "@lezer/lr": "^0.16.2"
+    "@codemirror/autocomplete": "^6.1.1",
+    "@codemirror/lang-xml": "^6.0.0",
+    "@codemirror/language": "^6.2.1",
+    "codemirror": "^6.0.1"
   }
 }

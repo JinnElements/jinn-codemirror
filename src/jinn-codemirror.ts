@@ -1,4 +1,5 @@
-import { EditorState, EditorView } from "@codemirror/basic-setup";
+import { EditorView } from "@codemirror/view";
+import { EditorState } from "@codemirror/state";
 import { XMLConfig } from "./xml";
 import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
