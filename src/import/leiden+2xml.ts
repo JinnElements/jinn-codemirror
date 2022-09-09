@@ -1,5 +1,5 @@
 import { Tree, TreeCursor } from "@lezer/common";
-import { parser } from "./parser/leiden+/parser.js";
+import { parser } from "../parser/leiden+/parser.js";
 
 const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
 

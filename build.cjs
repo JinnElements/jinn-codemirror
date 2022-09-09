@@ -40,6 +40,21 @@ async function bundle() {
 			console.error(err);
 			process.exit(1);
 		});
+    // needed for tests only
+    await esbuild
+		.build({
+			entryPoints: ['./src/import/leiden+2xml.ts'],
+            format: "esm",
+            outdir: 'dist',
+			bundle: true,
+            minify: false,
+			sourcemap: true,
+			logLevel: "info",
+		})
+		.catch((err) => {
+			console.error(err);
+			process.exit(1);
+		});
 }
 
 async function clean() {

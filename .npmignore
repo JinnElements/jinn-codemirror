@@ -6,3 +6,4 @@ build.cjs
 tsconfig.json
 web-dev-server.config.mjs
 test/
+dist/leiden+2xml*
