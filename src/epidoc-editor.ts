@@ -75,6 +75,7 @@ export class JinnEpidocEditor extends HTMLElement {
     connectedCallback() {
         this.unwrap = this.hasAttribute('unwrap');
         this.schema = this.getAttribute('schema');
+        
         this.shadowRoot.innerHTML = `
             <style>
                 ${style}
@@ -110,7 +111,7 @@ export class JinnEpidocEditor extends HTMLElement {
         let noUpdate = false;
         leidenEditor.addEventListener('update', (ev) => {
             ev.stopPropagation();
-            console.log('no update %s', noUpdate);
+            // avoid XML to be overwritten after conversion to Leiden+
             if (!noUpdate) {
                 this.xmlEditor.content = ev.detail.content;
             }
@@ -122,7 +123,7 @@ export class JinnEpidocEditor extends HTMLElement {
             if (hidden) {
                 if (this.xmlEditor.content.length > 0) {
                     noUpdate = true;
-                    leidenEditor.mode = 'leiden_plus';
+                    leidenEditor.setMode('leiden_plus', false);
                     const value = this.xmlEditor?.value;
                     if (this.unwrap && value instanceof Element) {
                         leidenEditor.value = value.childNodes;

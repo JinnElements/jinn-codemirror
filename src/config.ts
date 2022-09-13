@@ -1,5 +1,5 @@
 import { basicSetup, EditorView } from "codemirror";
-import { Command, ViewPlugin, ViewUpdate, keymap } from "@codemirror/view";
+import { Command, ViewPlugin, ViewUpdate, keymap, KeyBinding } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state";
 import {indentWithTab} from "@codemirror/commands";
@@ -18,8 +18,12 @@ import { JinnCodemirror } from "./jinn-codemirror";
     default = "default"
 };
 
+export abstract class ParametrizedCommand {
+    abstract create(...params:any): Command;
+}
+
 export interface EditorCommands {
-    [index:string]: Command|{create: Function}
+    [index:string]: Command|ParametrizedCommand
 }
 
 /**
@@ -73,12 +77,56 @@ export const snippetCommand = (template:string):Command => (editor) => {
     return true;
 }
 
+export function initCommand(cmdName: string, cmd: Command|ParametrizedCommand, control: HTMLElement):Command|null {
+    if (cmd.create) {
+        const paramsAttr = (control).dataset.params;
+        if (paramsAttr) {
+            let params;
+            try {
+                params = JSON.parse(paramsAttr);
+            } catch (e) {
+                params = [paramsAttr];
+            }
+            if (Array.isArray(params) && params.length === cmd.create.length) {
+                return cmd.create.apply(null, params);
+            } else {
+                console.error('<jinn-codemirror> Expected %d arguments for command %s', cmd.create.length, cmdName);
+                return null;
+            }
+        }
+    }
+    return <Command>cmd;
+}
+
 export abstract class EditorConfig {
 
     editor: JinnCodemirror;
+    keymap: KeyBinding[];
+    commands: EditorCommands;
 
-    constructor(editor:JinnCodemirror) {
+    constructor(editor:JinnCodemirror, commands: EditorCommands = {}, toolbar: HTMLElement[] = []) {
         this.editor = editor;
+        this.commands = commands;
+        this.keymap = [];
+        if (toolbar) {
+            toolbar.forEach((control) => {
+                const cmdName = <string>(<HTMLElement>control).dataset.command;
+                const cmd = commands[cmdName];
+                if (cmd) {
+                    const shortcut = control.getAttribute('data-key');
+                    if (shortcut && shortcut.length > 0) {
+                        const command = initCommand(cmdName, cmd, control);
+                        if (command) {
+                            const binding:KeyBinding = {
+                                key: shortcut,
+                                run: command
+                            };
+                            this.keymap.push(binding);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     getConfig(): EditorStateConfig {
@@ -105,13 +153,15 @@ export abstract class EditorConfig {
         });
 
         const customExtensions = this.getExtensions(this.editor);
-        return { extensions: [basicSetup, EditorView.lineWrapping, keymap.of([indentWithTab]),...customExtensions, updateListener] };
+        return { 
+            extensions: [basicSetup, EditorView.lineWrapping, keymap.of([indentWithTab, ...this.keymap]),...customExtensions, updateListener] 
+        };
     }
 
     abstract getExtensions(editor: JinnCodemirror): Extension[];
 
     getCommands():EditorCommands {
-        return {};
+        return this.commands;
     }
 
     onUpdate(tree: Tree, content: string) {

@@ -33,29 +33,20 @@ const commands:EditorCommands = {
     gap: insertCommand('[---]')
 };
 
-const leidenKeymap: readonly KeyBinding[] = [
-    { key: "Ctrl-Shift-d", mac: "Cmd-Shift-d", run: commands.erasure },
-    { key: "Ctrl-Shift-l", mac: "Cmd-Shift-l", run: commands.gap }
-];
-
 export class AncientTextConfig extends EditorConfig {
     
     _sourceType: SourceType;
 
-    constructor(editor: JinnCodemirror, sourceType: SourceType) {
-        super(editor);
+    constructor(editor: JinnCodemirror, toolbar: HTMLElement[]|null, sourceType: SourceType) {
+        super(editor, {
+            ...commands, 
+            convert: convertToLeidenPlusCommand(editor, sourceType)
+        }, toolbar);
         this._sourceType = sourceType;
     }
     
     getExtensions(): Extension[] {
-        return [keymap.of(leidenKeymap), lintGutter()];
-    }
-
-    getCommands():EditorCommands {
-        return {
-            ...commands, 
-            convert: convertToLeidenPlusCommand(this.editor, this._sourceType)
-        };
+        return [lintGutter()];
     }
 
     onUpdate(tree: Tree, content: string): string {

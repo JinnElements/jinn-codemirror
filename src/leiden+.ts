@@ -83,6 +83,10 @@ const leidenKeymap: readonly KeyBinding[] = [
 
 export class LeidenConfig extends EditorConfig {
     
+    constructor(editor:JinnCodemirror, toolbar: HTMLElement[]) {
+        super(editor, commands, toolbar);
+    }
+
     getExtensions(): Extension[] {
         return [leiden(), linter(leidenParseLinter(this.editor)), keymap.of(leidenKeymap), lintGutter()];
     }

@@ -137,20 +137,14 @@ const teiFragmentLinter = (editor: JinnCodemirror, namespace: string|null) => (v
     return diagnostics;
 }
 
-const xmlKeymap: readonly KeyBinding[] = [
-    { key: "Ctrl-Shift-s", mac: "Cmd-Shift-s", run: commands.selectElement },
-    { key: "Ctrl-Shift-x", mac: "Cmd-Shift-x", run: commands.removeEnclosing },
-    { key: "Ctrl-Shift-e", mac: "Cmd-Shift-e", run: commands.encloseWith }
-];
-
 export class XMLConfig extends EditorConfig {
 
     private namespace: string|null;
     private unwrap: boolean|null;
     private checkNamespace: boolean|null;
 
-    constructor(editor: JinnCodemirror, namespace: string|null = null, checkNamespace: boolean|null = false, unwrap: boolean|null = false) {
-        super(editor);
+    constructor(editor: JinnCodemirror, toolbar: HTMLElement[] = [], namespace: string|null = null, checkNamespace: boolean|null = false, unwrap: boolean|null = false) {
+        super(editor, commands, toolbar);
         this.namespace = namespace;
         this.checkNamespace = checkNamespace;
         this.unwrap = unwrap;
@@ -159,7 +153,6 @@ export class XMLConfig extends EditorConfig {
     private getDefaultExtensions (): Extension[] {
         return [
             inputPanel(),
-            keymap.of(xmlKeymap), 
             linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
             lintGutter({markerFilter})
         ];
@@ -172,10 +165,6 @@ export class XMLConfig extends EditorConfig {
         //     return this.getDefaultExtensions().concat(xml(schema));
         // }
         return this.getDefaultExtensions().concat(xml());
-    }
-
-    getCommands():EditorCommands {
-        return commands;
     }
 
     private async loadSchema(url: string) {

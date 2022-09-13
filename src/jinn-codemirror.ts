@@ -3,7 +3,7 @@ import { EditorState } from "@codemirror/state";
 import { XMLConfig } from "./xml";
 import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
-import { EditorConfig, SourceType } from "./config";
+import { EditorConfig, SourceType, initCommand } from "./config";
 
 /**
  * Source code editor component based on [codemirror](https://codemirror.net/).
@@ -78,6 +78,10 @@ export class JinnCodemirror extends HTMLElement {
      * The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'.
      */
     set mode(mode:string) {
+        this.setMode(mode);
+    }
+
+    setMode(mode:string, update:boolean = true) {
         const wrapper = this.shadowRoot?.getElementById('editor');
         if (!wrapper) {
             return;
@@ -106,21 +110,24 @@ export class JinnCodemirror extends HTMLElement {
         if (!this._config) {
             return
         }
-        this.content = this._config.setFromValue(this._value);
+        if (update) {
+            this.content = this._config.setFromValue(this._value);
+        }
     }
 
     protected configure() {
+        const toolbar = this.getToolbarControls(<HTMLSlotElement|null> this.shadowRoot?.querySelector('[name=toolbar]'));
         switch(this._mode) {
             case SourceType.default:
             case SourceType.edcs:
             case SourceType.phi:
-                this._config = new AncientTextConfig(this, this._mode);
+                this._config = new AncientTextConfig(this, toolbar, this._mode);
                 break;
             case SourceType.leiden_plus:
-                this._config = new LeidenConfig(this);
+                this._config = new LeidenConfig(this, toolbar);
                 break;
             default:
-                this._config = new XMLConfig(this, this.namespace);
+                this._config = new XMLConfig(this, toolbar, this.namespace);
                 break;
         }
     }
@@ -213,7 +220,9 @@ export class JinnCodemirror extends HTMLElement {
             elem.querySelectorAll('slot').forEach(sl => this.registerToolbar(sl));
             elem.querySelectorAll('[data-command]').forEach((btn) => {
                 const cmdName = <string>(<HTMLElement>btn).dataset.command;
-
+                if (btn.hasAttribute('data-key')) {
+                    (<HTMLElement>btn).title = `${(<HTMLElement>btn).title} (${btn.getAttribute('data-key')})`;
+                }
                 btn.addEventListener('click', () => {
                     if (!this._config) {
                         return;
@@ -221,30 +230,12 @@ export class JinnCodemirror extends HTMLElement {
                     const commands = this._config.getCommands();
                     const command = commands[cmdName];
                     if (command) {
-                        if (command instanceof Function) {
-                            command(<EditorView>this._editor);
-                            if (command.name !== 'encloseWithCommand') {
+                        const func = initCommand(cmdName, command, <HTMLElement>btn);
+                        if (func) {
+                            func(<EditorView>this._editor);
+                            if (cmdName !== 'encloseWithCommand') {
                                 this._editor?.focus();
                             }
-                        } else {
-                            const paramsAttr = (<HTMLElement>btn).dataset.params;
-                            const create = (<{create: Function}>command).create;
-                            if (paramsAttr) {
-                                let params;
-                                try {
-                                    params = JSON.parse(paramsAttr);
-                                } catch (e) {
-                                    params = [paramsAttr];
-                                }
-                                if (Array.isArray(params) && params.length === create.length) {
-                                    create.apply(null, params)(<EditorView>this._editor);
-                                } else {
-                                    console.error('<jinn-codemirror> Expected %d arguments for command %s', create.length, cmdName);
-                                }
-                            } else {
-                                console.error('<jinn-codemirror> No arguments specified for command %s', cmdName);
-                            }
-                            this._editor?.focus();
                         }
                     }
                 });
@@ -266,9 +257,19 @@ export class JinnCodemirror extends HTMLElement {
         });
     }
 
+    protected getToolbarControls(slot:HTMLSlotElement|null|undefined, toolbar:HTMLElement[] = []) {
+        slot?.assignedElements().forEach((elem) => {
+            elem.querySelectorAll('[data-command]').forEach((btn) => {
+                toolbar.push(<HTMLElement>btn);
+            });
+            elem.querySelectorAll('slot').forEach(sl => this.getToolbarControls(sl, toolbar));
+        });
+        return toolbar;
+    }
+
     styles() {
         return `
-            :host > div, .cm-editor {
+            :host > div {
                 height: 100%;
                 width: 100%;
                 background-color: var(--jinn-codemirror-background-color, #fff);
