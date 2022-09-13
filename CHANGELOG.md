@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.0.1...v1.1.0) (2022-09-13)
+
+
+### Features
+
+* make keybindings configurable ([1928a62](https://github.com/JinnElements/jinn-codemirror/commit/1928a62523a26b120516aa2690d49f9e3db414cb))
+
 ## [1.0.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.0.0...v1.0.1) (2022-09-09)
 
 
