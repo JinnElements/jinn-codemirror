@@ -2,18 +2,28 @@
 <html>
     <head>
         <title>Leiden+ Editor Demo</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald"/>
         <style>
+            body {
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 1.42857143;
+            }
+            h1 {
+                font-family: Oswald, sans-serif;
+            }
             section {
-                margin-bottom: 1em;
+                margin-bottom: 2em;
                 max-width: 1024px;
                 margin-left: auto;
                 margin-right: auto;
             }
-            jinn-codemirror, jinn-xml-editor {
+            jinn-codemirror, jinn-xml-editor, jinn-epidoc-editor {
                 max-height: 400px;
-                min-height: 320px;
+                overflow: auto;
                 font-size: 16px;
                 display:block;
+                --jinn-codemirror-background-color: #f0f0f0;
             }
             jinn-codemirror[valid="true"], jinn-xml-editor[valid="true"], jinn-epidoc-editor[valid="true"] {
                 outline: thin solid green;
@@ -22,13 +32,10 @@
                 outline: thin solid red;
             }
             #epidoc-editor {
-                flex: 2;
+                background-color: #ffc74f;
             }
-            #leiden-editor {
-                flex: 1;
-                padding-right: 10px;
-                border-right: 1px solid #CCAA00;
-                margin-right: 10px;
+            #xml-editor {
+                background-color: #95ffe6;
             }
             .hidden {
                 display: none;
@@ -37,7 +44,7 @@
                 display: flex;
                 column-gap: 4px;
                 width: 100%;
-                margin-bottom: 10px;
+                padding: 4px 0;
             }
             [slot] *, jinn-epidoc-editor::part(button) {
                 font-size: .85rem;
@@ -55,54 +62,67 @@
     </head>
     <body>
         <section class="epidoc">
-            <h2>EpiDoc Editor</h2>
-            <p>Combines an XML Editor with an option to import and convert a transcription following Leiden conventions.</p>
+            <h1>EpiDoc Editor</h1>
+            <p>Combines an XML Editor with an option to import and convert a transcription following Leiden conventions. Multiple variants of Leiden are supported, with Leiden+ providing the best coverage as it is backed by a syntax tree. The other two Leiden modes use heuristics and are more prone to produce invalid markup.</p>
+            <p>The toolbar and XML snippets are fully configurable in HTML.</p>
             <jinn-epidoc-editor id="epidoc-editor" schema="dist/epidoc.json">
-                <div slot="leiden-toolbar" class="toolbar">
-                    <button data-command="expan" data-mode="leiden_plus">(a(bcd))</button>
-                    <button data-command="erasure" data-mode="leiden_plus">〚abc〛</button>
-                    <button data-command="unclear" data-mode="leiden_plus">ạ</button>
-                    <button data-command="div" data-mode="leiden_plus">&lt;=...</button>
-                    <!--button data-command="fragment" data-mode="leiden_plus">&lt;D=.1.fragment...</button-->
-                    <button data-command="part" data-mode="leiden_plus">&lt;D=.A.part...</button>
-                    <button data-command="recto" data-mode="leiden_plus">&lt;D=.r...</button>
-                    <button data-command="verso" data-mode="leiden_plus">&lt;D=.v...</button>
-                    <button data-command="erasure" data-mode="edcs">〚abc〛</button>
-                    <button data-command="gap" data-mode="edcs">[...]</button>
-                    <button data-command="convert" data-mode="edcs">Convert to Leiden+</button>
+                <div slot="leiden-toolbar">
+                    <button data-command="expan" data-mode="leiden_plus" data-key="mod-e mod-e">(a(bcd))</button>
+                    <button data-command="erasure" data-mode="leiden_plus" data-key="mod-e mod-e">〚abc〛</button>
+                    <button data-command="unclear" data-mode="leiden_plus" data-key="mod-e mod-u">ạ</button>
+                    <button data-command="div" data-mode="leiden_plus" data-key="mod-e mod-d">&lt;=...</button>
+                    <button data-command="part" data-mode="leiden_plus" data-key="mod-e mod-p">&lt;D=.A.part...</button>
+                    <button data-command="recto" data-mode="leiden_plus" data-key="mod-e mod-r">&lt;D=.r...</button>
+                    <button data-command="verso" data-mode="leiden_plus" data-key="mod-e mod-v">&lt;D=.v...</button>
+                    <button data-command="erasure" data-mode="edcs" data-key="mod-e mod-u">〚abc〛</button>
+                    <button data-command="gap" data-mode="edcs" data-key="mod-e mod-g">[...]</button>
+                    <button data-command="convert" data-mode="edcs" data-key="mod-e mod-c">Convert to Leiden+</button>
                 </div>
-                <div slot="xml-toolbar" class="toolbar">
-                    <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
-                    <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
-                    <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
+                <div slot="xml-toolbar">
+                    <button data-command="selectElement" data-key="mod-e mod-s"
+                        title="Select element around current cursor position">&lt;|></button>
+                    <button data-command="encloseWith" data-key="mod-e mod-e"
+                        title="Enclose selection in new element">&lt;...&gt;</button>
+                    <button data-command="removeEnclosing" title="Remove enclosing tags" 
+                        data-key="mod-e mod-r" class="sep">&lt;X></button>
                     <button data-command="snippet" data-params='&lt;ab&gt;$|_|&lt;/ab>'
-                        title="Insert ab">&lt;ab&gt;
+                        title="Insert ab" data-key="mod-e mod-a">&lt;ab&gt;
                     </button>
-                    <button data-command="snippet" data-params='&lt;lb n="$|1|"/>$|2|' title="Line break">&lt;lb&gt;</button>
+                    <button data-command="snippet" data-params='&lt;lb n="$|1|"/>$|2|' 
+                        data-key="mod-e mod-l" title="Line break">&lt;lb&gt;</button>
                     <button data-command="snippet" data-params='&lt;supplied reason="lost">$|_|&lt;/supplied>'
-                        title="Insert supplied">&lt;supplied&gt;
+                        title="Insert supplied" data-key="mod-e mod-u">&lt;supplied&gt;
                     </button>
                     <button data-command="snippet" data-params='&lt;expan>&lt;abbr>$|1|&lt;/abbr>&lt;ex>$|2|&lt;/ex>&lt;/expan>$|3|'
-                        title="Insert expan/abbr">&lt;expan&gt;
+                        title="Insert expan/abbr" data-key="mod-e mod-p">&lt;expan&gt;
                     </button>
                     <button data-command="snippet" data-params='&lt;gap reason="lost" extent="unknown" unit="character"/&gt;$|1|'
-                        title="Gap extent unknown">&lt;gap/unknown&gt;</button>
+                        title="Gap extent unknown" data-key="mod-e mod-g">&lt;gap/unknown&gt;</button>
                     <button data-command="snippet" data-params='&lt;gap reason="lost" quantity="$|1|" unit="$|2:line|"/&gt;$|3|'
-                        title="Gap extent known">&lt;gap&gt;</button>
+                        title="Gap extent known" data-params="mod-e mod-k">&lt;gap&gt;</button>
                 </div>
             </jinn-epidoc-editor>
         </section>
 
         <section>
-            <h2>XML Editor</h2>
+            <h1>XML Editor</h1>
+            <p>An XML editor intended for entering a fragment of TEI XML. This editor instance is configured to wrap the content into a TEI body element.</p>
             <jinn-xml-editor id="xml-editor" unwrap namespace="http://www.tei-c.org/ns/1.0"
-                wrapper='<div xmlns="http://www.tei-c.org/ns/1.0" type="edition"></div>'>
+                wrapper='<body xmlns="http://www.tei-c.org/ns/1.0"></body>'>
                 <div slot="toolbar">
-                    <button data-command="selectElement" title="Select element around current cursor position">&lt;|></button>
-                    <button data-command="encloseWith" title="Enclose selection in new element">&lt;...&gt;</button>
-                    <button data-command="removeEnclosing" title="Remove enclosing tags" class="sep">&lt;X></button>
-                    <button data-command="snippet" data-params="<div>${_}</div>" title="Insert <div>">&lt;div&gt;</button>
-                    <button data-command="snippet" data-params="<p>${_}</p>" title="Insert <p>">&lt;p&gt;</button>
+                    <button data-command="selectElement" data-key="mod-e mod-s"
+                        title="Select element around current cursor position">&lt;|></button>
+                    <button data-command="encloseWith" data-key="mod-e mod-e"
+                        title="Enclose selection in new element">&lt;...&gt;</button>
+                    <button data-command="removeEnclosing" title="Remove enclosing tags" 
+                    data-key="mod-e mod-r" class="sep">&lt;X></button>
+                    <button data-command="snippet" data-params="<div>${_}</div>" title="Insert <div>"
+                        data-key="mod-e mod-b">&lt;div&gt;</button>
+                    <button data-command="snippet" data-params="<p>${_}</p>" title="Insert <p>"
+                        data-key="mod-e mod-p">&lt;p&gt;</button>
+                    <button data-command="snippet" data-params='<hi rend="${1}">${_}</hi>' 
+                        data-key="mod-e mod-h"
+                        title="Insert <hi>">&lt;hi&gt;</button>
                 </div>
             </jinn-xml-editor>
             <pre id="xml-output"></pre>
@@ -122,10 +142,10 @@
                     console.log("XML VALID", ev)
                 });
                 epidoc.addEventListener('update', (ev) => {
-                    console.log("XML UPDATE", ev.detail.serialized)
+                    console.log("XML UPDATE", ev.detail.content)
                 });
                 xml.addEventListener('update', (ev) => {
-                    // console.log("UPDATE");
+                    // because we defined a wrapper, the returned content will be a node instead of a string
                     xmlOutput.innerText = new XMLSerializer().serializeToString(ev.detail.content);
                 });
             });
