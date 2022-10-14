@@ -40,7 +40,7 @@ function createInputPanel(view: EditorView) {
         }
     });
     dom.appendChild(input);
-    return {top: false, dom, mount: () => input.focus() };
+    return {top: false, dom, mount: () => setTimeout(() => input.focus(), 50) };
 }
 
 const inputPanelTheme = EditorView.baseTheme({
