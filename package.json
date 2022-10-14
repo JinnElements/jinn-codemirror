@@ -1,6 +1,6 @@
 {
   "name": "@jinntec/jinn-codemirror",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Source code editor component based on codemirror with language support for XML and Leiden+",
   "repository": "https://github.com/JinnElements/jinn-codemirror.git",
   "main": "index.html",

@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.1.0...v1.1.1) (2022-10-14)
+
+
+### Bug Fixes
+
+* **xml-commands:** attempt to fix focus issue when opening panel ([a70d961](https://github.com/JinnElements/jinn-codemirror/commit/a70d96115d68f2155042785f6295fc7b9bfb727a))
+
 # [1.1.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.0.1...v1.1.0) (2022-09-13)
 
 
