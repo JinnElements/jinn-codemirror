@@ -39,7 +39,7 @@
     "web-component-analyzer": "^2.0.0-next.4"
   },
   "dependencies": {
-    "@codemirror/autocomplete": "^6.1.1",
+    "@codemirror/autocomplete": "^6.3.0",
     "@codemirror/lang-xml": "^6.0.0",
     "@codemirror/language": "^6.2.1",
     "codemirror": "^6.0.1"
