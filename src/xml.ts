@@ -1,12 +1,14 @@
 import { xml } from "@codemirror/lang-xml";
-import { Extension } from "@codemirror/state";
+import { Extension, EditorSelection } from "@codemirror/state";
 import { EditorConfig } from "./config";
 import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
-import { EditorView, KeyBinding, keymap } from "@codemirror/view";
+import { EditorView } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
+import { JinnXMLEditor } from "./xml-editor";
 import { commands, inputPanel } from "./xml-commands";
+import { Completion } from "@codemirror/autocomplete";
 
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
@@ -137,6 +139,14 @@ const teiFragmentLinter = (editor: JinnCodemirror, namespace: string|null) => (v
     return diagnostics;
 }
 
+const completeAttribute = (view: EditorView, completion: Completion, from: number, to: number) => {
+    const tx = view.state.update({
+        changes: { from: from, to: to, insert: `${completion.label}=""` },
+        selection: { anchor: from + completion.label.length + 2 }
+    });
+    view.dispatch(tx);
+}
+
 export class XMLConfig extends EditorConfig {
 
     private namespace: string|null;
@@ -159,7 +169,7 @@ export class XMLConfig extends EditorConfig {
     }
 
     async getExtensions(): Promise<Extension[]> {
-        const schemaUrl = this.editor.getAttribute('schema');
+        const schemaUrl = (<JinnXMLEditor>this.editor).schema;
         if (schemaUrl) {
             const schema = await this.loadSchema(schemaUrl);
             return this.getDefaultExtensions().concat(xml(schema));
@@ -168,33 +178,49 @@ export class XMLConfig extends EditorConfig {
     }
 
     private async loadSchema(url: string) {
-        let json = await fetch(url)
+        const json = await fetch(url)
             .then((response) => response.json());
-        const entryPoint = this.editor.getAttribute('schema-root');
+        let elements = json.elements;
+        const entryPoint = (<JinnXMLEditor>this.editor).schemaRoot;
         if (entryPoint) {
             const root = json.elements.find((elem) => elem.name === entryPoint);
             if (root) {
-                const filtered: any[] = [];
-                this.filterElements(root, json.elements, filtered);
-                json = {
-                    "elements": filtered
-                }
+                const filtered = new Map<string, any>();
+                const elemMap = new Map<string, any>();
+                json.elements.forEach((elem) => elemMap.set(elem.name, elem));
+
+                this.filterSchema(root, elemMap, filtered);
+                elements = Array.from(filtered.values())
             }
         }
-        return json;
+        this.extendSchema(elements);
+        return { elements };
     }
 
-    private filterElements(elem: any, elemList: any[], result: any[]) {
+    private filterSchema(elem: any, elemList: Map<string, any>, result: Map<string, any>, level: number = 0) {
         elem.children.forEach((child) => {
-            if (result.find((current) => current.name === child)) {
+            const existingEntry = result.get(child);
+            if (existingEntry) {
+                existingEntry.top = (level === 0);
                 return;
             }
-            const entry = elemList.find((current) => current.name === child);
+            const entry = elemList.get(child);
             if (entry) {
-                result.push(entry);
+                entry.top = (level === 0);
+                result.set(child, entry);
+                this.filterSchema(entry, elemList, result, level + 1);
             }
-            this.filterElements(entry, elemList, result);
         });
+    }
+
+    private extendSchema(elements: any[]) {
+        elements.forEach((elem) => {
+            elem.completion.type = 'keyword';
+            elem.attributes.forEach((attr) => {
+                attr.completion.type = 'property';
+                attr.completion.apply = completeAttribute;
+            });
+        })
     }
 
     serialize(): Element | NodeListOf<ChildNode> | string | null | undefined {

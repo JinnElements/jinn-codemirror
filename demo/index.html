@@ -9,8 +9,11 @@
                 font-size: 16px;
                 line-height: 1.42857143;
             }
-            h1 {
+            h1, h2 {
                 font-family: Oswald, sans-serif;
+            }
+            h2 {
+                font-size: 1em;
             }
             section {
                 margin-bottom: 2em;
@@ -106,10 +109,10 @@
 
         <section>
             <h1>XML Editor</h1>
-            <p>An XML editor intended for entering a fragment of TEI XML. This editor instance is configured to wrap the content into a TEI body element.</p>
+            <p>An XML editor intended for entering a fragment of TEI XML. This editor instance is configured to wrap the content into a TEI div element. Auto-complete will only suggest elements allowed below div.</p>
             <jinn-xml-editor id="xml-editor" unwrap namespace="http://www.tei-c.org/ns/1.0"
-                wrapper='<body xmlns="http://www.tei-c.org/ns/1.0"></body>' schema="../src/tei.json"
-                schema-root="body">
+                wrapper='<div xmlns="http://www.tei-c.org/ns/1.0"></div>' schema="../src/tei.json"
+                schema-root="div">
                 <div slot="toolbar">
                     <button data-command="selectElement" data-key="mod-e mod-s"
                         title="Select element around current cursor position">&lt;|></button>
@@ -117,15 +120,16 @@
                         title="Enclose selection in new element">&lt;...&gt;</button>
                     <button data-command="removeEnclosing" title="Remove enclosing tags" 
                     data-key="mod-e mod-r" class="sep">&lt;X></button>
-                    <button data-command="snippet" data-params="<div>${_}</div>" title="Insert <div>"
-                        data-key="mod-e mod-b">&lt;div&gt;</button>
                     <button data-command="snippet" data-params="<p>${_}</p>" title="Insert <p>"
                         data-key="mod-e mod-p">&lt;p&gt;</button>
                     <button data-command="snippet" data-params='<hi rend="${1}">${_}</hi>' 
                         data-key="mod-e mod-h"
                         title="Insert <hi>">&lt;hi&gt;</button>
+                    <button data-command="snippet" data-params="<list>&#10;&#09;<item>${_}</item>&#10;</list>" title="Insert <list>"
+                        data-key="mod-e mod-l">&lt;list&gt;</button>
                 </div>
             </jinn-xml-editor>
+            <h2>XML Output</h2>
             <pre id="xml-output"></pre>
         </section>
 

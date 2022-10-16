@@ -51,8 +51,8 @@ export class JinnEpidocEditor extends HTMLElement {
 
     public valid?: boolean;
     public unwrap?: boolean;
-    private schema: string | null;
-    private schemaRoot: string | null;
+    public schema: string | null;
+    public schemaRoot: string | null;
 
     /**
      * The value edited in the editor as either an Element or string -
@@ -80,7 +80,7 @@ export class JinnEpidocEditor extends HTMLElement {
         this.unwrap = this.hasAttribute('unwrap');
         this.schema = this.getAttribute('schema');
         this.schemaRoot = this.getAttribute('schema-root');
-        
+
         this.shadowRoot.innerHTML = `
             <style>
                 ${style}
