@@ -9,6 +9,8 @@ import { XMLConfig } from "./xml";
  * @attr {boolean} unwrap - If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.
  * The wrapper element itself will not be shown in the editor.
  * @attr {boolean} check-namespace - if enabled, a missing namespace will be reported as error 
+ * @attr {string} schema - an optional schema description (JSON syntax) to load
+ * @attr {string} schema-root - determines the root element
  */
 export class JinnXMLEditor extends JinnCodemirror {
 

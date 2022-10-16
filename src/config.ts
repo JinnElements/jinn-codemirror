@@ -129,7 +129,7 @@ export abstract class EditorConfig {
         }
     }
 
-    getConfig(): EditorStateConfig {
+    async getConfig(): Promise<EditorStateConfig> {
         const self = this;
         const updateListener = ViewPlugin.fromClass(class {
             update(update: ViewUpdate) {
@@ -152,13 +152,13 @@ export abstract class EditorConfig {
             }
         });
 
-        const customExtensions = this.getExtensions(this.editor);
+        const customExtensions = await this.getExtensions(this.editor);
         return { 
             extensions: [basicSetup, EditorView.lineWrapping, keymap.of([indentWithTab, ...this.keymap]),...customExtensions, updateListener] 
         };
     }
 
-    abstract getExtensions(editor: JinnCodemirror): Extension[];
+    abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;
 
     getCommands():EditorCommands {
         return this.commands;

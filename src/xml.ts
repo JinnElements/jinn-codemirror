@@ -1,6 +1,6 @@
 import { xml } from "@codemirror/lang-xml";
 import { Extension } from "@codemirror/state";
-import { EditorCommands, EditorConfig } from "./config";
+import { EditorConfig } from "./config";
 import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
 import { EditorView, KeyBinding, keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
@@ -158,19 +158,43 @@ export class XMLConfig extends EditorConfig {
         ];
     }
 
-    getExtensions(): Extension[] {
-        // const schemaUrl = this.editor.getAttribute('schema');
-        // if (schemaUrl) {
-        //     const schema = await this.loadSchema(schemaUrl);
-        //     return this.getDefaultExtensions().concat(xml(schema));
-        // }
+    async getExtensions(): Promise<Extension[]> {
+        const schemaUrl = this.editor.getAttribute('schema');
+        if (schemaUrl) {
+            const schema = await this.loadSchema(schemaUrl);
+            return this.getDefaultExtensions().concat(xml(schema));
+        }
         return this.getDefaultExtensions().concat(xml());
     }
 
     private async loadSchema(url: string) {
-        const json = await fetch(url)
+        let json = await fetch(url)
             .then((response) => response.json());
+        const entryPoint = this.editor.getAttribute('schema-root');
+        if (entryPoint) {
+            const root = json.elements.find((elem) => elem.name === entryPoint);
+            if (root) {
+                const filtered: any[] = [];
+                this.filterElements(root, json.elements, filtered);
+                json = {
+                    "elements": filtered
+                }
+            }
+        }
         return json;
+    }
+
+    private filterElements(elem: any, elemList: any[], result: any[]) {
+        elem.children.forEach((child) => {
+            if (result.find((current) => current.name === child)) {
+                return;
+            }
+            const entry = elemList.find((current) => current.name === child);
+            if (entry) {
+                result.push(entry);
+            }
+            this.filterElements(entry, elemList, result);
+        });
     }
 
     serialize(): Element | NodeListOf<ChildNode> | string | null | undefined {

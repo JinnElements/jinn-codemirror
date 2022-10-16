@@ -87,7 +87,7 @@ export class LeidenConfig extends EditorConfig {
         super(editor, commands, toolbar);
     }
 
-    getExtensions(): Extension[] {
+    async getExtensions(): Promise<Extension[]> {
         return [leiden(), linter(leidenParseLinter(this.editor)), keymap.of(leidenKeymap), lintGutter()];
     }
 

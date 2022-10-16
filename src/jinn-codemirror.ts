@@ -101,18 +101,19 @@ export class JinnCodemirror extends HTMLElement {
             select.value = this._mode;
         }
 
-        const stateConfig = this._config?.getConfig();
-        
-        this._editor = new EditorView({
-            state: EditorState.create(stateConfig),
-            parent: wrapper
+        this._config?.getConfig().then((stateConfig) => {
+            this._editor = new EditorView({
+                state: EditorState.create(stateConfig),
+                parent: wrapper
+            });
+            if (!this._config) {
+                return
+            }
+            if (update) {
+                this.content = this._config.setFromValue(this._value);
+            }
         });
-        if (!this._config) {
-            return
-        }
-        if (update) {
-            this.content = this._config.setFromValue(this._value);
-        }
+        
     }
 
     protected configure() {

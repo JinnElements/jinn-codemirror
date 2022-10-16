@@ -55,6 +55,8 @@ content. Setting the property requires that a DOM element is passed via value.
 | Attribute         | Type      | Description                                      |
 |-------------------|-----------|--------------------------------------------------|
 | `check-namespace` | `boolean` | if enabled, a missing namespace will be reported as error |
+| `schema`          | `string`  | an optional schema description (JSON syntax) to load |
+| `schema-root`     | `string`  | determines the root element                      |
 
 #### Properties
 
@@ -72,6 +74,12 @@ content. Setting the property requires that a DOM element is passed via value.
 ### jinn-epidoc-editor
 
 Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
+
+#### Attributes
+
+| Attribute     | Type     | Description                 |
+|---------------|----------|-----------------------------|
+| `schema-root` | `string` | determines the root element |
 
 #### Properties
 

@@ -45,7 +45,7 @@ export class AncientTextConfig extends EditorConfig {
         this._sourceType = sourceType;
     }
     
-    getExtensions(): Extension[] {
+    async getExtensions(): Promise<Extension[]> {
         return [lintGutter()];
     }
 

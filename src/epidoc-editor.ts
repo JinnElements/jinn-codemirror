@@ -42,6 +42,8 @@ const style = `
  * 
  * @attr {boolean} unwrap - If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.
  * The wrapper element itself will not be shown in the editor.
+ * @attr {string} schema - an optional schema description (JSON syntax) to load
+ * @attr {string} schema-root - determines the root element
  */
 export class JinnEpidocEditor extends HTMLElement {
 
@@ -50,6 +52,7 @@ export class JinnEpidocEditor extends HTMLElement {
     public valid?: boolean;
     public unwrap?: boolean;
     private schema: string | null;
+    private schemaRoot: string | null;
 
     /**
      * The value edited in the editor as either an Element or string -
@@ -69,12 +72,14 @@ export class JinnEpidocEditor extends HTMLElement {
         this.valid = true;
         this.unwrap = false;
         this.schema = null;
+        this.schemaRoot = null;
         this.attachShadow({ mode: 'open' });
     }
 
     connectedCallback() {
         this.unwrap = this.hasAttribute('unwrap');
         this.schema = this.getAttribute('schema');
+        this.schemaRoot = this.getAttribute('schema-root');
         
         this.shadowRoot.innerHTML = `
             <style>
@@ -91,7 +96,8 @@ export class JinnEpidocEditor extends HTMLElement {
                     <button part="button" id="close-leiden">Close</button>
                 </div>
             </jinn-codemirror>
-            <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}">
+            <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}"
+                schema-root="${this.schemaRoot}">
                 <div slot="toolbar">
                     <button part="button" id="import" title="Import from Leiden markup">Leiden Editor</button>
                     <slot name="xml-toolbar"></slot>
