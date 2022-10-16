@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.1.1...v1.2.0) (2022-10-16)
+
+
+### Features
+
+* **jinn-xml-editor:** reinstate support for autocomplete; add TEI schema for autocomplete ([86cc2b1](https://github.com/JinnElements/jinn-codemirror/commit/86cc2b14c3b49fb231392186715401efc29e5cc3))
+
 ## [1.1.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.1.0...v1.1.1) (2022-10-14)
 
 
