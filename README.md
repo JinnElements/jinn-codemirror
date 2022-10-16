@@ -4,6 +4,15 @@ A plain javascript web component based on [codemirror](https://codemirror.net/) 
 
 [Demo](https://jinnelements.github.io/jinn-codemirror/)
 
+Features:
+
+    * Configurable toolbar with support for snippets
+    * Autocomplete based on a JSON representation of the schema (currently TEI only)
+    * Commands for XML editing: 
+      * enclose in element
+      * remove enclosing parent
+      * select parent
+      
 ## API
 
 ### jinn-codemirror
@@ -55,14 +64,14 @@ content. Setting the property requires that a DOM element is passed via value.
 | Attribute         | Type      | Description                                      |
 |-------------------|-----------|--------------------------------------------------|
 | `check-namespace` | `boolean` | if enabled, a missing namespace will be reported as error |
-| `schema`          | `string`  | an optional schema description (JSON syntax) to load |
-| `schema-root`     | `string`  | determines the root element                      |
 
 #### Properties
 
-| Property | Attribute | Type      | Default | Description                                      |
-|----------|-----------|-----------|---------|--------------------------------------------------|
-| `unwrap` | `unwrap`  | `boolean` | false   | Set to indicate that the content of the node should be edited rather<br />than the root node itself. |
+| Property     | Attribute     | Type     | Default | Description                                      |
+|--------------|---------------|----------|---------|--------------------------------------------------|
+| `schema`     | `schema`      | `string` | null    | Schema to load for autocompletion.               |
+| `schemaRoot` | `schema-root` | `string` | null    | Determines the root element to be used for autocomplete. |
+| `unwrap`     | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
 
 #### Methods
 
@@ -83,12 +92,14 @@ Combines an XML editor with an option to import and convert markup following var
 
 #### Properties
 
-| Property    | Attribute | Type                   | Default | Description                                      |
-|-------------|-----------|------------------------|---------|--------------------------------------------------|
-| `unwrap`    | `unwrap`  | `boolean`              | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
-| `valid`     |           | `boolean \| undefined` | true    |                                                  |
-| `value`     |           |                        |         | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
-| `xmlEditor` |           |                        | null    |                                                  |
+| Property     | Attribute | Type                   | Default | Description                                      |
+|--------------|-----------|------------------------|---------|--------------------------------------------------|
+| `schema`     | `schema`  | `string`               | null    | an optional schema description (JSON syntax) to load |
+| `schemaRoot` |           | `string \| null`       | null    |                                                  |
+| `unwrap`     | `unwrap`  | `boolean`              | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `valid`      |           | `boolean \| undefined` | true    |                                                  |
+| `value`      |           |                        |         | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `xmlEditor`  |           |                        | null    |                                                  |
 
 #### Events
 
