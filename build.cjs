@@ -74,7 +74,7 @@ async function prepare() {
 
     replace('demo/index.html', '.', [
         {regex: /..\/src\/jinn-codemirror-bundle.ts/, replacement: 'dist/jinn-codemirror-bundle.js'},
-        {regex: /..\/src\/tei.json/, replacement: 'dist/tei.json'}
+        {regex: /..\/src\/tei.json/g, replacement: 'dist/tei.json'}
     ]);
     await mfs.copy('src/tei.json', 'dist');
 }
