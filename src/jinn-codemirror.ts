@@ -153,9 +153,11 @@ export class JinnCodemirror extends HTMLElement {
             console.log('no editor');
             return;
         }
-        this._editor.dispatch({
-            changes: {from: 0, to: this._editor.state.doc.length, insert: text}
-        });
+        setTimeout(() =>
+            this._editor.dispatch({
+                changes: {from: 0, to: this._editor.state.doc.length, insert: text}
+            })
+        );
     }
 
     get content(): string {

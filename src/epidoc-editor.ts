@@ -127,6 +127,9 @@ export class JinnEpidocEditor extends HTMLElement {
         openLeiden.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
+                leidenEditor.classList.remove('hidden');
+                leidenEditor.focus();
+                openLeiden.classList.add('hidden');
                 if (this.xmlEditor.content.length > 0) {
                     noUpdate = true;
                     leidenEditor.setMode('leiden_plus', false);
@@ -137,9 +140,6 @@ export class JinnEpidocEditor extends HTMLElement {
                         leidenEditor.value = value;
                     }
                 }
-                leidenEditor.classList.remove('hidden');
-                leidenEditor.focus();
-                openLeiden.classList.add('hidden');
             } else {
                 leidenEditor.classList.add('hidden');
                 openLeiden.classList.remove('hidden');
