@@ -1,20 +1,23 @@
 import { lintGutter } from "@codemirror/lint";
 import { Extension } from "@codemirror/state";
-import { Command, KeyBinding, keymap } from "@codemirror/view";
+import { Command } from "@codemirror/view";
 import { Tree } from "@lezer/common";
 import { EditorCommands, EditorConfig, insertCommand, SourceType, wrapCommand } from "./config";
 import { ancientText2XML } from "./import/ancientText2xml.js";
 import { xml2leidenPlus } from "./import/xml2leiden+";
 import { JinnCodemirror } from "./jinn-codemirror";
 
-export function convertToLeidenPlus(text: string, type: SourceType): string {
+export function convertToLeidenPlus(text: string, type: SourceType): string | null {
     const converted = ancientText2XML(text, type);
     const xml = `<ab>${converted}\n</ab>`
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'application/xml');
-    
     if (!doc.firstElementChild) {
         return '';
+    }
+    const errorNode = doc.querySelector('parsererror');
+    if (errorNode) {
+        return null;
     }
     return xml2leidenPlus(doc.firstElementChild);
 }
@@ -22,9 +25,12 @@ export function convertToLeidenPlus(text: string, type: SourceType): string {
 export const convertToLeidenPlusCommand = (component: JinnCodemirror, type:SourceType):Command => (editor) => {
     const lines = editor.state.doc.toJSON();
     const leiden = convertToLeidenPlus(lines.join('\n'), type);
-    component.content = leiden;
-    component.mode = 'leiden_plus';
-
+    if (leiden) {
+        component.content = leiden;
+        component.mode = 'leiden_plus';
+    } else {
+        alert('Conversion failed due to invalid XML!');
+    }
     return true;
 };
 
