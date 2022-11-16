@@ -35,7 +35,7 @@ function transform(node: Node|null, output: string[]) {
                     n = elem.getAttribute('n');
                     output.push(`<D=.${n}.column`);
                     transformElem(elem, output);
-                    output.push(`=D>`);
+                    output.push(`=D>\n`);
                     break;
                 case 'expan':
                 case 'ex':
@@ -146,8 +146,10 @@ export function xml2leidenPlus(root: Node): string {
         return '';
     }
     const output:string[] = [];
-    const columnBreaks = root.querySelectorAll('cb');
+    let columnBreaks = root.querySelectorAll('cb');
     if (columnBreaks.length > 0) {
+        root = root.cloneNode(true);
+        columnBreaks = (<Element>root).querySelectorAll('cb');
         for (let i = 0; i <= columnBreaks.length; i++) {
             const range = document.createRange();
             if (i === 0) {
@@ -160,13 +162,13 @@ export function xml2leidenPlus(root: Node): string {
             } else {
                 range.setEndBefore(columnBreaks[i]);
             }
-            console.log(range);
             const columnDiv = document.createElement('div');
             columnDiv.setAttribute('type', 'textpart');
             columnDiv.setAttribute('subtype', 'column');
             columnDiv.setAttribute('n', (i + 1).toString());
-            range.surroundContents(columnDiv);
-            console.log('column: %o', columnDiv);
+            const ab = document.createElement('ab');
+            columnDiv.appendChild(ab);
+            ab.appendChild(range.extractContents());
             transform(columnDiv, output);
         }
     } else {
