@@ -139,6 +139,8 @@ export class JinnEpidocEditor extends HTMLElement {
                     } else {
                         leidenEditor.value = value;
                     }
+                } else {
+                    leidenEditor.value = '';
                 }
             } else {
                 leidenEditor.classList.add('hidden');
