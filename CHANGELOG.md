@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.3...v1.2.4) (2022-11-18)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** show warning if user tries to open leiden+ but xml is invalid ([77179ff](https://github.com/JinnElements/jinn-codemirror/commit/77179ffb91a5c6b78d97fd41942160f529e2921c))
+
 ## [1.2.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.2...v1.2.3) (2022-11-18)
 
 
