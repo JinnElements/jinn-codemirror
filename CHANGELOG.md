@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.0...v1.2.1) (2022-11-16)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** clear content if xml is empty ([19de046](https://github.com/JinnElements/jinn-codemirror/commit/19de046accb3cd47fb1c4d8e6be92d8ee54d391f))
+
 # [1.2.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.1.1...v1.2.0) (2022-10-16)
 
 
