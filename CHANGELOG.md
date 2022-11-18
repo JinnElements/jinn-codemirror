@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.1...v1.2.2) (2022-11-18)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** close Leiden editor if user starts typing into XML editor. ([bd4174e](https://github.com/JinnElements/jinn-codemirror/commit/bd4174e6296ec4e3c4acdd401b384f9f5a84936a))
+
 ## [1.2.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.0...v1.2.1) (2022-11-16)
 
 
