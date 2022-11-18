@@ -150,12 +150,11 @@ export class JinnEpidocEditor extends HTMLElement {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
                 if (this.xmlEditor.content.length > 0) {
-                    const value = this.xmlEditor?.value;
-                    console.log('value=%o', value);
-                    if (value == null) {
+                    if (!this.valid) {
                         alert('The XML contains errors. Cannot convert to Leiden+');
                         return;
                     }
+                    const value = this.xmlEditor?.value;
                     updateXML = false;
                     leidenEditor.setMode('leiden_plus', false);
                     showLeiden();
