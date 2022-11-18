@@ -139,23 +139,33 @@ export class JinnEpidocEditor extends HTMLElement {
             }
         });
 
+        function showLeiden() {
+            openLeidenBtn.classList.add('hidden');
+            leidenEditor.classList.remove('hidden');
+            leidenEditorOpened = true;
+            leidenEditor.focus();
+        }
+
         openLeidenBtn.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
-                leidenEditor.classList.remove('hidden');
-                leidenEditorOpened = true;
-                leidenEditor.focus();
-                openLeidenBtn.classList.add('hidden');
                 if (this.xmlEditor.content.length > 0) {
+                    const value = this.xmlEditor?.value;
+                    console.log('value=%o', value);
+                    if (value == null) {
+                        alert('The XML contains errors. Cannot convert to Leiden+');
+                        return;
+                    }
                     updateXML = false;
                     leidenEditor.setMode('leiden_plus', false);
-                    const value = this.xmlEditor?.value;
+                    showLeiden();
                     if (this.unwrap && value instanceof Element) {
                         leidenEditor.value = value.childNodes;
                     } else {
                         leidenEditor.value = value;
                     }
                 } else {
+                    showLeiden();
                     leidenEditor.value = '';
                 }
             } else {
