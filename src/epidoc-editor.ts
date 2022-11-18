@@ -36,6 +36,8 @@ const style = `
         font-weight: bold;
     }`;
 
+const ignoreKeys = ['Shift', 'Alt', 'Meta', 'Control', 'ArrowLeft', 'ArrowRight', 'ArrowDown',
+    'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End'];
 
 /**
  * Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
@@ -107,31 +109,45 @@ export class JinnEpidocEditor extends HTMLElement {
          
         this.xmlEditor = this.shadowRoot?.querySelector('#xml-editor');
         const leidenEditor:JinnCodemirror | null | undefined = this.shadowRoot?.querySelector('#leiden-editor');
-        const openLeiden:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#import');
-        const closeLeiden:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#close-leiden');
+        const openLeidenBtn:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#import');
+        const closeLeidenBtn:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#close-leiden');
 
-        if (!(this.xmlEditor && leidenEditor && openLeiden && closeLeiden)) {
+        if (!(this.xmlEditor && leidenEditor && openLeidenBtn && closeLeidenBtn)) {
             throw new Error('One or more components were not initialized')
         }
 
-        let noUpdate = false;
+        let updateXML = true;
+        let leidenEditorOpened = false;
+        // update XML when Leiden editor changes
         leidenEditor.addEventListener('update', (ev) => {
             ev.stopPropagation();
             // avoid XML to be overwritten after conversion to Leiden+
-            if (!noUpdate) {
+            if (updateXML) {
                 this.xmlEditor.content = ev.detail.content;
             }
-            noUpdate = false;
+            updateXML = true;
+        });
+        this.xmlEditor.addEventListener('keyup', (ev) => {
+            if (leidenEditorOpened) {
+                if (ignoreKeys.indexOf(ev.key) > -1) {
+                    return;
+                }
+                
+                openLeidenBtn.classList.remove('hidden');
+                leidenEditor.classList.add('hidden');
+                leidenEditorOpened = false;
+            }
         });
 
-        openLeiden.addEventListener('click', () => {
+        openLeidenBtn.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
                 leidenEditor.classList.remove('hidden');
+                leidenEditorOpened = true;
                 leidenEditor.focus();
-                openLeiden.classList.add('hidden');
+                openLeidenBtn.classList.add('hidden');
                 if (this.xmlEditor.content.length > 0) {
-                    noUpdate = true;
+                    updateXML = false;
                     leidenEditor.setMode('leiden_plus', false);
                     const value = this.xmlEditor?.value;
                     if (this.unwrap && value instanceof Element) {
@@ -144,13 +160,14 @@ export class JinnEpidocEditor extends HTMLElement {
                 }
             } else {
                 leidenEditor.classList.add('hidden');
-                openLeiden.classList.remove('hidden');
+                openLeidenBtn.classList.remove('hidden');
+                leidenEditorOpened = false;
                 this.xmlEditor.focus();
             }
         });
 
-        closeLeiden.addEventListener('click', () => {
-            openLeiden.classList.remove('hidden');
+        closeLeidenBtn.addEventListener('click', () => {
+            openLeidenBtn.classList.remove('hidden');
             leidenEditor.classList.add('hidden');
             this.xmlEditor.focus();
         });
