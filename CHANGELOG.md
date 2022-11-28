@@ -1,3 +1,10 @@
+## [1.2.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.4...v1.2.5) (2022-11-28)
+
+
+### Bug Fixes
+
+* **leiden+:** detect and report invalid abbreviations ([f19cde3](https://github.com/JinnElements/jinn-codemirror/commit/f19cde3b80734c19e5279f050f5c70f24e7b44e1))
+
 ## [1.2.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.3...v1.2.4) (2022-11-18)
 
 
