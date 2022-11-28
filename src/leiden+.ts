@@ -4,7 +4,7 @@ import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { leidenPlus2epiDoc } from "./import/leiden+2xml";
-import { EditorConfig, EditorCommands, snippetCommand, wrapCommand, insertCommand } from "./config";
+import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
 import { leiden } from "./language";
 import { xml2leidenPlus } from "./import/xml2leiden+";
 import { JinnCodemirror } from "./jinn-codemirror";
@@ -22,15 +22,37 @@ const leidenParseLinter = (editor: JinnCodemirror) => (view: EditorView): Diagno
 
     const diagnostics:Diagnostic[] = [];
     const tree = syntaxTree(view.state);
+    let abbrevs = 0;
+    let hasInnerAbbrev = false;
     tree.iterate({
         enter: (node:TreeCursor) => {
-            if (node.type.isError) {
+            if (node.name === 'Abbrev') {
+                abbrevs += 1;
+            } else if (node.type.isError) {
                 diagnostics.push({
                     message: 'Syntaxfehler',
                     severity: 'error',
                     from: node.from,
                     to: node.to
                 });
+            }
+        },
+        leave: (node:TreeCursor) => {
+            if (node.name === 'Abbrev') {
+                if (abbrevs === 2) {
+                    hasInnerAbbrev = true;
+                } else if (!hasInnerAbbrev) {
+                    diagnostics.push({
+                        message: 'Invalid abbreviation. Abbreviations must\nuse double parenthesis, e.g. "(C(aesar))"',
+                        severity: 'error',
+                        from: node.from,
+                        to: node.to
+                    });
+                }
+                abbrevs -= 1;
+                if (abbrevs === 0) {
+                    hasInnerAbbrev = false;
+                }
             }
         }
     });
