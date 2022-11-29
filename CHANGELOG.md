@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.3.0...v1.3.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* **ancientText:** fix conversion to leiden+ ([1762644](https://github.com/JinnElements/jinn-codemirror/commit/17626442f91c2682ae99e2d9cbcb0e750f236907))
+
 # [1.3.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.5...v1.3.0) (2022-11-29)
 
 
