@@ -84,22 +84,18 @@ content. Setting the property requires that a DOM element is passed via value.
 
 Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
 
-#### Attributes
-
-| Attribute     | Type     | Description                 |
-|---------------|----------|-----------------------------|
-| `schema-root` | `string` | determines the root element |
-
 #### Properties
 
-| Property     | Attribute | Type                   | Default | Description                                      |
-|--------------|-----------|------------------------|---------|--------------------------------------------------|
-| `schema`     | `schema`  | `string`               | null    | an optional schema description (JSON syntax) to load |
-| `schemaRoot` |           | `string \| null`       | null    |                                                  |
-| `unwrap`     | `unwrap`  | `boolean`              | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
-| `valid`      |           | `boolean \| undefined` | true    |                                                  |
-| `value`      |           |                        |         | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
-| `xmlEditor`  |           |                        | null    |                                                  |
+| Property     | Attribute     | Type                   | Default       | Description                                      |
+|--------------|---------------|------------------------|---------------|--------------------------------------------------|
+| `mode`       |               | `string`               | "leiden_plus" | Syntax mode to use for the leiden editor, one of leiden_plus, edcs or petrae |
+| `modeSelect` | `mode-select` | `boolean`              | false         | if set, user may choose from the supported syntaxes |
+| `schema`     |               | `string \| null`       | null          | an optional schema description (JSON syntax) to load for the XML editor |
+| `schemaRoot` | `schema-root` | `string`               | null          | determines the root element for autocomplete     |
+| `unwrap`     |               | `boolean \| undefined` | false         | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `valid`      |               | `boolean \| undefined` | true          |                                                  |
+| `value`      |               |                        |               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `xmlEditor`  |               |                        | null          |                                                  |
 
 #### Events
 
