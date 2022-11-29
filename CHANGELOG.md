@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.3.2...v1.4.0) (2022-11-29)
+
+
+### Features
+
+* add css and xquery modes ([64faa70](https://github.com/JinnElements/jinn-codemirror/commit/64faa709b4aafc7a48626de48eb5568dce5ddb3e))
+
 ## [1.3.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.3.1...v1.3.2) (2022-11-29)
 
 
