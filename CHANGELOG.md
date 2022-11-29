@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.5...v1.3.0) (2022-11-29)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** allow syntax select to be hidden ([50f8ec8](https://github.com/JinnElements/jinn-codemirror/commit/50f8ec8238fd41cfffe0a628fbe05fdf5e006a10))
+
+
+### Features
+
+* **leiden+:** add 'fixNewlines' command ([9af1aac](https://github.com/JinnElements/jinn-codemirror/commit/9af1aac4cfa5bd872c3969f7838f59b5be73c5ad))
+
 ## [1.2.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.2.4...v1.2.5) (2022-11-28)
 
 
