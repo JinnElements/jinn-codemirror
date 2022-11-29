@@ -8,9 +8,12 @@ export const leidenPlusLanguage = LRLanguage.define({
             styleTags({
                 Number: t.number,
                 "LineBreak LineBreakWrapped": t.contentSeparator,
-                "Illegible GapUnknown Gap SuppliedLost Supplied Unclear": t.comment,
                 "Div Recto Verso Part Fragment": t.keyword,
-                "( )": t.paren
+                "Abbrev!": t.integer,
+                "( ) [ ]": t.paren,
+                "Supplied!": t.comment,
+                "SuppliedLost!": t.comment,
+                "Unclear!": t.bool
             })
         ]
     }),
