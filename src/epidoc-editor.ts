@@ -39,21 +39,53 @@ const style = `
 const ignoreKeys = ['Shift', 'Alt', 'Meta', 'Control', 'ArrowLeft', 'ArrowRight', 'ArrowDown',
     'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End'];
 
+const EDITOR_MODES = {
+    leiden_plus: 'Leiden+',
+    edcs: 'EDCS/EDH',
+    default: 'Petrae'
+};
+
+function createModeSelect(mode: string) {
+    const options:string[] = [];
+    Object.entries(EDITOR_MODES).forEach(([key, value]) => {
+        options.push(`<option value="${key}" ${key === mode ? 'selected': ''}>${value}</option>`);
+    });
+    return `<select name="modes">${options.join('\n')}</select>`;
+}
+
 /**
  * Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
  * 
- * @attr {boolean} unwrap - If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.
- * The wrapper element itself will not be shown in the editor.
- * @attr {string} schema - an optional schema description (JSON syntax) to load
- * @attr {string} schema-root - determines the root element
  */
 export class JinnEpidocEditor extends HTMLElement {
 
     xmlEditor: JinnXMLEditor | null | undefined;
 
+    /**
+     * Syntax mode to use for the leiden editor, one of leiden_plus, edcs or petrae
+     */
+    public mode: string = 'leiden_plus';
+    /**
+     * if set, user may choose from the supported syntaxes
+     * 
+     * @attr {boolean} mode-select
+     */
+    public modeSelect: boolean;
     public valid?: boolean;
+    /**
+     * If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.
+     * The wrapper element itself will not be shown in the editor.
+     */
     public unwrap?: boolean;
+    /**
+     * an optional schema description (JSON syntax) to load for the XML editor
+     */
     public schema: string | null;
+    /**
+     * determines the root element for autocomplete
+     * 
+     * @attr {string} schema-root
+     */
     public schemaRoot: string | null;
 
     /**
@@ -75,6 +107,7 @@ export class JinnEpidocEditor extends HTMLElement {
         this.unwrap = false;
         this.schema = null;
         this.schemaRoot = null;
+        this.modeSelect = false;
         this.attachShadow({ mode: 'open' });
     }
 
@@ -82,18 +115,16 @@ export class JinnEpidocEditor extends HTMLElement {
         this.unwrap = this.hasAttribute('unwrap');
         this.schema = this.getAttribute('schema');
         this.schemaRoot = this.getAttribute('schema-root');
+        this.modeSelect = this.hasAttribute('mode-select');
+        this.mode = this.getAttribute('mode') || 'leiden_plus';
 
         this.shadowRoot.innerHTML = `
             <style>
                 ${style}
             </style>
-            <jinn-codemirror id="leiden-editor" class="hidden">
+            <jinn-codemirror id="leiden-editor" class="hidden" mode="${this.mode}">
                 <div slot="toolbar">
-                    <select name="modes">
-                        <option value="edcs" selected>EDCS/EDH</option>
-                        <option value="default">Petrae</option>
-                        <option value="leiden_plus">Leiden+</option>
-                    </select>
+                    ${ this.modeSelect ? createModeSelect(this.mode) : '' }
                     <slot name="leiden-toolbar"></slot>
                     <button part="button" id="close-leiden">Close</button>
                 </div>
