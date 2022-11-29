@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.3.1...v1.3.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* **leiden+:** token highlighting ([6d4186e](https://github.com/JinnElements/jinn-codemirror/commit/6d4186e0d026ca922d6beebaa2447491d6d08b0b))
+
 ## [1.3.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.3.0...v1.3.1) (2022-11-29)
 
 
