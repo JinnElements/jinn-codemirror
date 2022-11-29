@@ -3,6 +3,8 @@ import { EditorState } from "@codemirror/state";
 import { XMLConfig } from "./xml";
 import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
+import { XQueryConfig } from "./xquery";
+import { CSSConfig } from "./css";
 import { EditorConfig, SourceType, initCommand } from "./config";
 
 /**
@@ -126,6 +128,12 @@ export class JinnCodemirror extends HTMLElement {
                 break;
             case SourceType.leiden_plus:
                 this._config = new LeidenConfig(this, toolbar);
+                break;
+            case SourceType.xquery:
+                this._config = new XQueryConfig(this);
+                break;
+            case SourceType.css:
+                this._config = new CSSConfig(this);
                 break;
             default:
                 this._config = new XMLConfig(this, toolbar, this.namespace);

@@ -133,6 +133,18 @@
             <pre id="xml-output"></pre>
         </section>
 
+        <section>
+            <h1>Other syntaxes</h1>
+            <jinn-codemirror>
+                <div slot="toolbar">
+                    <select name="modes">
+                        <option value="xquery" selected>XQuery</option>
+                        <option value="css">CSS</option>
+                    </select>
+                </div>
+            </jinn-codemirror>
+        </section>
+
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 const epidoc = document.getElementById('epidoc-editor');

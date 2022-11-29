@@ -15,7 +15,9 @@ import { JinnCodemirror } from "./jinn-codemirror";
     leiden_plus = 'leiden_plus',
     edcs = "edcs",
     phi = "phi",
-    default = "default"
+    default = "default",
+    xquery = "xquery",
+    css = "css"
 };
 
 export abstract class ParametrizedCommand {
