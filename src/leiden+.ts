@@ -81,6 +81,19 @@ export const toggleUnclearCommand:Command = (editor) => {
     return true;
 }
 
+export const fixNewlinesCommand: Command = (editor) => {
+    const content = editor.state.doc.toString();
+    let matchCount = 0;
+    const fixed = content.replace(/^(?!\d+\.)/gm, () => {
+        matchCount += 1;
+        return `${matchCount}. `;
+    });
+    editor.dispatch({
+        changes: [{from: 0, to: editor.state.doc.length, insert: fixed}]
+    });
+    return true;
+}
+
 const commands:EditorCommands = {
     expan: snippetCommand('(${_}(${}))'),
     div: wrapCommand('<=\n', '\n=>'),
@@ -89,7 +102,8 @@ const commands:EditorCommands = {
     recto: wrapCommand('<D=.r<=\n', '\n=>=D>'),
     verso: wrapCommand('<D=.v<=\n', '\n=>=D>'),
     erasure: wrapCommand('〚', '〛'),
-    unclear: toggleUnclearCommand
+    unclear: toggleUnclearCommand,
+    fixNewlines: fixNewlinesCommand
 };
 
 const leidenKeymap: readonly KeyBinding[] = [
