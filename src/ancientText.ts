@@ -26,7 +26,7 @@ export const convertToLeidenPlusCommand = (component: JinnCodemirror, type:Sourc
     const lines = editor.state.doc.toJSON();
     const leiden = convertToLeidenPlus(lines.join('\n'), type);
     if (leiden) {
-        component.content = leiden;
+        component._value = leiden;
         component.mode = 'leiden_plus';
     } else {
         alert('Conversion failed due to invalid XML!');
