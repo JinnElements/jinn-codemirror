@@ -11,6 +11,7 @@ block {
     Part { "<D=." PartId ( block )+ "=D>"} |
     Fragment { "<D=." FragmentNum ( block )+ "=D>"} |
     Column { "<D=." ColumnNum ( block )+ "=D>" } | 
+    Foreign { "~|" ( block )+ ForeignEnd } |
     Inline
 }
 
@@ -18,6 +19,7 @@ Inline {
     LineBreakWrapped |
     LineBreak |
     Number |
+    AbbrevUnresolved |
     Abbrev | 
     Supplied | 
     lost |
@@ -34,6 +36,10 @@ Text {
 
 Abbrev {
     "(" Inline+ ")"
+}
+
+AbbrevUnresolved {
+    "(|" Inline+ "|)"
 }
 
 Supplied {
@@ -88,6 +94,10 @@ LostLines {
 
     Illegible {
         "." ( Number | QuestionMark ) "lin"?
+    }
+
+    ForeignEnd {
+        "|~" $[a-zA-Z]+
     }
 
     @precedence { Illegible, ".", FragmentNum, ColumnNum, LineBreakWrapped, LineBreak, Number }

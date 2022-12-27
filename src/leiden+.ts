@@ -3,7 +3,7 @@ import { Tree, TreeCursor } from "@lezer/common";
 import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
-import { leidenPlus2epiDoc } from "./import/leiden+2xml";
+import { leidenPlus2epiDoc, debugLeidenTree } from "./import/leiden+2xml";
 import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
 import { leiden } from "./language";
 import { xml2leidenPlus } from "./import/xml2leiden+";
@@ -102,8 +102,12 @@ const commands:EditorCommands = {
     recto: wrapCommand('<D=.r<=\n', '\n=>=D>'),
     verso: wrapCommand('<D=.v<=\n', '\n=>=D>'),
     erasure: wrapCommand('〚', '〛'),
+    foreign: snippetCommand('~|${_}|~${2:gr}'),
     unclear: toggleUnclearCommand,
-    fixNewlines: fixNewlinesCommand
+    fixNewlines: fixNewlinesCommand,
+    snippet: {
+        create: (template:string) => snippetCommand(template)
+    }
 };
 
 const leidenKeymap: readonly KeyBinding[] = [
@@ -114,7 +118,8 @@ const leidenKeymap: readonly KeyBinding[] = [
     { key: "Ctrl-Shift-r", mac: "Cmd-Shift-r", run: commands.recto },
     { key: "Ctrl-Shift-v", mac: "Cmd-Shift-v", run: commands.verso },
     { key: "Ctrl-Shift-d", mac: "Cmd-Shift-d", run: commands.erasure },
-    { key: "Ctrl-Shift-u", mac: "Cmd-Shift-u", run: commands.unclear }
+    { key: "Ctrl-Shift-u", mac: "Cmd-Shift-u", run: commands.unclear },
+    { key: "Ctrl-Shift-f", mac: "Cmd-Shift-f", run: commands.foreign }
 ];
 
 export class LeidenConfig extends EditorConfig {
@@ -132,6 +137,7 @@ export class LeidenConfig extends EditorConfig {
     }
 
     onUpdate(tree: Tree, content: string): string {
+        // debugLeidenTree(content, tree);
         return leidenPlus2epiDoc(content, tree);
     }
 

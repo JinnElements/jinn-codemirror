@@ -3,11 +3,25 @@ import { parser } from "../parser/leiden+/parser.js";
 
 const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
 
-export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input)) {
-    function text(node:TreeCursor) {
-        return input.substring(node.from, node.to);
-    }
+function text(input: string, node:TreeCursor) {
+    return input.substring(node.from, node.to);
+}
 
+export function debugLeidenTree(input: string, root: Tree = parser.parse(input)) {
+    root.iterate({
+        enter: (node: TreeCursor) => {
+            console.log(`> ${node.name}`);
+            if (node.name === 'Text') {
+                console.log(text(input, node));
+            }
+        },
+        leave: (node) => {
+            console.log(`< ${node.name}`);
+        }
+    })
+}
+
+export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input)) {
     const stack:string[] = [];
     const xml:string[] = [];
     let needsWrap = false;
@@ -16,7 +30,7 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
     root.iterate({
         enter: (node:TreeCursor) => {
             if (node.type.isError) {
-                xml.push(`<!-- Error:${text(node)} -->`);
+                xml.push(`<!-- Error:${text(input, node)} -->`);
                 return;
             }
             const name = node.name;
@@ -40,16 +54,16 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     break;
                 case 'Text':
                 case 'Number':
-                    xml.push(text(node));
+                    xml.push(text(input, node));
                     break;
                 case 'LineBreak':
                     node.firstChild();
-                    value = /^([0-9]+)\..*$/.exec(text(node));
+                    value = /^([0-9]+)\..*$/.exec(text(input, node));
                     xml.push(`<lb n="${value ? value[1] : ''}"/>`);
                     break;
                 case 'LineBreakWrapped':
                     node.firstChild();
-                    value = /^([0-9]+)\..*$/.exec(text(node));
+                    value = /^([0-9]+)\..*$/.exec(text(input, node));
                     xml.push(`<lb n="${value ? value[1] : ''}" break="no"/>`);
                     break;
                 case 'Div':
@@ -61,21 +75,27 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     break;
                 case 'Fragment':
                     node.firstChild();
-                    value = /^([0-9]+)\..*$/.exec(text(node));
+                    value = /^([0-9]+)\..*$/.exec(text(input, node));
                     xml.push(`<div n="${value ? value[1] : ''}" subtype="fragment" type="textpart">`);
                     break;
                 case 'Part':
                     node.firstChild();
-                    value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
+                    value = /^([a-zA-Z0-9]+)\..*$/.exec(text(input, node));
                     xml.push(`<div n="${value ? value[1] : ''}" subtype="part" type="textpart">`)
                     break;
                 case 'Column':
                     node.firstChild();
-                    value = /^([a-zA-Z0-9]+)\..*$/.exec(text(node));
+                    value = /^([a-zA-Z0-9]+)\..*$/.exec(text(input, node));
                     xml.push(`<div n="${value ? value[1] : ''}" subtype="column" type="textpart">`)
                     break;
+                case 'Foreign':
+                    node.lastChild();
+                    value = /^\|\~(.*)$/.exec(text(input, node));
+                    xml.push(`<foreign xml:lang="${value ? value[1] : ''}">`);
+                    node.parent();
+                    break;
                 case 'Unclear':
-                    const content = text(node);
+                    const content = text(input, node);
                     let stripped = '';
                     for (let i = 0; i < content.length; i++) {
                         const codepoint = content.codePointAt(i);
@@ -87,13 +107,13 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     return false;
                 case 'Gap':
                     node.next(true);
-                    xml.push(`<gap reason="lost" quantity="${text(node)}" unit="character"/>`);
+                    xml.push(`<gap reason="lost" quantity="${text(input, node)}" unit="character"/>`);
                     return false;
                 case 'GapUnknown':
                     xml.push(`<gap reason="lost" extent="unknown" unit="character"/>`);
                     return false;
                 case 'Illegible':
-                    value = /^\.([0-9?]+)(lin)?$/.exec(text(node));
+                    value = /^\.([0-9?]+)(lin)?$/.exec(text(input, node));
                     if (value) {
                         if (value[2] === 'lin') {
                             xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="line"/>`);
@@ -108,7 +128,7 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     xml.push('<del rend="erasure">');
                     break;
                 case 'LostLines':
-                    value = /^lost\.([0-9?]+)lin$/.exec(text(node));
+                    value = /^lost\.([0-9?]+)lin$/.exec(text(input, node));
                     if (value) {
                         if (value[1] === '?') {
                             xml.push(`<gap reason="lost" extent="unknown" unit="line"/>`);
@@ -117,10 +137,13 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                         }
                     }
                     return false;
+                case 'AbbrevUnresolved':
+                    xml.push('<abbr>');
+                    break;
                 case 'Abbrev':
                     if (stack.length > 0) {
                         node.lastChild();
-                        value = text(node);
+                        value = text(input, node);
                         if (value.length > 0 && value.charAt(value.length - 1) === '?') {
                             xml.push(`<ex cert="low">`);
                         } else {
@@ -150,6 +173,7 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     }
                     node.parent();
                     break;
+                case 'ForeignEnd':
                 case 'CertLow':
                     return false;
                 case 'QuestionMark':
@@ -170,6 +194,9 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     if (needsWrap) {
                         xml.push(`\n</${wrapper}>`);
                     }
+                    break;
+                case 'AbbrevUnresolved':
+                    xml.push('</abbr>');
                     break;
                 case 'Abbrev':
                     if (stack.length > 1) {
@@ -199,6 +226,9 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     break;
                 case 'Erasure':
                     xml.push('</del>');
+                    break;
+                case 'Foreign':
+                    xml.push('</foreign>');
                     break;
             }
         }

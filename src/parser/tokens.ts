@@ -9,7 +9,7 @@ import { chars as lp_chars, Unclear, lostLinesStart } from "./leiden+/parser.ter
 //     if (input.pos === 0) input.acceptToken(sof)
 // });
 
-const skipped = '() <>?=.0123456789\[\]〚〛';
+const skipped = '() <>~|?=.0123456789\[\]〚〛';
 
 export const charsToken = new ExternalTokenizer(input => {
     let str = '';

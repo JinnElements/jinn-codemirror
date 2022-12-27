@@ -40,9 +40,19 @@ describe('inline', () => {
         '<ab><expan><ex>ἔτους</ex></expan></ab>'
     );
     testTransform(
-        'expansion of whole word',
+        'expansion of whole word, uncertain',
         `<=((ἔτους?))=>`,
         '<ab><expan><ex cert="low">ἔτους</ex></expan></ab>'
+    );
+    testTransform(
+        'expansion of whole word, unresolved',
+        '(|ομυο|)',
+        '<ab><abbr>ομυο</abbr></ab>'
+    );
+    testTransform(
+        'expansion of whole word, unresolved, with gap',
+        '(|[.8]χυρι̣ο|)',
+        '<ab><abbr><gap reason="lost" quantity="8" unit="character"/>χυρ<unclear>ι</unclear>ο</abbr></ab>'
     );
     testTransform(
         'expands lines',
@@ -119,4 +129,8 @@ describe('inline', () => {
     );
     testTransform('erasure', `<=ab〚c def g〛hi=>`, '<ab>ab<del rend="erasure">c def g</del>hi</ab>');
     testTransform('erasure with expan and gap', `<=〚(Ψε.2λως) 〛=>`, '<ab><del rend="erasure"><expan>Ψε<gap reason="illegible" quantity="2" unit="character"/>λως</expan> </del></ab>');
+    testTransform('language switch',
+        `<=~|1. Ὑψίστῳ Σερά2.- πιδι σὺν γάστ3.- ρᾳ καὶ μυστα4.- ρίοις|~gr 5. (G(aius)) C(Calp(urnius)) 6. Rufinus (v(ir))=>`,
+        '<ab><foreign xml:lang="gr"><lb n="1"/>Ὑψίστῳ Σερά<lb n="2" break="no"/>πιδι σὺν γάστ<lb n="3" break="no"/>ρᾳ καὶ μυστα<lb n="4" break="no"/>ρίοις</foreign> <lb n="5"/><expan>G<ex>aius</ex></expan> C<expan>Calp<ex>urnius</ex></expan> <lb n="6"/>Rufinus <expan>v<ex>ir</ex></expan></ab>'
+    );
 });
