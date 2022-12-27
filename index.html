@@ -67,15 +67,19 @@
             <h1>EpiDoc Editor</h1>
             <p>Combines an XML Editor with an option to import and convert a transcription following Leiden conventions. Multiple variants of Leiden are supported, with Leiden+ providing the best coverage as it is backed by a syntax tree. The other two Leiden modes use heuristics and are more prone to produce invalid markup.</p>
             <p>The toolbar and XML snippets are fully configurable in HTML.</p>
-            <jinn-epidoc-editor id="epidoc-editor" schema="dist/tei.json" schema-root="div" mode="edcs" mode-select>
+            <jinn-epidoc-editor id="epidoc-editor" schema="dist/tei.json" schema-root="div" mode="leiden_plus" mode-select>
                 <div slot="leiden-toolbar">
                     <button data-command="expan" data-mode="leiden_plus" data-key="mod-e mod-e">(a(bcd))</button>
-                    <button data-command="erasure" data-mode="leiden_plus" data-key="mod-e mod-e">〚abc〛</button>
+                    <button data-command="snippet" data-mode="leiden_plus" data-key="mod-e mod-x"
+                        data-params="(|${_}|)">(|abc|)</button>
+                    <button data-command="snippet" data-mode="leiden_plus" data-key="mod-e mod-e"
+                        data-params="〚${_}〛">〚abc〛</button>
                     <button data-command="unclear" data-mode="leiden_plus" data-key="mod-e mod-u">ạ</button>
                     <button data-command="div" data-mode="leiden_plus" data-key="mod-e mod-d">&lt;=...</button>
                     <button data-command="part" data-mode="leiden_plus" data-key="mod-e mod-p">&lt;D=.A.part...</button>
                     <button data-command="recto" data-mode="leiden_plus" data-key="mod-e mod-r">&lt;D=.r...</button>
                     <button data-command="verso" data-mode="leiden_plus" data-key="mod-e mod-v">&lt;D=.v...</button>
+                    <button data-command="foreign" data-mode="leiden_plus" data-key="mod-e mod-f">~|...|~</button>
                     <button data-command="erasure" data-mode="edcs" data-key="mod-e mod-u">〚abc〛</button>
                     <button data-command="gap" data-mode="edcs" data-key="mod-e mod-g">[...]</button>
                     <button data-command="convert" data-mode="edcs" data-key="mod-e mod-c">Convert to Leiden+</button>

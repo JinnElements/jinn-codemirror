@@ -26,9 +26,9 @@ Features extended support for XML and Leiden+ code.
 |-------------|-------------------------------|--------------------------------------------------|
 | `content`   | `string`                      | The content edited in the editor as a string.    |
 | `mode`      | `string`                      | The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'. |
-| `namespace` | `string \| null \| undefined` | Default element namespace to enforce on the root element in<br />XML mode |
+| `namespace` | `string \| null \| undefined` | Default element namespace to enforce on the root element in<br />XML mode |
 | `valid`     | `boolean`                     |                                                  |
-| `value`     |                               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `value`     |                               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
 
 #### Methods
 
@@ -71,7 +71,7 @@ content. Setting the property requires that a DOM element is passed via value.
 |--------------|---------------|----------|---------|--------------------------------------------------|
 | `schema`     | `schema`      | `string` | null    | Schema to load for autocompletion.               |
 | `schemaRoot` | `schema-root` | `string` | null    | Determines the root element to be used for autocomplete. |
-| `unwrap`     | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `unwrap`     | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
 
 #### Methods
 
@@ -92,9 +92,9 @@ Combines an XML editor with an option to import and convert markup following var
 | `modeSelect` | `mode-select` | `boolean`              | false         | if set, user may choose from the supported syntaxes |
 | `schema`     |               | `string \| null`       | null          | an optional schema description (JSON syntax) to load for the XML editor |
 | `schemaRoot` | `schema-root` | `string`               | null          | determines the root element for autocomplete     |
-| `unwrap`     |               | `boolean \| undefined` | false         | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `unwrap`     |               | `boolean \| undefined` | false         | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
 | `valid`      |               | `boolean \| undefined` | true          |                                                  |
-| `value`      |               |                        |               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `value`      |               |                        |               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
 | `xmlEditor`  |               |                        | null          |                                                  |
 
 #### Events
