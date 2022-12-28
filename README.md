@@ -25,6 +25,7 @@ Features extended support for XML and Leiden+ code.
 | Property    | Type                          | Description                                      |
 |-------------|-------------------------------|--------------------------------------------------|
 | `content`   | `string`                      | The content edited in the editor as a string.    |
+| `linter`    | `string \| null \| undefined` | XQuery mode: the API endpoint to use for linting. |
 | `mode`      | `string`                      | The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'. |
 | `namespace` | `string \| null \| undefined` | Default element namespace to enforce on the root element in<br />XML mode |
 | `valid`     | `boolean`                     |                                                  |
