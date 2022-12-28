@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.4.0...v1.5.0) (2022-12-28)
+
+
+### Features
+
+* allow initial value to be set via `code` attribute ([b62c33e](https://github.com/JinnElements/jinn-codemirror/commit/b62c33eda04d4c9b4f170f625ef08aaf8ab74365))
+
 # [1.4.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.3.2...v1.4.0) (2022-11-29)
 
 
