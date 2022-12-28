@@ -1,7 +1,7 @@
 import {StreamLanguage} from "@codemirror/language";
 import {xQuery} from "@codemirror/legacy-modes/mode/xquery";
 import { Extension } from "@codemirror/state";
-import { EditorView } from "@codemirror/view";
+import { EditorView, placeholder } from "@codemirror/view";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { EditorConfig } from "./config";
 import { JinnCodemirror } from "./jinn-codemirror";
@@ -66,7 +66,8 @@ export class XQueryConfig extends EditorConfig {
         return [
             StreamLanguage.define(xQuery), 
             linter(eXistLinter(editor, this.linterUri)),
-            lintGutter()
+            lintGutter(),
+            placeholder(editor.placeholder)
         ];
     }
 

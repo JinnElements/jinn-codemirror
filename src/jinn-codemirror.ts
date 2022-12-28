@@ -32,6 +32,8 @@ export class JinnCodemirror extends HTMLElement {
      */
     public linter?: string | null;
 
+    public placeholder: string = '';
+
     _editor?: EditorView;
     _config?: EditorConfig;
 
@@ -53,6 +55,7 @@ export class JinnCodemirror extends HTMLElement {
         this.shadowRoot?.appendChild(wrapper);
         this.registerToolbar(this.shadowRoot?.querySelector('[name=toolbar]'));
 
+        this.placeholder = this.getAttribute('placeholder') || '';
         this.namespace = this.getAttribute('namespace');
         this.linter = this.getAttribute('linter');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';

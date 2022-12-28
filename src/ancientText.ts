@@ -1,6 +1,6 @@
 import { lintGutter } from "@codemirror/lint";
 import { Extension } from "@codemirror/state";
-import { Command } from "@codemirror/view";
+import { Command, placeholder } from "@codemirror/view";
 import { Tree } from "@lezer/common";
 import { EditorCommands, EditorConfig, insertCommand, SourceType, wrapCommand } from "./config";
 import { ancientText2XML } from "./import/ancientText2xml.js";
@@ -52,7 +52,7 @@ export class AncientTextConfig extends EditorConfig {
     }
     
     async getExtensions(): Promise<Extension[]> {
-        return [lintGutter()];
+        return [lintGutter(), placeholder(this.editor.placeholder)];
     }
 
     onUpdate(tree: Tree, content: string): string {

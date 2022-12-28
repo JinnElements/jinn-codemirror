@@ -88,6 +88,8 @@ export class JinnEpidocEditor extends HTMLElement {
      */
     public schemaRoot: string | null;
 
+    public placeholder: string = '';
+
     /**
      * The value edited in the editor as either an Element or string -
      * depending on the mode set.
@@ -117,6 +119,7 @@ export class JinnEpidocEditor extends HTMLElement {
         this.schemaRoot = this.getAttribute('schema-root');
         this.modeSelect = this.hasAttribute('mode-select');
         this.mode = this.getAttribute('mode') || 'leiden_plus';
+        this.placeholder = this.getAttribute('placeholder') || '';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -130,7 +133,7 @@ export class JinnEpidocEditor extends HTMLElement {
                 </div>
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}"
-                schema-root="${this.schemaRoot}">
+                schema-root="${this.schemaRoot}" placeholder="${this.placeholder}">
                 <div slot="toolbar">
                     <button part="button" id="import" title="Import from Leiden markup">Leiden Editor</button>
                     <slot name="xml-toolbar"></slot>
