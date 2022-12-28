@@ -50,12 +50,24 @@ export class JinnXMLEditor extends JinnCodemirror {
         const wrapper = this.getAttribute('wrapper');
         if (wrapper) {
             const parser = new DOMParser();
-            const parsed = parser.parseFromString(wrapper, 'application/xml');
-            const errors = parsed.getElementsByTagName("parsererror")
+            let parsed = parser.parseFromString(wrapper, 'application/xml');
+            let errors = parsed.getElementsByTagName("parsererror");
+            let root = null;
             if (errors.length) {
                 console.error('<jinn-xml-editor> Invalid XML for wrapper attribute: %s', new XMLSerializer().serializeToString(parsed));
             } else {
-                this.setValue(parsed.firstElementChild);
+                root = parsed.firstElementChild;
+                if (root && this.hasAttribute('code')) {
+                    const code = this.getAttribute('code') || '';
+                    parsed = parser.parseFromString(code, 'application/xml');
+                    errors = parsed.getElementsByTagName("parsererror");
+                    if (errors.length) {
+                        console.error('<jinn-xml-editor> Invalid XML for code attribute: %s', new XMLSerializer().serializeToString(parsed));
+                    } else if (parsed.firstElementChild) {
+                        root.appendChild(parsed.firstElementChild);
+                    }
+                }
+                this.setValue(root);
             }
         }
     }

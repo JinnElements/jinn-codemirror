@@ -57,6 +57,11 @@ export class JinnCodemirror extends HTMLElement {
         this.linter = this.getAttribute('linter');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
 
+        if (this.hasAttribute('code')) {
+            console.log('code: %s', this.getAttribute('code'));
+            this.value = this.getAttribute('code');
+        }
+
         this.addEventListener('blur', (ev) => {
             const target = ev.relatedTarget;
             if (target) {

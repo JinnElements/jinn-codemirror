@@ -2,7 +2,7 @@ import {StreamLanguage} from "@codemirror/language";
 import {xQuery} from "@codemirror/legacy-modes/mode/xquery";
 import { Extension } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
-import { Diagnostic, linter } from "@codemirror/lint";
+import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { EditorConfig } from "./config";
 import { JinnCodemirror } from "./jinn-codemirror";
 
@@ -63,7 +63,11 @@ export class XQueryConfig extends EditorConfig {
     }
 
     async getExtensions(editor: JinnCodemirror): Promise<Extension[]> {
-        return [StreamLanguage.define(xQuery), linter(eXistLinter(editor, this.linterUri))];
+        return [
+            StreamLanguage.define(xQuery), 
+            linter(eXistLinter(editor, this.linterUri)),
+            lintGutter()
+        ];
     }
 
     setFromValue(value: string | Element | NodeListOf<ChildNode> | null | undefined): string {
