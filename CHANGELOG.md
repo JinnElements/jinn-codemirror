@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.5.0...v1.6.0) (2022-12-28)
+
+
+### Features
+
+* add placeholder attribute to editors ([fa5a2d7](https://github.com/JinnElements/jinn-codemirror/commit/fa5a2d752780f9d5f75c24141c4934adcc5046a4))
+
 # [1.5.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.4.0...v1.5.0) (2022-12-28)
 
 
