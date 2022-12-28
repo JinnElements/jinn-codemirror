@@ -27,6 +27,11 @@ export class JinnCodemirror extends HTMLElement {
      */
     public namespace?: string | null;
 
+    /**
+     * XQuery mode: the API endpoint to use for linting.
+     */
+    public linter?: string | null;
+
     _editor?: EditorView;
     _config?: EditorConfig;
 
@@ -49,6 +54,7 @@ export class JinnCodemirror extends HTMLElement {
         this.registerToolbar(this.shadowRoot?.querySelector('[name=toolbar]'));
 
         this.namespace = this.getAttribute('namespace');
+        this.linter = this.getAttribute('linter');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
 
         this.addEventListener('blur', (ev) => {
@@ -130,7 +136,7 @@ export class JinnCodemirror extends HTMLElement {
                 this._config = new LeidenConfig(this, toolbar);
                 break;
             case SourceType.xquery:
-                this._config = new XQueryConfig(this);
+                this._config = new XQueryConfig(this, this.linter);
                 break;
             case SourceType.css:
                 this._config = new CSSConfig(this);
