@@ -111,7 +111,7 @@ export class JinnCodemirror extends HTMLElement {
 
     set placeholder(label:string) {
         this._placeholder = label;
-        this.setMode(this.mode, false);
+        this.setMode(this.mode);
     }
 
     /**
