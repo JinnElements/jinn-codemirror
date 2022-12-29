@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.1...v1.6.2) (2022-12-29)
+
+
+### Bug Fixes
+
+* clear old editor div before setting mode ([036dae9](https://github.com/JinnElements/jinn-codemirror/commit/036dae9d139fd4a3dd92392bd23c3ca078a7e200))
+
 ## [1.6.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.0...v1.6.1) (2022-12-29)
 
 
