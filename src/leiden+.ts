@@ -1,6 +1,6 @@
 import { EditorSelection, Extension } from "@codemirror/state";
 import { Tree, TreeCursor } from "@lezer/common";
-import { EditorView, keymap, KeyBinding, Command, placeholder } from "@codemirror/view";
+import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import { leidenPlus2epiDoc, debugLeidenTree } from "./import/leiden+2xml";
@@ -133,8 +133,7 @@ export class LeidenConfig extends EditorConfig {
             leiden(), 
             linter(leidenParseLinter(this.editor)), 
             keymap.of(leidenKeymap), 
-            lintGutter(),
-            placeholder(this.editor.placeholder)
+            lintGutter()
         ];
     }
 

@@ -2,7 +2,6 @@ import { css } from "@codemirror/lang-css";
 import { Extension } from "@codemirror/state";
 import { EditorConfig } from "./config";
 import { JinnCodemirror } from "./jinn-codemirror";
-import { placeholder } from "@codemirror/view";
 
 export class CSSConfig extends EditorConfig {
 
@@ -11,7 +10,7 @@ export class CSSConfig extends EditorConfig {
     }
 
     async getExtensions(editor: JinnCodemirror): Promise<Extension[]> {
-        return [css(), placeholder(editor.placeholder)];
+        return [css()];
     }
 
     setFromValue(value: string | Element | NodeListOf<ChildNode> | null | undefined): string {

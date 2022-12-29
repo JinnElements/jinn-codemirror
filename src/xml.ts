@@ -2,7 +2,7 @@ import { xml } from "@codemirror/lang-xml";
 import { Extension, EditorSelection } from "@codemirror/state";
 import { EditorConfig } from "./config";
 import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
-import { EditorView, placeholder } from "@codemirror/view";
+import { EditorView } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
@@ -164,8 +164,7 @@ export class XMLConfig extends EditorConfig {
         return [
             inputPanel(),
             linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
-            lintGutter({markerFilter}),
-            placeholder(this.editor.placeholder)
+            lintGutter({markerFilter})
         ];
     }
 

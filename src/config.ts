@@ -1,4 +1,5 @@
-import { basicSetup, EditorView } from "codemirror";
+import { basicSetup } from "codemirror";
+import { EditorView, placeholder } from "@codemirror/view";
 import { Command, ViewPlugin, ViewUpdate, keymap, KeyBinding } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state";
@@ -156,7 +157,14 @@ export abstract class EditorConfig {
 
         const customExtensions = await this.getExtensions(this.editor);
         return { 
-            extensions: [basicSetup, EditorView.lineWrapping, keymap.of([indentWithTab, ...this.keymap]),...customExtensions, updateListener] 
+            extensions: [
+                basicSetup, 
+                EditorView.lineWrapping, 
+                keymap.of([indentWithTab, ...this.keymap]),
+                placeholder(this.editor.placeholder),
+                ...customExtensions, 
+                updateListener
+            ] 
         };
     }
 

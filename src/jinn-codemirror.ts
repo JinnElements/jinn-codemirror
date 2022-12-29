@@ -32,10 +32,12 @@ export class JinnCodemirror extends HTMLElement {
      */
     public linter?: string | null;
 
-    public placeholder: string = '';
+    _placeholder: string = '';
 
     _editor?: EditorView;
     _config?: EditorConfig;
+
+    static get observedAttributes() { return ['placeholder']; }
 
     constructor() {
         super();
@@ -55,7 +57,7 @@ export class JinnCodemirror extends HTMLElement {
         this.shadowRoot?.appendChild(wrapper);
         this.registerToolbar(this.shadowRoot?.querySelector('[name=toolbar]'));
 
-        this.placeholder = this.getAttribute('placeholder') || '';
+        this._placeholder = this.getAttribute('placeholder') || '';
         this.namespace = this.getAttribute('namespace');
         this.linter = this.getAttribute('linter');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
@@ -81,6 +83,18 @@ export class JinnCodemirror extends HTMLElement {
         });
     }
 
+    attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+        if (!oldValue || oldValue === newValue) {
+            return;
+        }
+        switch (name) {
+            case 'placeholder':
+                this._placeholder = newValue;
+                this.setMode(this.mode, false);
+                break;
+        }
+    }
+
     /**
      * Move keyboard focus to the editor
      */
@@ -88,6 +102,15 @@ export class JinnCodemirror extends HTMLElement {
         if (this._editor) {
             this._editor.focus();
         }
+    }
+
+    get placeholder() {
+        return this._placeholder;
+    }
+
+    set placeholder(label:string) {
+        this._placeholder = label;
+        this.setMode(this.mode, false);
     }
 
     /**
@@ -295,7 +318,6 @@ export class JinnCodemirror extends HTMLElement {
     styles() {
         return `
             :host > div {
-                height: 100%;
                 width: 100%;
                 background-color: var(--jinn-codemirror-background-color, #fff);
             }
