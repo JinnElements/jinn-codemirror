@@ -90,8 +90,7 @@ export class JinnCodemirror extends HTMLElement {
         }
         switch (name) {
             case 'placeholder':
-                this._placeholder = newValue;
-                this.setMode(this.mode, false);
+                this.placeholder = newValue;
                 break;
         }
     }
