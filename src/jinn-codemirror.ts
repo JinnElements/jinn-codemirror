@@ -5,7 +5,9 @@ import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
 import { XQueryConfig } from "./xquery";
 import { CSSConfig } from "./css";
+import { PlainConfig } from "./plain";
 import { EditorConfig, SourceType, initCommand } from "./config";
+import { HTMLConfig } from "./html";
 
 /**
  * Source code editor component based on [codemirror](https://codemirror.net/).
@@ -159,6 +161,8 @@ export class JinnCodemirror extends HTMLElement {
         const toolbar = this.getToolbarControls(<HTMLSlotElement|null> this.shadowRoot?.querySelector('[name=toolbar]'));
         switch(this._mode) {
             case SourceType.default:
+                this._config = new PlainConfig(this);
+                break;
             case SourceType.edcs:
             case SourceType.phi:
                 this._config = new AncientTextConfig(this, toolbar, this._mode);
@@ -171,6 +175,9 @@ export class JinnCodemirror extends HTMLElement {
                 break;
             case SourceType.css:
                 this._config = new CSSConfig(this);
+                break;
+            case SourceType.html:
+                this._config = new HTMLConfig(this);
                 break;
             default:
                 this._config = new XMLConfig(this, toolbar, this.namespace);

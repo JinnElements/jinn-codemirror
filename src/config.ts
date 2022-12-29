@@ -13,6 +13,7 @@ import { JinnCodemirror } from "./jinn-codemirror";
  */
  export enum SourceType {
     xml = 'xml',
+    html = 'html',
     leiden_plus = 'leiden_plus',
     edcs = "edcs",
     phi = "phi",
