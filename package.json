@@ -3,7 +3,7 @@
   "version": "1.6.4",
   "description": "Source code editor component based on codemirror with language support for XML and Leiden+",
   "repository": "https://github.com/JinnElements/jinn-codemirror.git",
-  "main": "index.html",
+  "main": "index.js",
   "type": "module",
   "keywords": [
     "epidoc",

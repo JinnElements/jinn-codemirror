@@ -24,7 +24,9 @@ function transform(node: Node|null, output: string[]) {
                     output.push('=>');
                     break;
                 case 'abbr':
+                    output.push('<abbr>');
                     transformElem(elem, output);
+                    output.push('</abbr>');
                     break;
                 case 'del':
                     output.push('〚');
@@ -59,6 +61,24 @@ function transform(node: Node|null, output: string[]) {
                     break;
                 case 'supplied':
                     transformSupplied(elem, output);
+                    break;
+                case 'unclear':
+                    const content = elem.textContent || '';
+                    let contentOut = '';
+                    for (let i = 0; i < content.length; i++) {
+                        const codepoint = content.codePointAt(i);
+
+                        if (codepoint) {
+                            contentOut += String.fromCodePoint(codepoint);
+                            contentOut += String.fromCodePoint(0x0323);
+                        }
+                    }
+                    output.push(contentOut);
+                    break;
+                case 'foreign':
+                    output.push('~|');
+                    transformElem(elem, output);
+                    output.push(`|~${elem.getAttribute('xml:lang')}`);
                     break;
                 default:
                     transformElem(elem, output);
