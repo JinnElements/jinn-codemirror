@@ -63,7 +63,6 @@ export class JinnCodemirror extends HTMLElement {
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
 
         if (this.hasAttribute('code')) {
-            console.log('code: %s', this.getAttribute('code'));
             this.value = this.getAttribute('code');
         }
 
@@ -128,6 +127,7 @@ export class JinnCodemirror extends HTMLElement {
 
         if (this._editor) {
             this._editor.destroy();
+            wrapper.innerHTML = '';
         }
 
         this._mode = SourceType[mode as keyof typeof SourceType];
