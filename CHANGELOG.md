@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.3...v1.6.4) (2022-12-29)
+
+
+### Bug Fixes
+
+* add transpiled source files to dist ([bdda273](https://github.com/JinnElements/jinn-codemirror/commit/bdda2736af4d031f34629eb783209cc52e6672db))
+
 ## [1.6.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.2...v1.6.3) (2022-12-29)
 
 
