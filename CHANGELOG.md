@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.0...v1.6.1) (2022-12-29)
+
+
+### Bug Fixes
+
+* observe placeholder attribute ([2bd4393](https://github.com/JinnElements/jinn-codemirror/commit/2bd4393e9fb04fa9def11893041b5903f3ab53e7))
+
 # [1.6.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.5.0...v1.6.0) (2022-12-28)
 
 
