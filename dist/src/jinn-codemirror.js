@@ -5,7 +5,9 @@ import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
 import { XQueryConfig } from "./xquery";
 import { CSSConfig } from "./css";
+import { PlainConfig } from "./plain";
 import { SourceType, initCommand } from "./config";
+import { HTMLConfig } from "./html";
 class JinnCodemirror extends HTMLElement {
   constructor() {
     super();
@@ -112,6 +114,8 @@ class JinnCodemirror extends HTMLElement {
     const toolbar = this.getToolbarControls((_a = this.shadowRoot) == null ? void 0 : _a.querySelector("[name=toolbar]"));
     switch (this._mode) {
       case SourceType.default:
+        this._config = new PlainConfig(this);
+        break;
       case SourceType.edcs:
       case SourceType.phi:
         this._config = new AncientTextConfig(this, toolbar, this._mode);
@@ -124,6 +128,9 @@ class JinnCodemirror extends HTMLElement {
         break;
       case SourceType.css:
         this._config = new CSSConfig(this);
+        break;
+      case SourceType.html:
+        this._config = new HTMLConfig(this);
         break;
       default:
         this._config = new XMLConfig(this, toolbar, this.namespace);

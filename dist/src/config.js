@@ -27,6 +27,7 @@ import { indentWithTab } from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
 var SourceType = /* @__PURE__ */ ((SourceType2) => {
   SourceType2["xml"] = "xml";
+  SourceType2["html"] = "html";
   SourceType2["leiden_plus"] = "leiden_plus";
   SourceType2["edcs"] = "edcs";
   SourceType2["phi"] = "phi";
