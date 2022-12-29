@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.2...v1.6.3) (2022-12-29)
+
+
+### Bug Fixes
+
+* **xquery:** duplicate placeholder ([03b48fd](https://github.com/JinnElements/jinn-codemirror/commit/03b48fd4961ab8959eaec577c9ce2207b093e609))
+
 ## [1.6.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.1...v1.6.2) (2022-12-29)
 
 
