@@ -22,14 +22,15 @@ Features extended support for XML and Leiden+ code.
 
 #### Properties
 
-| Property    | Type                          | Description                                      |
-|-------------|-------------------------------|--------------------------------------------------|
-| `content`   | `string`                      | The content edited in the editor as a string.    |
-| `linter`    | `string \| null \| undefined` | XQuery mode: the API endpoint to use for linting. |
-| `mode`      | `string`                      | The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'. |
-| `namespace` | `string \| null \| undefined` | Default element namespace to enforce on the root element in<br />XML mode |
-| `valid`     | `boolean`                     |                                                  |
-| `value`     |                               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| Property      | Attribute     | Type                          | Description                                      |
+|---------------|---------------|-------------------------------|--------------------------------------------------|
+| `content`     |               | `string`                      | The content edited in the editor as a string.    |
+| `linter`      |               | `string \| null \| undefined` | XQuery mode: the API endpoint to use for linting. |
+| `mode`        |               | `string`                      | The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'. |
+| `namespace`   |               | `string \| null \| undefined` | Default element namespace to enforce on the root element in<br />XML mode |
+| `placeholder` | `placeholder` | `string`                      |                                                  |
+| `valid`       |               | `boolean`                     |                                                  |
+| `value`       |               |                               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
 
 #### Methods
 
@@ -87,16 +88,17 @@ Combines an XML editor with an option to import and convert markup following var
 
 #### Properties
 
-| Property     | Attribute     | Type                   | Default       | Description                                      |
-|--------------|---------------|------------------------|---------------|--------------------------------------------------|
-| `mode`       |               | `string`               | "leiden_plus" | Syntax mode to use for the leiden editor, one of leiden_plus, edcs or petrae |
-| `modeSelect` | `mode-select` | `boolean`              | false         | if set, user may choose from the supported syntaxes |
-| `schema`     |               | `string \| null`       | null          | an optional schema description (JSON syntax) to load for the XML editor |
-| `schemaRoot` | `schema-root` | `string`               | null          | determines the root element for autocomplete     |
-| `unwrap`     |               | `boolean \| undefined` | false         | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
-| `valid`      |               | `boolean \| undefined` | true          |                                                  |
-| `value`      |               |                        |               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
-| `xmlEditor`  |               |                        | null          |                                                  |
+| Property      | Attribute     | Type                   | Default       | Description                                      |
+|---------------|---------------|------------------------|---------------|--------------------------------------------------|
+| `mode`        |               | `string`               | "leiden_plus" | Syntax mode to use for the leiden editor, one of leiden_plus, edcs or petrae |
+| `modeSelect`  | `mode-select` | `boolean`              | false         | if set, user may choose from the supported syntaxes |
+| `placeholder` |               | `string`               | ""            |                                                  |
+| `schema`      |               | `string \| null`       | null          | an optional schema description (JSON syntax) to load for the XML editor |
+| `schemaRoot`  | `schema-root` | `string`               | null          | determines the root element for autocomplete     |
+| `unwrap`      |               | `boolean \| undefined` | false         | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `valid`       |               | `boolean \| undefined` | true          |                                                  |
+| `value`       |               |                        |               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `xmlEditor`   |               |                        | null          |                                                  |
 
 #### Events
 
