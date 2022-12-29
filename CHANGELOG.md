@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.7.0...v1.7.1) (2022-12-29)
+
+
+### Bug Fixes
+
+* placeholder overwrites content ([4da0b11](https://github.com/JinnElements/jinn-codemirror/commit/4da0b11d3ff7a80a750aeb5beec6dc247192df6b))
+
 # [1.7.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.4...v1.7.0) (2022-12-29)
 
 
