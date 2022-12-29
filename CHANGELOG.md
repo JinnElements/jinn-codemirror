@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.4...v1.7.0) (2022-12-29)
+
+
+### Bug Fixes
+
+* **leiden+:** add missing elements to leiden+2xml conversion ([140bdc6](https://github.com/JinnElements/jinn-codemirror/commit/140bdc6da4c01599b57b91e8bce20cf93844df35))
+
+
+### Features
+
+* add plain and html modes ([2aad5b1](https://github.com/JinnElements/jinn-codemirror/commit/2aad5b15ef6bad5532b8deee0ab260d01bca75dd))
+
 ## [1.6.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.6.3...v1.6.4) (2022-12-29)
 
 
