@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiXml from "chai-xml";
-import {leidenPlus2epiDoc} from "../dist/leiden+2xml.js";
+import {leidenPlus2epiDoc} from "../dist/src/import/leiden+2xml.js";
 
 chai.use(chaiXml);
 

@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const commandLineArgs = require("command-line-args");
 const chalk = require("chalk");
+const glob = require('glob');
 const { analyzeText, transformAnalyzerResult } = require("web-component-analyzer");
 
 
@@ -41,20 +42,19 @@ async function bundle() {
 			process.exit(1);
 		});
     // needed for tests only
+    const entryPoints = glob.sync('./src/**/*.{ts,js}');
     await esbuild
 		.build({
-			entryPoints: ['./src/import/leiden+2xml.ts'],
+			entryPoints: entryPoints,
             format: "esm",
-            outdir: 'dist',
-			bundle: true,
-            minify: false,
-			sourcemap: true,
+            outdir: 'dist/src',
 			logLevel: "info",
 		})
 		.catch((err) => {
 			console.error(err);
 			process.exit(1);
 		});
+    // await mfs.copy('./src/**/*.js', 'dist/src');
 }
 
 async function clean() {
