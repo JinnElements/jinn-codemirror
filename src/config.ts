@@ -103,13 +103,19 @@ export function initCommand(cmdName: string, cmd: Command|ParametrizedCommand, c
     return <Command>cmd;
 }
 
+export const defaultCommands:EditorCommands = {
+    snippet: {
+        create: (template:string) => snippetCommand(template)
+    }
+};
+
 export abstract class EditorConfig {
 
     editor: JinnCodemirror;
     keymap: KeyBinding[];
     commands: EditorCommands;
 
-    constructor(editor:JinnCodemirror, commands: EditorCommands = {}, toolbar: HTMLElement[] = []) {
+    constructor(editor:JinnCodemirror, commands: EditorCommands = defaultCommands, toolbar: HTMLElement[] = []) {
         this.editor = editor;
         this.commands = commands;
         this.keymap = [];
