@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.3...v1.9.0) (2022-12-30)
+
+
+### Features
+
+* snippet command should be supported in all modes ([62a52e5](https://github.com/JinnElements/jinn-codemirror/commit/62a52e52209c00a19e7368e7a1c75896fc110c2e))
+
 ## [1.8.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.2...v1.8.3) (2022-12-30)
 
 
