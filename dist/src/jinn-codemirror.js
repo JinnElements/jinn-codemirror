@@ -6,6 +6,7 @@ import { AncientTextConfig } from "./ancientText";
 import { XQueryConfig } from "./xquery";
 import { CSSConfig } from "./css";
 import { PlainConfig } from "./plain";
+import { TeXConfig } from "./tex";
 import { SourceType, initCommand } from "./config";
 import { HTMLConfig } from "./html";
 class JinnCodemirror extends HTMLElement {
@@ -73,7 +74,7 @@ class JinnCodemirror extends HTMLElement {
   }
   set placeholder(label) {
     this._placeholder = label;
-    this.setMode(this.mode, false);
+    this.setMode(this.mode);
   }
   set mode(mode) {
     this.setMode(mode);
@@ -128,6 +129,9 @@ class JinnCodemirror extends HTMLElement {
         break;
       case SourceType.css:
         this._config = new CSSConfig(this);
+        break;
+      case SourceType.tex:
+        this._config = new TeXConfig(this);
         break;
       case SourceType.html:
         this._config = new HTMLConfig(this);

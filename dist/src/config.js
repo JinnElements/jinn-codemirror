@@ -34,6 +34,7 @@ var SourceType = /* @__PURE__ */ ((SourceType2) => {
   SourceType2["default"] = "default";
   SourceType2["xquery"] = "xquery";
   SourceType2["css"] = "css";
+  SourceType2["tex"] = "tex";
   return SourceType2;
 })(SourceType || {});
 ;
