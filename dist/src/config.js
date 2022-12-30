@@ -87,8 +87,13 @@ function initCommand(cmdName, cmd, control) {
   }
   return cmd;
 }
+const defaultCommands = {
+  snippet: {
+    create: (template) => snippetCommand(template)
+  }
+};
 class EditorConfig {
-  constructor(editor, commands = {}, toolbar = []) {
+  constructor(editor, commands = defaultCommands, toolbar = []) {
     this.editor = editor;
     this.commands = commands;
     this.keymap = [];
@@ -176,6 +181,7 @@ export {
   EditorConfig,
   ParametrizedCommand,
   SourceType,
+  defaultCommands,
   initCommand,
   insertCommand,
   snippetCommand,
