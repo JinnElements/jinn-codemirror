@@ -1,18 +1,32 @@
-# Text Editor Webcomponent
+<a href="https://www.npmjs.com/package/@jinntec/jinn-codemirror">
+<img title="npm (scoped)" src="https://img.shields.io/npm/v/@jinntec/jinn-codemirror">
+</a>
 
-A plain javascript web component based on [codemirror](https://codemirror.net/) with language definitions for XML and Leiden+.
+# Code Editor Webcomponent
+
+A plain javascript web component based on [codemirror](https://codemirror.net/).
 
 [Demo](https://jinnelements.github.io/jinn-codemirror/)
 
 Features:
 
-    * Configurable toolbar with support for snippets
-    * Autocomplete based on a JSON representation of the schema (currently TEI only)
-    * Commands for XML editing: 
-      * enclose in element
-      * remove enclosing parent
-      * select parent
-      
+* Editing **modes** for: XML, HTML, CSS, TeX, XQuery, Leiden+ and other variants of the Leiden convention
+* Configurable **toolbar** with support for snippets
+* **Autocomplete** in XML mode based on a JSON representation of the schema
+* Commands for **XML editing**: 
+  * enclose in element
+  * remove enclosing parent
+  * select parent
+* **Linting** for XML and XQuery
+* Support for markup following the **Leiden+ convention**, backed by a grammar
+* Conversion between EpiDoc XML fragments and Leiden+
+
+The component comes in 3 flavours:
+
+1. `jinn-codemirror`: the generic code editor webcomponent
+2. `jinn-xml-editor`: extends `jinn-codemirror` with the option to specify an outer element which should wrap around the edited content. This is important if you want users to e.g. edit the contents of a `<div>` without seeing the wrapping element. The wrapper will be removed when a value is passed to the editor and added back when serializing the edited content.
+3. `jinn-epidoc-editor`: combines an XML Editor with an option to import and convert a transcription following Leiden conventions. Leiden markup is automatically converted to the corresponding EpiDoc XML.
+
 ## API
 
 ### jinn-codemirror
@@ -20,17 +34,23 @@ Features:
 Source code editor component based on [codemirror](https://codemirror.net/).
 Features extended support for XML and Leiden+ code.
 
+#### Attributes
+
+| Attribute | Type     | Description                                      |
+|-----------|----------|--------------------------------------------------|
+| `code`    | `string` | specifies initial content to be inserted at startup for editing |
+
 #### Properties
 
 | Property      | Attribute     | Type                          | Description                                      |
 |---------------|---------------|-------------------------------|--------------------------------------------------|
 | `content`     |               | `string`                      | The content edited in the editor as a string.    |
-| `linter`      |               | `string \| null \| undefined` | XQuery mode: the API endpoint to use for linting. |
-| `mode`        |               | `string`                      | The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'. |
-| `namespace`   |               | `string \| null \| undefined` | Default element namespace to enforce on the root element in<br />XML mode |
-| `placeholder` | `placeholder` | `string`                      |                                                  |
+| `linter`      | `linter`      | `string`                      | XQuery mode: the API endpoint to use for linting. |
+| `mode`        | `mode`        | `string`                      | The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'leiden_plus', 'edcs', 'phi' or 'default'. |
+| `namespace`   |               | `string \| null \| undefined` | Default element namespace to enforce on the root element in XML mode |
+| `placeholder` | `placeholder` | `string`                      | A placeholder string to be shown if the user has not yet entered anything. |
 | `valid`       |               | `boolean`                     |                                                  |
-| `value`       |               |                               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
+| `value`       |               |                               | The value edited in the editor as either an Element or string - depending on the mode set. |
 
 #### Methods
 
@@ -45,9 +65,9 @@ Features extended support for XML and Leiden+ code.
 
 | Event     | Description                                      |
 |-----------|--------------------------------------------------|
-| `invalid` | fired if the content of the editor is invalid (requires a linting to be supported) |
+| `invalid` | fired if the content of the editor is invalid (requires a linter to be supported) |
 | `update`  | fired when the content of the editor has changed |
-| `valid`   | fired if the content of the editor is valid (requires a linting to be supported) |
+| `valid`   | fired if the content of the editor is valid (requires a linter to be supported) |
 
 #### Slots
 
@@ -73,7 +93,7 @@ content. Setting the property requires that a DOM element is passed via value.
 |--------------|---------------|----------|---------|--------------------------------------------------|
 | `schema`     | `schema`      | `string` | null    | Schema to load for autocompletion.               |
 | `schemaRoot` | `schema-root` | `string` | null    | Determines the root element to be used for autocomplete. |
-| `unwrap`     | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
+| `unwrap`     | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content. The wrapper element itself will not be shown in the editor. |
 
 #### Methods
 

@@ -151,6 +151,26 @@ class EditorConfig {
   onUpdate(tree, content) {
     return content;
   }
+  setFromValue(value) {
+    if (!value) {
+      return "";
+    }
+    if (value instanceof Node || value instanceof NodeList) {
+      const serializer = new XMLSerializer();
+      if (value instanceof NodeList) {
+        const buf = [];
+        for (let i = 0; i < value.length; i++) {
+          buf.push(serializer.serializeToString(value[i]));
+        }
+        return buf.join("");
+      }
+      return serializer.serializeToString(value);
+    }
+    if (typeof value === "string") {
+      return value;
+    }
+    return JSON.stringify(value);
+  }
 }
 export {
   EditorConfig,

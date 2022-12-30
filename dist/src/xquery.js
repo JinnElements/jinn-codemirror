@@ -73,15 +73,6 @@ class XQueryConfig extends EditorConfig {
       ];
     });
   }
-  setFromValue(value) {
-    if (!value) {
-      return "";
-    }
-    if (!(typeof value === "string")) {
-      throw new Error("cannot set value");
-    }
-    return value;
-  }
   serialize() {
     return this.editor.content;
   }

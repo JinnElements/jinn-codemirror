@@ -216,20 +216,6 @@ class XMLConfig extends EditorConfig {
     }
     return this.unwrap ? (_a = parsed.firstElementChild) == null ? void 0 : _a.childNodes : parsed.firstElementChild;
   }
-  setFromValue(value) {
-    if (!(value && (value instanceof Element || value instanceof NodeList))) {
-      return "";
-    }
-    const s = new XMLSerializer();
-    if (value instanceof NodeList) {
-      const buf = [];
-      for (let i = 0; i < value.length; i++) {
-        buf.push(s.serializeToString(value[i]));
-      }
-      return buf.join("");
-    }
-    return s.serializeToString(value);
-  }
 }
 export {
   XMLConfig

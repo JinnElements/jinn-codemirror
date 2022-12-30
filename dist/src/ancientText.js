@@ -92,15 +92,6 @@ ${converted}
   serialize() {
     return this.editor.content;
   }
-  setFromValue(value) {
-    if (!value) {
-      return "";
-    }
-    if (!(typeof value === "string")) {
-      throw new Error("cannot set value");
-    }
-    return value;
-  }
 }
 export {
   AncientTextConfig,

@@ -17,7 +17,7 @@ class JinnCodemirror extends HTMLElement {
     this.attachShadow({ mode: "open" });
   }
   static get observedAttributes() {
-    return ["placeholder"];
+    return ["placeholder", "mode", "code"];
   }
   connectedCallback() {
     var _a, _b, _c, _d;
@@ -35,6 +35,9 @@ class JinnCodemirror extends HTMLElement {
     this.namespace = this.getAttribute("namespace");
     this.linter = this.getAttribute("linter");
     this.mode = this.initModes() || this.getAttribute("mode") || "xml";
+    if (!this.hasAttribute("mode")) {
+      this.setAttribute("mode", this._mode);
+    }
     if (this.hasAttribute("code")) {
       this.value = this.getAttribute("code");
     }
@@ -54,13 +57,19 @@ class JinnCodemirror extends HTMLElement {
     });
   }
   attributeChangedCallback(name, oldValue, newValue) {
+    console.log("mode: %s; old: %o, new: %o", name, oldValue, newValue);
     if (!oldValue || oldValue === newValue) {
       return;
     }
     switch (name) {
       case "placeholder":
-        this._placeholder = newValue;
-        this.setMode(this.mode, false);
+        this.placeholder = newValue;
+        break;
+      case "mode":
+        this.mode = newValue;
+        break;
+      case "code":
+        this.value = newValue;
         break;
     }
   }
