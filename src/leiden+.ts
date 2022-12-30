@@ -160,9 +160,6 @@ export class LeidenConfig extends EditorConfig {
         if (value instanceof Element) {
             return xml2leidenPlus(value); 
         }
-        if (!(typeof value === 'string')) {
-            throw new Error("cannot set value")
-        }
-        return value;
+        return super.setFromValue(value);
     }
 }

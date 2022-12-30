@@ -119,12 +119,17 @@ export class JinnXMLEditor extends JinnCodemirror {
         if (!value) {
             this._wrapper = null;
         }
-        if (!(value instanceof Element)) { 
-            throw new Error("Value is not a node");
+        if (typeof value === 'string') {
+            const parser = new DOMParser();
+            const fragment = parser.parseFromString(value, 'application/xml');
+            if (!fragment.firstElementChild) {
+                return false;
+            }
+            value = fragment.firstElementChild;
         }
-        
+
         this._wrapper = value;
-        this._value = value.childNodes;
+        this._value = value?.childNodes;
         return true;
     }
 

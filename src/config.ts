@@ -180,7 +180,26 @@ export abstract class EditorConfig {
         return content;
     }
 
-    abstract setFromValue(value: Element|NodeListOf<ChildNode>|string|null|undefined): string;
+    setFromValue(value: Element|NodeListOf<ChildNode>|string|null|undefined): string {
+        if (!value) { 
+            return '';
+        }
+        if (value instanceof Node || value instanceof NodeList) {
+            const serializer = new XMLSerializer();
+            if (value instanceof NodeList) {
+                const buf = [];
+                for (let i = 0; i < (<NodeList>value).length; i++) {
+                    buf.push(serializer.serializeToString(value[i]));
+                }
+                return buf.join('');
+            }
+            return serializer.serializeToString(value);
+        }
+        if (typeof value === 'string') {
+            return value;
+        }
+        return JSON.stringify(value);
+    }
 
     abstract serialize(): Element | NodeListOf<ChildNode> | string | null | undefined;
 }

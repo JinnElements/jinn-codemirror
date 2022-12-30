@@ -63,12 +63,4 @@ export class AncientTextConfig extends EditorConfig {
     serialize(): Element | string | null {
         return this.editor.content;
     }
-
-    setFromValue(value: Element | string | null|undefined): string {
-        if (!value) { return '' }
-        if (!(typeof value === 'string')) {
-            throw new Error("cannot set value")
-        }
-        return value;
-    }
 }

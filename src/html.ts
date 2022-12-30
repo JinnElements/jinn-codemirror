@@ -13,14 +13,6 @@ export class HTMLConfig extends EditorConfig {
         return [html({ selfClosingTags: false})];
     }
 
-    setFromValue(value: string | Element | NodeListOf<ChildNode> | null | undefined): string {
-        if (!value) { return '' }
-        if (!(typeof value === 'string')) {
-            throw new Error("cannot set value")
-        }
-        return value;
-    }
-
     serialize(): string | Element | NodeListOf<ChildNode> | null | undefined {
         return this.editor.content;
     }
