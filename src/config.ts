@@ -5,8 +5,18 @@ import { syntaxTree } from "@codemirror/language";
 import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state";
 import {indentWithTab} from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
+import { oneDarkTheme } from "@codemirror/theme-one-dark";
 import { Tree } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
+
+function theme(name:string): Extension|null {
+    switch(name) {
+        case 'dark':
+            return oneDarkTheme;
+        default:
+            return null;
+    }
+}
 
 /**
  * Supported editor modes
@@ -164,16 +174,23 @@ export abstract class EditorConfig {
         });
 
         const customExtensions = await this.getExtensions(this.editor);
-        return { 
-            extensions: [
-                basicSetup, 
-                EditorView.lineWrapping, 
-                keymap.of([indentWithTab, ...this.keymap]),
-                placeholder(this.editor.placeholder),
-                ...customExtensions, 
-                updateListener
-            ] 
-        };
+        const extensions = [
+            basicSetup, 
+            EditorView.lineWrapping, 
+            keymap.of([indentWithTab, ...this.keymap]),
+            placeholder(this.editor.placeholder),
+            ...customExtensions, 
+            updateListener
+        ];
+        if (this.editor && this.editor.theme) {
+            const extTheme = theme(this.editor.theme);
+            if (extTheme) {
+                extensions.push(extTheme);
+            } else {
+                console.error('<jinn-codemirror> Unknown theme: %s', this.editor.theme);
+            }
+        }
+        return { extensions };
     }
 
     abstract getExtensions(editor: JinnCodemirror): Promise<Extension[]>;

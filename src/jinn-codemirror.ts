@@ -39,6 +39,11 @@ export class JinnCodemirror extends HTMLElement {
 
     _placeholder: string = '';
 
+    /**
+     * Editor theme to use. Currently only `dark` is supported.
+     */
+    public theme?: string | null;
+
     _editor?: EditorView;
     _config?: EditorConfig;
 
@@ -72,6 +77,10 @@ export class JinnCodemirror extends HTMLElement {
 
         if (this.hasAttribute('code')) {
             this.value = this.getAttribute('code');
+        }
+
+        if (this.hasAttribute('theme')) {
+            this.theme = this.getAttribute('theme');
         }
 
         this.addEventListener('blur', (ev) => {
