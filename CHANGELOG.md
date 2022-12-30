@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.7.2...v1.8.0) (2022-12-30)
+
+
+### Features
+
+* add support for TeX syntax ([b4b5655](https://github.com/JinnElements/jinn-codemirror/commit/b4b5655a381e11c9e3f58d2befe769e25dcd9e68))
+
 ## [1.7.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.7.1...v1.7.2) (2022-12-29)
 
 
