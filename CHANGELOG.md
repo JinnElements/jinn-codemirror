@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.1...v1.8.2) (2022-12-30)
+
+
+### Bug Fixes
+
+* react to 'code' attribute change ([46ff91e](https://github.com/JinnElements/jinn-codemirror/commit/46ff91e1a065ff9dfecf9c179d6a1a6a2064be18))
+
 ## [1.8.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.0...v1.8.1) (2022-12-30)
 
 
