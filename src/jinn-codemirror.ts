@@ -6,6 +6,7 @@ import { AncientTextConfig } from "./ancientText";
 import { XQueryConfig } from "./xquery";
 import { CSSConfig } from "./css";
 import { PlainConfig } from "./plain";
+import { TeXConfig } from "./tex";
 import { EditorConfig, SourceType, initCommand } from "./config";
 import { HTMLConfig } from "./html";
 
@@ -174,6 +175,9 @@ export class JinnCodemirror extends HTMLElement {
                 break;
             case SourceType.css:
                 this._config = new CSSConfig(this);
+                break;
+            case SourceType.tex:
+                this._config = new TeXConfig(this);
                 break;
             case SourceType.html:
                 this._config = new HTMLConfig(this);

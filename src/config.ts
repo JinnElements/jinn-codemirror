@@ -19,7 +19,8 @@ import { JinnCodemirror } from "./jinn-codemirror";
     phi = "phi",
     default = "default",
     xquery = "xquery",
-    css = "css"
+    css = "css",
+    tex = "tex"
 };
 
 export abstract class ParametrizedCommand {
