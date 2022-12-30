@@ -16,10 +16,11 @@ import { HTMLConfig } from "./html";
  * 
  * @attr {string} mode - editor mode to be used
  * @attr {string} linter - in XQuery mode: API endpoint to use for linting
+ * @attr {string} code - specifies initial content to be inserted at startup for editing
  * @slot toolbar - toolbar to be shown
  * @fires update - fired when the content of the editor has changed
- * @fires valid - fired if the content of the editor is valid (requires a linting to be supported)
- * @fires invalid - fired if the content of the editor is invalid (requires a linting to be supported)
+ * @fires valid - fired if the content of the editor is valid (requires a linter to be supported)
+ * @fires invalid - fired if the content of the editor is invalid (requires a linter to be supported)
  */
 export class JinnCodemirror extends HTMLElement {
 
@@ -27,8 +28,7 @@ export class JinnCodemirror extends HTMLElement {
     _value?: Element | NodeListOf<ChildNode> | string | null;
 
     /**
-     * Default element namespace to enforce on the root element in
-     * XML mode
+     * Default element namespace to enforce on the root element in XML mode
      */
     public namespace?: string | null;
 
@@ -42,7 +42,7 @@ export class JinnCodemirror extends HTMLElement {
     _editor?: EditorView;
     _config?: EditorConfig;
 
-    static get observedAttributes() { return ['placeholder', 'mode']; }
+    static get observedAttributes() { return ['placeholder', 'mode', 'code']; }
 
     constructor() {
         super();
@@ -66,6 +66,9 @@ export class JinnCodemirror extends HTMLElement {
         this.namespace = this.getAttribute('namespace');
         this.linter = this.getAttribute('linter');
         this.mode = this.initModes() || this.getAttribute('mode') || 'xml';
+        if (!this.hasAttribute('mode')) {
+            this.setAttribute('mode', this._mode);
+        }
 
         if (this.hasAttribute('code')) {
             this.value = this.getAttribute('code');
@@ -88,6 +91,7 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+        console.log('mode: %s; old: %o, new: %o', name, oldValue, newValue);
         if (!oldValue || oldValue === newValue) {
             return;
         }
@@ -97,6 +101,9 @@ export class JinnCodemirror extends HTMLElement {
                 break;
             case 'mode':
                 this.mode = newValue;
+                break;
+            case 'code':
+                this.value = newValue;
                 break;
         }
     }
@@ -114,13 +121,20 @@ export class JinnCodemirror extends HTMLElement {
         return this._placeholder;
     }
 
+    /**
+     * A placeholder string to be shown if the user has not yet entered anything.
+     * 
+     * @attr {string} placeholder
+     */
     set placeholder(label:string) {
         this._placeholder = label;
         this.setMode(this.mode);
     }
 
     /**
-     * The mode to use. Currently supported are 'xml', 'leiden_plus', 'edcs', 'phi' or 'default'.
+     * The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'leiden_plus', 'edcs', 'phi' or 'default'.
+     * 
+     * @attr {string} mode
      */
     set mode(mode:string) {
         this.setMode(mode);
@@ -225,8 +239,7 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     /**
-     * The value edited in the editor as either an Element or string -
-     * depending on the mode set.
+     * The value edited in the editor as either an Element or string - depending on the mode set.
      */
     set value(value: Element | NodeListOf<ChildNode> | string | null | undefined) {
         const updated = this.setValue(value);
