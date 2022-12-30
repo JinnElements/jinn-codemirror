@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.0...v1.8.1) (2022-12-30)
+
+
+### Bug Fixes
+
+* react to attribute change for 'mode' ([67e7677](https://github.com/JinnElements/jinn-codemirror/commit/67e76770e5a523fe4a3e9aa8943af677f2c6288a))
+
 # [1.8.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.7.2...v1.8.0) (2022-12-30)
 
 
