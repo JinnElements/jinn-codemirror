@@ -1,16 +1,30 @@
-# Text Editor Webcomponent
+<a href="https://www.npmjs.com/package/@jinntec/jinn-codemirror">
+<img title="npm (scoped)" src="https://img.shields.io/npm/v/@jinntec/jinn-codemirror">
+</a>
 
-A plain javascript web component based on [codemirror](https://codemirror.net/) with language definitions for XML and Leiden+.
+# Code Editor Webcomponent
+
+A plain javascript web component based on [codemirror](https://codemirror.net/).
 
 [Demo](https://jinnelements.github.io/jinn-codemirror/)
 
 Features:
 
-    * Configurable toolbar with support for snippets
-    * Autocomplete based on a JSON representation of the schema (currently TEI only)
-    * Commands for XML editing: 
-      * enclose in element
-      * remove enclosing parent
-      * select parent
-      
+* Editing **modes** for: XML, HTML, CSS, TeX, XQuery, Leiden+ and other variants of the Leiden convention
+* Configurable **toolbar** with support for snippets
+* **Autocomplete** in XML mode based on a JSON representation of the schema
+* Commands for **XML editing**: 
+  * enclose in element
+  * remove enclosing parent
+  * select parent
+* **Linting** for XML and XQuery
+* Support for markup following the **Leiden+ convention**, backed by a grammar
+* Conversion between EpiDoc XML fragments and Leiden+
+
+The component comes in 3 flavours:
+
+1. `jinn-codemirror`: the generic code editor webcomponent
+2. `jinn-xml-editor`: extends `jinn-codemirror` with the option to specify an outer element which should wrap around the edited content. This is important if you want users to e.g. edit the contents of a `<div>` without seeing the wrapping element. The wrapper will be removed when a value is passed to the editor and added back when serializing the edited content.
+3. `jinn-epidoc-editor`: combines an XML Editor with an option to import and convert a transcription following Leiden conventions. Leiden markup is automatically converted to the corresponding EpiDoc XML.
+
 ## API
