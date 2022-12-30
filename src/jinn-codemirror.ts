@@ -14,6 +14,8 @@ import { HTMLConfig } from "./html";
  * Source code editor component based on [codemirror](https://codemirror.net/).
  * Features extended support for XML and Leiden+ code.
  * 
+ * @attr {string} mode - editor mode to be used
+ * @attr {string} linter - in XQuery mode: API endpoint to use for linting
  * @slot toolbar - toolbar to be shown
  * @fires update - fired when the content of the editor has changed
  * @fires valid - fired if the content of the editor is valid (requires a linting to be supported)
@@ -40,7 +42,7 @@ export class JinnCodemirror extends HTMLElement {
     _editor?: EditorView;
     _config?: EditorConfig;
 
-    static get observedAttributes() { return ['placeholder']; }
+    static get observedAttributes() { return ['placeholder', 'mode']; }
 
     constructor() {
         super();
@@ -92,6 +94,9 @@ export class JinnCodemirror extends HTMLElement {
         switch (name) {
             case 'placeholder':
                 this.placeholder = newValue;
+                break;
+            case 'mode':
+                this.mode = newValue;
                 break;
         }
     }
