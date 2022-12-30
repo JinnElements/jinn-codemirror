@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.9.0...v1.10.0) (2022-12-30)
+
+
+### Bug Fixes
+
+* also emit update event if editor becomes empty ([166cd95](https://github.com/JinnElements/jinn-codemirror/commit/166cd9596694e54117c2458e91e88f1f27f6f63e))
+
+
+### Features
+
+* add support for dark theme ([097226b](https://github.com/JinnElements/jinn-codemirror/commit/097226bfda3621b0ac6eb262eae437333cc563f1))
+
 # [1.9.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.3...v1.9.0) (2022-12-30)
 
 
