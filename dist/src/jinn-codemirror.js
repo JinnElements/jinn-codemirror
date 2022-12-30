@@ -41,6 +41,9 @@ class JinnCodemirror extends HTMLElement {
     if (this.hasAttribute("code")) {
       this.value = this.getAttribute("code");
     }
+    if (this.hasAttribute("theme")) {
+      this.theme = this.getAttribute("theme");
+    }
     this.addEventListener("blur", (ev) => {
       const target = ev.relatedTarget;
       if (target) {

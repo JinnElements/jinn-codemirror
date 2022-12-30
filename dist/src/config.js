@@ -25,6 +25,15 @@ import { syntaxTree } from "@codemirror/language";
 import { EditorSelection } from "@codemirror/state";
 import { indentWithTab } from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
+import { oneDarkTheme } from "@codemirror/theme-one-dark";
+function theme(name) {
+  switch (name) {
+    case "dark":
+      return oneDarkTheme;
+    default:
+      return null;
+  }
+}
 var SourceType = /* @__PURE__ */ ((SourceType2) => {
   SourceType2["xml"] = "xml";
   SourceType2["html"] = "html";
@@ -128,7 +137,7 @@ class EditorConfig {
             const content = self.onUpdate(tree, lines.join("\n"));
             try {
               const serialized = self.serialize();
-              if (serialized) {
+              if (serialized != null) {
                 self.editor._value = serialized;
                 self.editor.emitUpdateEvent(content);
               }
@@ -138,16 +147,23 @@ class EditorConfig {
         }
       });
       const customExtensions = yield this.getExtensions(this.editor);
-      return {
-        extensions: [
-          basicSetup,
-          EditorView.lineWrapping,
-          keymap.of([indentWithTab, ...this.keymap]),
-          placeholder(this.editor.placeholder),
-          ...customExtensions,
-          updateListener
-        ]
-      };
+      const extensions = [
+        basicSetup,
+        EditorView.lineWrapping,
+        keymap.of([indentWithTab, ...this.keymap]),
+        placeholder(this.editor.placeholder),
+        ...customExtensions,
+        updateListener
+      ];
+      if (this.editor && this.editor.theme) {
+        const extTheme = theme(this.editor.theme);
+        if (extTheme) {
+          extensions.push(extTheme);
+        } else {
+          console.error("<jinn-codemirror> Unknown theme: %s", this.editor.theme);
+        }
+      }
+      return { extensions };
     });
   }
   getCommands() {
