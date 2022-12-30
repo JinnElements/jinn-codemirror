@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.2...v1.8.3) (2022-12-30)
+
+
+### Bug Fixes
+
+* refactor to handle type conversion ([d2ef6b0](https://github.com/JinnElements/jinn-codemirror/commit/d2ef6b0effb055e671376b96196dfd32253fafa6))
+
 ## [1.8.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.8.1...v1.8.2) (2022-12-30)
 
 
