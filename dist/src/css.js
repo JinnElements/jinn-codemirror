@@ -18,15 +18,13 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
-import { css } from "@codemirror/lang-css";
+import { cssLanguage } from "@codemirror/lang-css";
+import { LanguageSupport } from "@codemirror/language";
 import { EditorConfig } from "./config";
 class CSSConfig extends EditorConfig {
-  constructor(editor) {
-    super(editor);
-  }
   getExtensions(editor) {
     return __async(this, null, function* () {
-      return [css()];
+      return [new LanguageSupport(cssLanguage)];
     });
   }
   serialize() {

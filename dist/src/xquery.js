@@ -60,8 +60,8 @@ const eXistLinter = (editor, uri) => (view) => {
   }));
 };
 class XQueryConfig extends EditorConfig {
-  constructor(editor, linterUri = null) {
-    super(editor);
+  constructor(editor, toolbar = [], linterUri = null) {
+    super(editor, toolbar);
     this.linterUri = linterUri;
   }
   getExtensions(editor) {

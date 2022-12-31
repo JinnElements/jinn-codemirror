@@ -140,7 +140,7 @@ const completeAttribute = (view, completion, from, to) => {
 };
 class XMLConfig extends EditorConfig {
   constructor(editor, toolbar = [], namespace = null, checkNamespace = false, unwrap = false) {
-    super(editor, commands, toolbar);
+    super(editor, toolbar, commands);
     this.namespace = namespace;
     this.checkNamespace = checkNamespace;
     this.unwrap = unwrap;

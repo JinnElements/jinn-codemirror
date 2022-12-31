@@ -72,10 +72,10 @@ const commands = {
   gap: insertCommand("[---]")
 };
 class AncientTextConfig extends EditorConfig {
-  constructor(editor, toolbar, sourceType) {
-    super(editor, __spreadProps(__spreadValues({}, commands), {
+  constructor(editor, toolbar = [], sourceType) {
+    super(editor, toolbar, __spreadProps(__spreadValues({}, commands), {
       convert: convertToLeidenPlusCommand(editor, sourceType)
-    }), toolbar);
+    }));
     this._sourceType = sourceType;
   }
   getExtensions() {

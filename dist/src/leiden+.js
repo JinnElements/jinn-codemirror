@@ -133,7 +133,7 @@ const leidenKeymap = [
 ];
 class LeidenConfig extends EditorConfig {
   constructor(editor, toolbar) {
-    super(editor, commands, toolbar);
+    super(editor, toolbar, commands);
   }
   getExtensions() {
     return __async(this, null, function* () {

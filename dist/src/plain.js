@@ -20,9 +20,6 @@ var __async = (__this, __arguments, generator) => {
 };
 import { EditorConfig } from "./config";
 class PlainConfig extends EditorConfig {
-  constructor(editor) {
-    super(editor);
-  }
   getExtensions(editor) {
     return __async(this, null, function* () {
       return [];

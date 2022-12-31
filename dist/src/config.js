@@ -102,7 +102,7 @@ const defaultCommands = {
   }
 };
 class EditorConfig {
-  constructor(editor, commands = defaultCommands, toolbar = []) {
+  constructor(editor, toolbar = [], commands = defaultCommands) {
     this.editor = editor;
     this.commands = commands;
     this.keymap = [];

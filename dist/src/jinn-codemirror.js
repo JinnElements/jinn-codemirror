@@ -60,7 +60,6 @@ class JinnCodemirror extends HTMLElement {
     });
   }
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log("mode: %s; old: %o, new: %o", name, oldValue, newValue);
     if (!oldValue || oldValue === newValue) {
       return;
     }
@@ -126,9 +125,6 @@ class JinnCodemirror extends HTMLElement {
     var _a;
     const toolbar = this.getToolbarControls((_a = this.shadowRoot) == null ? void 0 : _a.querySelector("[name=toolbar]"));
     switch (this._mode) {
-      case SourceType.default:
-        this._config = new PlainConfig(this);
-        break;
       case SourceType.edcs:
       case SourceType.phi:
         this._config = new AncientTextConfig(this, toolbar, this._mode);
@@ -137,19 +133,22 @@ class JinnCodemirror extends HTMLElement {
         this._config = new LeidenConfig(this, toolbar);
         break;
       case SourceType.xquery:
-        this._config = new XQueryConfig(this, this.linter);
+        this._config = new XQueryConfig(this, toolbar, this.linter);
         break;
       case SourceType.css:
-        this._config = new CSSConfig(this);
+        this._config = new CSSConfig(this, toolbar);
         break;
       case SourceType.tex:
-        this._config = new TeXConfig(this);
+        this._config = new TeXConfig(this, toolbar);
         break;
       case SourceType.html:
-        this._config = new HTMLConfig(this);
+        this._config = new HTMLConfig(this, toolbar);
+        break;
+      case SourceType.xml:
+        this._config = new XMLConfig(this, toolbar, this.namespace);
         break;
       default:
-        this._config = new XMLConfig(this, toolbar, this.namespace);
+        this._config = new PlainConfig(this, toolbar);
         break;
     }
   }
