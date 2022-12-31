@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.10.1...v1.11.0) (2022-12-31)
+
+
+### Features
+
+* add markdown mode ([393b5a8](https://github.com/JinnElements/jinn-codemirror/commit/393b5a88f99718937b1f0d8965dff596afa013eb))
+
 ## [1.10.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.10.0...v1.10.1) (2022-12-31)
 
 
