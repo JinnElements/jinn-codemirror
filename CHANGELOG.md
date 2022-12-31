@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.10.0...v1.10.1) (2022-12-31)
+
+
+### Bug Fixes
+
+* allow toolbar on all editor modes ([f6dcd43](https://github.com/JinnElements/jinn-codemirror/commit/f6dcd4308ee82b050c653c37987d4d9bd90b6098))
+
 # [1.10.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.9.0...v1.10.0) (2022-12-30)
 
 
