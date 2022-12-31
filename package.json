@@ -42,6 +42,7 @@
     "@codemirror/autocomplete": "^6.4.0",
     "@codemirror/lang-css": "^6.0.1",
     "@codemirror/lang-html": "^6.4.0",
+    "@codemirror/lang-markdown": "^6.0.5",
     "@codemirror/lang-xml": "^6.0.1",
     "@codemirror/language": "^6.3.2",
     "@codemirror/legacy-modes": "^6.3.1",

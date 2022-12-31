@@ -30,7 +30,8 @@ function theme(name:string): Extension|null {
     default = "default",
     xquery = "xquery",
     css = "css",
-    tex = "tex"
+    tex = "tex",
+    markdown = "markdown"
 };
 
 export abstract class ParametrizedCommand {

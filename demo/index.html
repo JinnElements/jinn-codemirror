@@ -153,11 +153,13 @@
                         <option value="css">CSS</option>
                         <option value="html">HTML</option>
                         <option value="tex">TeX</option>
+                        <option value="markdown">Markdown</option>
                         <option value="default">Plain text</option>
                     </select>
                     <button data-mode="css" data-command="snippet" data-params="${1:*} {&#10;    ${_};${3}&#10;}" title="Add CSS rule">+</button>
                     <button data-mode="xquery" data-command="snippet" data-params="for ${1:$i} in ${_}">for</button>
                     <button data-mode="xquery" data-command="snippet" data-params="let ${1:$i} := ${_}">let</button>
+                    <button data-mode="markdown" data-command="snippet" data-params="[${_}]{${2}}">Link</button>
                 </div>
             </jinn-codemirror>
         </section>

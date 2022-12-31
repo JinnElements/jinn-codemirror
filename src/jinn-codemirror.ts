@@ -9,6 +9,7 @@ import { PlainConfig } from "./plain";
 import { TeXConfig } from "./tex";
 import { EditorConfig, SourceType, initCommand } from "./config";
 import { HTMLConfig } from "./html";
+import { MarkdownConfig } from "./markdown";
 
 /**
  * Source code editor component based on [codemirror](https://codemirror.net/).
@@ -140,7 +141,7 @@ export class JinnCodemirror extends HTMLElement {
     }
 
     /**
-     * The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'leiden_plus', 'edcs', 'phi' or 'default'.
+     * The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'markdown', 'leiden_plus', 'edcs', 'phi' or 'default'.
      * 
      * @attr {string} mode
      */
@@ -208,6 +209,9 @@ export class JinnCodemirror extends HTMLElement {
                 break;
             case SourceType.xml:
                 this._config = new XMLConfig(this, toolbar, this.namespace);
+                break;
+            case SourceType.markdown:
+                this._config = new MarkdownConfig(this, toolbar);
                 break;
             default:
                 this._config = new PlainConfig(this, toolbar);
