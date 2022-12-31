@@ -1,6 +1,6 @@
 import { ExternalTokenizer } from "@lezer/lr";
 import { chars as lp_chars, Unclear, lostLinesStart } from "./leiden+/parser.terms.js";
-const skipped = "() <>~|?=.0123456789[]\u301A\u301B";
+const skipped = "() <>|?=.0123456789[]\u301A\u301B";
 const charsToken = new ExternalTokenizer((input) => {
   let str = "";
   for (; ; ) {
@@ -13,7 +13,7 @@ const charsToken = new ExternalTokenizer((input) => {
       return;
     }
     const ch = String.fromCharCode(input.next);
-    if (skipped.indexOf(ch) > -1) {
+    if (ch === "~" && String.fromCharCode(input.peek(1)) === "|" || skipped.indexOf(ch) > -1) {
       break;
     }
     const nextChar = input.peek(1);

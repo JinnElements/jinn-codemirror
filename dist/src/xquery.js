@@ -52,7 +52,7 @@ const eXistLinter = (editor, uri) => (view) => {
         message: json.message,
         severity: "error",
         from: line.from + json.column,
-        to: line.from + json.column + 3
+        to: line.from + line.length
       });
     }
     resolve(diagnostics);
