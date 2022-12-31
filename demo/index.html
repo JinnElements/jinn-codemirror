@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Leiden+ Editor Demo</title>
+        <title>jinn-codemirror Editor Demo</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald"/>
         <style>
             body {
@@ -63,6 +63,10 @@
         <script type="module" src="../src/jinn-codemirror-bundle.ts"></script>
     </head>
     <body>
+        <section>
+            <h1>Code Editor Webcomponent Examples</h1>
+            <p>A plain javascript web component based on <a href="https://codemirror.net/">codemirror</a>. It adds support for toolbars, XML-specific shortcuts, and helpers for the transcription of epigraphic documents.</p>
+        </section>
         <section class="epidoc">
             <h1>EpiDoc Editor</h1>
             <p>Combines an XML Editor with an option to import and convert a transcription following Leiden conventions. Multiple variants of Leiden are supported, with Leiden+ providing the best coverage as it is backed by a syntax tree. The other two Leiden modes use heuristics and are more prone to produce invalid markup.</p>
@@ -118,7 +122,7 @@
             <jinn-xml-editor id="xml-editor" unwrap namespace="http://www.tei-c.org/ns/1.0"
                 theme="dark"
                 wrapper='<div xmlns="http://www.tei-c.org/ns/1.0"></div>' schema="../src/tei.json"
-                schema-root="div" code='<head>Hello</head>' placeholder="[TEI division content]">
+                schema-root="div" placeholder="[TEI division content]">
                 <div slot="toolbar">
                     <button data-command="selectElement" data-key="mod-e mod-s"
                         title="Select element around current cursor position">&lt;|></button>
@@ -151,6 +155,9 @@
                         <option value="tex">TeX</option>
                         <option value="default">Plain text</option>
                     </select>
+                    <button data-mode="css" data-command="snippet" data-params="${1:*} {&#10;    ${_};${3}&#10;}" title="Add CSS rule">+</button>
+                    <button data-mode="xquery" data-command="snippet" data-params="for ${1:$i} in ${_}">for</button>
+                    <button data-mode="xquery" data-command="snippet" data-params="let ${1:$i} := ${_}">let</button>
                 </div>
             </jinn-codemirror>
         </section>

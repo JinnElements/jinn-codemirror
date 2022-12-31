@@ -125,7 +125,7 @@ const leidenKeymap: readonly KeyBinding[] = [
 export class LeidenConfig extends EditorConfig {
     
     constructor(editor:JinnCodemirror, toolbar: HTMLElement[]) {
-        super(editor, commands, toolbar);
+        super(editor, toolbar, commands);
     }
 
     async getExtensions(): Promise<Extension[]> {

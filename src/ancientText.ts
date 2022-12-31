@@ -43,11 +43,11 @@ export class AncientTextConfig extends EditorConfig {
     
     _sourceType: SourceType;
 
-    constructor(editor: JinnCodemirror, toolbar: HTMLElement[]|null, sourceType: SourceType) {
-        super(editor, {
+    constructor(editor: JinnCodemirror, toolbar: HTMLElement[]|undefined = [], sourceType: SourceType) {
+        super(editor, toolbar, {
             ...commands, 
             convert: convertToLeidenPlusCommand(editor, sourceType)
-        }, toolbar);
+        });
         this._sourceType = sourceType;
     }
     

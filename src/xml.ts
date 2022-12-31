@@ -154,7 +154,7 @@ export class XMLConfig extends EditorConfig {
     private checkNamespace: boolean|null;
 
     constructor(editor: JinnCodemirror, toolbar: HTMLElement[] = [], namespace: string|null = null, checkNamespace: boolean|null = false, unwrap: boolean|null = false) {
-        super(editor, commands, toolbar);
+        super(editor, toolbar, commands);
         this.namespace = namespace;
         this.checkNamespace = checkNamespace;
         this.unwrap = unwrap;

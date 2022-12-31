@@ -125,7 +125,7 @@ export abstract class EditorConfig {
     keymap: KeyBinding[];
     commands: EditorCommands;
 
-    constructor(editor:JinnCodemirror, commands: EditorCommands = defaultCommands, toolbar: HTMLElement[] = []) {
+    constructor(editor:JinnCodemirror, toolbar: HTMLElement[] = [], commands: EditorCommands = defaultCommands) {
         this.editor = editor;
         this.commands = commands;
         this.keymap = [];

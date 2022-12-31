@@ -56,8 +56,8 @@ export class XQueryConfig extends EditorConfig {
 
     private linterUri: string|null;
 
-    constructor(editor: JinnCodemirror, linterUri: string|null = null) {
-        super(editor);
+    constructor(editor: JinnCodemirror, toolbar: HTMLElement[]|undefined = [], linterUri: string|null = null) {
+        super(editor, toolbar);
         
         this.linterUri = linterUri;
     }
