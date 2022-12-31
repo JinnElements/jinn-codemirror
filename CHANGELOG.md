@@ -1,3 +1,11 @@
+## [1.11.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.0...v1.11.1) (2022-12-31)
+
+
+### Bug Fixes
+
+* **leiden+:** entering single < crashes editor ([f0e2e82](https://github.com/JinnElements/jinn-codemirror/commit/f0e2e8271053b21c2e971a4e5914f46612e86e2e))
+* **xquery:** wrong end position reported by linter causes crash ([0e5501c](https://github.com/JinnElements/jinn-codemirror/commit/0e5501ce5f0adb2bf2d094425cf245ea5a76bdf7))
+
 # [1.11.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.10.1...v1.11.0) (2022-12-31)
 
 
