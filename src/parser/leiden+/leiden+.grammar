@@ -43,7 +43,7 @@ AbbrevUnresolved {
 }
 
 Supplied {
-    "<" Inline* CertLow? ">"
+    "<" Inline+ CertLow? ">"
 }
 
 lost {

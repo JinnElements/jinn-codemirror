@@ -9,7 +9,7 @@ import { chars as lp_chars, Unclear, lostLinesStart } from "./leiden+/parser.ter
 //     if (input.pos === 0) input.acceptToken(sof)
 // });
 
-const skipped = '() <>~|?=.0123456789\[\]〚〛';
+const skipped = '() <>|?=.0123456789\[\]〚〛';
 
 export const charsToken = new ExternalTokenizer(input => {
     let str = '';
@@ -17,15 +17,20 @@ export const charsToken = new ExternalTokenizer(input => {
         if (input.next < 0) {
             break;
         }
+        // found "lost.": return token lostLinesStart
         if (input.next === 46 && str === 'lost') {
             input.advance();
             input.acceptToken(lostLinesStart);
             return;
         }
         const ch = String.fromCharCode(input.next);
-        if (skipped.indexOf(ch) > -1) {
+        if ((ch === '~' && String.fromCharCode(input.peek(1)) === '|') ||
+            (skipped.indexOf(ch) > -1)) {
             break;
         }
+
+        // check if the character after next is the underdot
+        // if yes, the current character belongs to an unclear segment
         const nextChar = input.peek(1);
         if (nextChar === 0x0323) {
             break;
@@ -45,6 +50,7 @@ export const unclearToken = new ExternalTokenizer(input => {
             break;
         }
         const nextChar = input.peek(1);
+        // unclear text continues as long as next character is an underdot
         if (nextChar === 0x0323) {
             charCount++;
             input.advance(2);
