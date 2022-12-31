@@ -37,13 +37,12 @@ const eXistLinter = (editor: JinnCodemirror, uri: string|null) => (view: EditorV
         .then(response => response.json())
         .then(json => {
             if (json.status === 'fail') {
-                const line = view.state.doc.lineAt(json.line);
-
+                const line = view.state.doc.lineAt(json.line); 
                 diagnostics.push({
                     message: json.message,
                     severity: 'error',
                     from: line.from + json.column,
-                    to: line.from + json.column + 3
+                    to: line.from + line.length
                 });
             }
             resolve(diagnostics);
