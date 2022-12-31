@@ -9,6 +9,7 @@ import { PlainConfig } from "./plain";
 import { TeXConfig } from "./tex";
 import { SourceType, initCommand } from "./config";
 import { HTMLConfig } from "./html";
+import { MarkdownConfig } from "./markdown";
 class JinnCodemirror extends HTMLElement {
   constructor() {
     super();
@@ -146,6 +147,9 @@ class JinnCodemirror extends HTMLElement {
         break;
       case SourceType.xml:
         this._config = new XMLConfig(this, toolbar, this.namespace);
+        break;
+      case SourceType.markdown:
+        this._config = new MarkdownConfig(this, toolbar);
         break;
       default:
         this._config = new PlainConfig(this, toolbar);

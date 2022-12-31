@@ -46,7 +46,7 @@ Features extended support for XML and Leiden+ code.
 |---------------|---------------|-------------------------------|--------------------------------------------------|
 | `content`     |               | `string`                      | The content edited in the editor as a string.    |
 | `linter`      | `linter`      | `string`                      | XQuery mode: the API endpoint to use for linting. |
-| `mode`        | `mode`        | `string`                      | The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'leiden_plus', 'edcs', 'phi' or 'default'. |
+| `mode`        | `mode`        | `string`                      | The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'markdown', 'leiden_plus', 'edcs', 'phi' or 'default'. |
 | `namespace`   |               | `string \| null \| undefined` | Default element namespace to enforce on the root element in XML mode |
 | `placeholder` | `placeholder` | `string`                      | A placeholder string to be shown if the user has not yet entered anything. |
 | `theme`       |               | `string \| null \| undefined` | Editor theme to use. Currently only `dark` is supported. |
