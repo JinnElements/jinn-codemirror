@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.1...v1.11.2) (2023-01-10)
+
+
+### Bug Fixes
+
+* **html:** fix surround-with command ([889330b](https://github.com/JinnElements/jinn-codemirror/commit/889330bc245ea51a3d3e365306b62d4d6e3ec957))
+
 ## [1.11.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.0...v1.11.1) (2022-12-31)
 
 
