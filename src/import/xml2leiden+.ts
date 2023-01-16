@@ -24,9 +24,9 @@ function transform(node: Node|null, output: string[]) {
                     output.push('=>');
                     break;
                 case 'abbr':
-                    output.push('<abbr>');
+                    output.push('(|');
                     transformElem(elem, output);
-                    output.push('</abbr>');
+                    output.push('|)');
                     break;
                 case 'del':
                     output.push('〚');
