@@ -22,6 +22,7 @@ import { EditorSelection } from "@codemirror/state";
 import { keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { linter, lintGutter } from "@codemirror/lint";
+import { snippet } from "@codemirror/autocomplete";
 import { leidenPlus2epiDoc } from "./import/leiden+2xml";
 import { EditorConfig, snippetCommand, wrapCommand } from "./config";
 import { leiden } from "./language";
@@ -105,15 +106,29 @@ const fixNewlinesCommand = (editor) => {
   });
   return true;
 };
+const expansionCommand = (editor) => {
+  editor.state.selection.ranges.forEach((range) => {
+    const content = editor.state.doc.slice(range.from, range.to).toString();
+    let abbrev = "", expan = "";
+    if (content.length > 0) {
+      abbrev = content.charAt(0);
+      expan = content.substring(1);
+    }
+    const template = `(\${1:${abbrev}}(\${2:${expan}}))\${3}`;
+    const snip = snippet(template);
+    snip(editor, { label: "" }, range.from, range.to);
+  });
+  return true;
+};
 const commands = {
-  expan: snippetCommand("(${_}(${}))"),
+  expan: expansionCommand,
   div: wrapCommand("<=\n", "\n=>"),
   fragment: snippetCommand("<D=.${1:1}.fragment<=\n${2}\n=>=D>"),
   part: snippetCommand("<D=.${1:A}.part<=\n${2}\n=>=D>"),
   recto: wrapCommand("<D=.r<=\n", "\n=>=D>"),
   verso: wrapCommand("<D=.v<=\n", "\n=>=D>"),
   erasure: wrapCommand("\u301A", "\u301B"),
-  foreign: snippetCommand("~|${_}|~${2:gr}"),
+  foreign: snippetCommand("~|${_}|~${gr}"),
   unclear: toggleUnclearCommand,
   fixNewlines: fixNewlinesCommand,
   snippet: {
@@ -171,6 +186,7 @@ class LeidenConfig extends EditorConfig {
 }
 export {
   LeidenConfig,
+  expansionCommand,
   fixNewlinesCommand,
   toggleUnclearCommand
 };

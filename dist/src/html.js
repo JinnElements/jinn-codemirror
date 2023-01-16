@@ -20,14 +20,14 @@ var __async = (__this, __arguments, generator) => {
 };
 import { EditorConfig } from "./config";
 import { html } from "@codemirror/lang-html";
-import { commands } from "./xml-commands";
+import { commands, inputPanel } from "./xml-commands";
 class HTMLConfig extends EditorConfig {
   constructor(editor, toolbar = []) {
     super(editor, toolbar, commands);
   }
   getExtensions(editor) {
     return __async(this, null, function* () {
-      return [html({ selfClosingTags: false })];
+      return [html({ selfClosingTags: false }), inputPanel()];
     });
   }
   serialize() {

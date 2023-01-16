@@ -22,9 +22,9 @@ function transform(node, output) {
           output.push("=>");
           break;
         case "abbr":
-          output.push("<abbr>");
+          output.push("(|");
           transformElem(elem, output);
-          output.push("</abbr>");
+          output.push("|)");
           break;
         case "del":
           output.push("\u301A");
