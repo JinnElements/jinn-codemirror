@@ -1,3 +1,11 @@
+## [1.11.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.2...v1.11.3) (2023-01-16)
+
+
+### Bug Fixes
+
+* **leiden+:** fix xml2leiden conversion of unexpanded abbreviation ([313aab9](https://github.com/JinnElements/jinn-codemirror/commit/313aab9b2eba3dec36c357a314b5a7bb06c17211))
+* **leiden+:** improve expan snippet ([a1805ae](https://github.com/JinnElements/jinn-codemirror/commit/a1805aeafdfdfb4ab6719068a21edecac709727d))
+
 ## [1.11.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.1...v1.11.2) (2023-01-10)
 
 
