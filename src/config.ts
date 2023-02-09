@@ -125,6 +125,7 @@ export abstract class EditorConfig {
     editor: JinnCodemirror;
     keymap: KeyBinding[];
     commands: EditorCommands;
+    threshold: number = 300;
 
     constructor(editor:JinnCodemirror, toolbar: HTMLElement[] = [], commands: EditorCommands = defaultCommands) {
         this.editor = editor;
@@ -153,23 +154,29 @@ export abstract class EditorConfig {
 
     async getConfig(): Promise<EditorStateConfig> {
         const self = this;
+        let runningUpdate:any = null;
         const updateListener = ViewPlugin.fromClass(class {
             update(update: ViewUpdate) {
                 if (update.docChanged) {
-                    const tree = syntaxTree(update.state);
-                    const lines = update.state.doc.toJSON();
-                    const content = self.onUpdate(tree, lines.join('\n'));
-                    
-                    // save content to property `value` on editor parent
-                    try {
-                        const serialized = self.serialize();
-                        if (serialized != null) {
-                            self.editor._value = serialized;
-                            self.editor.emitUpdateEvent(content);
-                        }
-                    } catch (e) {
-                        // suppress updates (invalid data)
+                    if (runningUpdate) {
+                        clearTimeout(runningUpdate);
                     }
+                    runningUpdate = setTimeout(() => {
+                        const tree = syntaxTree(update.state);
+                        const lines = update.state.doc.toJSON();
+                        const content = self.onUpdate(tree, lines.join('\n'));
+                        
+                        // save content to property `value` on editor parent
+                        try {
+                            const serialized = self.serialize();
+                            if (serialized != null) {
+                                self.editor._value = serialized;
+                                self.editor.emitUpdateEvent(content);
+                            }
+                        } catch (e) {
+                            // suppress updates (invalid data)
+                        }
+                    }, self.threshold);
                 }
             }
         });
