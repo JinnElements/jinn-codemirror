@@ -96,11 +96,18 @@ const toggleUnclearCommand = (editor) => {
 };
 const fixNewlinesCommand = (editor) => {
   const content = editor.state.doc.toString();
-  let matchCount = 0;
-  const fixed = content.replace(/^(?!\d+\.)/gm, () => {
-    matchCount += 1;
-    return `${matchCount}. `;
-  });
+  let fixed;
+  if (content.indexOf("/") !== -1) {
+    const lines = content.split(/(?<!\/)\/(?!\/)/);
+    const split = lines.map((line, idx) => `${idx + 1}. ${line.replace(/^\s+/, "")}`);
+    fixed = split.join("\n");
+  } else {
+    let matchCount = 0;
+    fixed = content.replace(/^(?!\d+\.)/gm, () => {
+      matchCount += 1;
+      return `${matchCount}. `;
+    });
+  }
   editor.dispatch({
     changes: [{ from: 0, to: editor.state.doc.length, insert: fixed }]
   });

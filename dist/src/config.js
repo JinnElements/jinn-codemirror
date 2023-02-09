@@ -104,6 +104,7 @@ const defaultCommands = {
 };
 class EditorConfig {
   constructor(editor, toolbar = [], commands = defaultCommands) {
+    this.threshold = 300;
     this.editor = editor;
     this.commands = commands;
     this.keymap = [];
@@ -130,20 +131,26 @@ class EditorConfig {
   getConfig() {
     return __async(this, null, function* () {
       const self = this;
+      let runningUpdate = null;
       const updateListener = ViewPlugin.fromClass(class {
         update(update) {
           if (update.docChanged) {
-            const tree = syntaxTree(update.state);
-            const lines = update.state.doc.toJSON();
-            const content = self.onUpdate(tree, lines.join("\n"));
-            try {
-              const serialized = self.serialize();
-              if (serialized != null) {
-                self.editor._value = serialized;
-                self.editor.emitUpdateEvent(content);
-              }
-            } catch (e) {
+            if (runningUpdate) {
+              clearTimeout(runningUpdate);
             }
+            runningUpdate = setTimeout(() => {
+              const tree = syntaxTree(update.state);
+              const lines = update.state.doc.toJSON();
+              const content = self.onUpdate(tree, lines.join("\n"));
+              try {
+                const serialized = self.serialize();
+                if (serialized != null) {
+                  self.editor._value = serialized;
+                  self.editor.emitUpdateEvent(content);
+                }
+              } catch (e) {
+              }
+            }, self.threshold);
           }
         }
       });
