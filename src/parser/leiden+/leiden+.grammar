@@ -53,7 +53,8 @@ lost {
 }
 
 Erasure {
-    "〚" Inline+ "〛"
+    "〚" Inline+ "〛" |
+    "[[" Inline+ "]]"
 }
 
 LostLines {
