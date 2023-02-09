@@ -20,9 +20,9 @@ describe('inline', () => {
         '<ab>\n<expan>T<ex>itus</ex></expan> <expan>Fl<ex>avius</ex></expan> Severus\n</ab>'
     );
     testTransform(
-        'wraps div around multiple blocks',
-        `<=Titus=><=Antonius=>`,
-        '<div><ab>Titus</ab><ab>Antonius</ab></div>'
+        'wraps ab around inline elements',
+        `Titus Antonius`,
+        '<ab>\nTitus Antonius\n</ab>'
     );
     testTransform(
         'expands abbreviation in nested supplied',
