@@ -11,11 +11,11 @@ block {
     Part { "<D=." PartId ( block )+ "=D>"} |
     Fragment { "<D=." FragmentNum ( block )+ "=D>"} |
     Column { "<D=." ColumnNum ( block )+ "=D>" } | 
-    Foreign { "~|" ( block )+ ForeignEnd } |
     Inline
 }
 
 Inline {
+    Foreign { "~|" ( block )+ ForeignEnd } |
     LineBreakWrapped |
     LineBreak |
     Number |
