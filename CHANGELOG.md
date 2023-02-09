@@ -1,3 +1,13 @@
+## [1.11.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.3...v1.11.4) (2023-02-09)
+
+
+### Bug Fixes
+
+* **leiden+:** broken test ([59ac71e](https://github.com/JinnElements/jinn-codemirror/commit/59ac71e7afa3d9def44948a381f5fde118b1e0e1))
+* **leiden+:** fix recto/verso; do not wrap into ab unless there's inline content between ([6aed1e8](https://github.com/JinnElements/jinn-codemirror/commit/6aed1e89d0a8ebaac4a918902ac830a7a86bc3ce))
+* **leiden+:** foreign is an inline element ([001cb7d](https://github.com/JinnElements/jinn-codemirror/commit/001cb7ddc86abdd642decdfa5dd541cd3a862759))
+* limit update events by adding 300ms timeout ([1a0c2d4](https://github.com/JinnElements/jinn-codemirror/commit/1a0c2d4bb9197abfd28ab9672a03a441ac9b42c3))
+
 ## [1.11.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.2...v1.11.3) (2023-01-16)
 
 
