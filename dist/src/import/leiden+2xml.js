@@ -31,17 +31,15 @@ function leidenPlus2epiDoc(input, root = parser.parse(input)) {
       const name = node.name;
       switch (name) {
         case "Document":
-          let count = 0;
+          let foundInline = false;
           if (node.firstChild()) {
             do {
-              count++;
-              if (blockElements.includes(node.type.name)) {
-                wrapper = "div";
+              if (!blockElements.includes(node.type.name)) {
+                foundInline = !/^[\s\n]+$/.test(text(input, node));
               }
-              needsWrap = needsWrap || node.type.name === "Inline";
             } while (node.nextSibling());
           }
-          needsWrap = count > 1 || needsWrap;
+          needsWrap = foundInline;
           if (needsWrap) {
             xml.push(`<${wrapper}>
 `);
@@ -66,8 +64,10 @@ function leidenPlus2epiDoc(input, root = parser.parse(input)) {
           xml.push("<ab>");
           break;
         case "Recto":
-        case "Verso":
           xml.push('<div n="r" type="textpart">');
+          break;
+        case "Verso":
+          xml.push('<div n="v" type="textpart">');
           break;
         case "Fragment":
           node.firstChild();
