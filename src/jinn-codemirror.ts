@@ -254,9 +254,8 @@ export class JinnCodemirror extends HTMLElement {
      * The value edited in the editor as either an Element or string - depending on the mode set.
      */
     set value(value: Element | NodeListOf<ChildNode> | string | null | undefined) {
-        const updated = this.setValue(value);
-
-        if (updated && this._editor && this._config) {
+        this.setValue(value);
+        if (this._editor && this._config) {
             this.content = this._config?.setFromValue(this._value);
         }
     }
