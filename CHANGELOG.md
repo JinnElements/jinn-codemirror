@@ -1,3 +1,10 @@
+## [1.11.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.4...v1.11.5) (2023-02-10)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** reopening leiden editor does not update ([b338ecf](https://github.com/JinnElements/jinn-codemirror/commit/b338ecfea9512172e2e3bf3c89e0443fe8cd6682))
+
 ## [1.11.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.3...v1.11.4) (2023-02-09)
 
 
