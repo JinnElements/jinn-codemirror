@@ -94,44 +94,44 @@
             <jinn-epidoc-editor id="epidoc-editor" schema="../src/tei.json" schema-root="div" mode="leiden_plus" mode-select
                 placeholder="[Transcription]">
                 <div slot="leiden-toolbar">
-                    <button data-command="expan" data-mode="leiden_plus" data-key="mod-e mod-e">(a(bcd))</button>
-                    <button data-command="snippet" data-mode="leiden_plus" data-key="mod-e mod-x"
-                        data-params="(|${_}|)">(|abc|)</button>
-                    <button data-command="snippet" data-mode="leiden_plus" data-key="mod-e mod-e"
-                        data-params="〚${_}〛">〚abc〛</button>
-                    <button data-command="unclear" data-mode="leiden_plus" data-key="mod-e mod-u">ạ</button>
-                    <button data-command="div" data-mode="leiden_plus" data-key="mod-e mod-d">&lt;=...</button>
-                    <button data-command="part" data-mode="leiden_plus" data-key="mod-e mod-p">&lt;D=.A.part...</button>
-                    <button data-command="recto" data-mode="leiden_plus" data-key="mod-e mod-r">&lt;D=.r...</button>
-                    <button data-command="verso" data-mode="leiden_plus" data-key="mod-e mod-v">&lt;D=.v...</button>
-                    <button data-command="foreign" data-mode="leiden_plus" data-key="mod-e mod-f">~|...|~</button>
-                    <button data-command="erasure" data-mode="edcs" data-key="mod-e mod-u">〚abc〛</button>
-                    <button data-command="gap" data-mode="edcs" data-key="mod-e mod-g">[...]</button>
-                    <button data-command="convert" data-mode="edcs" data-key="mod-e mod-c">Convert to Leiden+</button>
+                    <button data-command="expan" data-mode="leiden_plus" data-key="mod-c mod-x" title="Abbreviation expansion">(a(bcd))</button>
+                    <button data-command="snippet" data-mode="leiden_plus" data-key="mod-c mod-u"
+                        data-params="(|${_}|)" title="Unexpanded abbreviation">(|abc|)</button>
+                    <button data-command="snippet" data-mode="leiden_plus" data-key="mod-c mod-r"
+                        data-params="〚${_}〛" title="Erasure">〚abc〛</button>
+                    <button data-command="unclear" data-mode="leiden_plus" data-key="mod-c mod-c" title="Unclear characters">ạ</button>
+                    <button data-command="div" data-mode="leiden_plus" data-key="mod-c mod-d" title="Division (ab)">&lt;=...</button>
+                    <button data-command="part" data-mode="leiden_plus" data-key="mod-p mod-p" title="Part">&lt;D=.A.part...</button>
+                    <button data-command="recto" data-mode="leiden_plus" data-key="mod-p mod-r" title="Recto">&lt;D=.r...</button>
+                    <button data-command="verso" data-mode="leiden_plus" data-key="mod-p mod-v" title="Verso">&lt;D=.v...</button>
+                    <button data-command="foreign" data-mode="leiden_plus" data-key="mod-c mod-f" title="Language switch (foreign)">~|...|~</button>
+                    <button data-command="erasure" data-mode="edcs" data-key="mod-c mod-r">〚abc〛</button>
+                    <button data-command="gap" data-mode="edcs" data-key="mod-c mod-g">[...]</button>
+                    <button data-command="convert" data-mode="edcs" data-key="mod-c mod-c">Convert to Leiden+</button>
                     <button data-command="fixNewlines" data-mode="leiden_plus" title="Add missing line numbers">&#x21A9;</button>
                 </div>
                 <div slot="xml-toolbar">
-                    <button data-command="selectElement" data-key="mod-e mod-s"
+                    <button data-command="selectElement" data-key="mod-c mod-s"
                         title="Select element around current cursor position">&lt;|></button>
-                    <button data-command="encloseWith" data-key="mod-e mod-e"
+                    <button data-command="encloseWith" data-key="mod-c mod-e"
                         title="Enclose selection in new element">&lt;...&gt;</button>
                     <button data-command="removeEnclosing" title="Remove enclosing tags" 
-                        data-key="mod-e mod-r" class="sep">&lt;X></button>
+                        data-key="mod-c mod-r" class="sep">&lt;X></button>
                     <button data-command="snippet" data-params='&lt;ab&gt;$|_|&lt;/ab>'
-                        title="Insert ab" data-key="mod-e mod-a">&lt;ab&gt;
+                        title="Insert ab" data-key="mod-c mod-a">&lt;ab&gt;
                     </button>
                     <button data-command="snippet" data-params='&lt;lb n="$|1|"/>$|2|' 
-                        data-key="mod-e mod-l" title="Line break">&lt;lb&gt;</button>
+                        data-key="mod-c mod-l" title="Line break">&lt;lb&gt;</button>
                     <button data-command="snippet" data-params='&lt;supplied reason="lost">$|_|&lt;/supplied>'
-                        title="Insert supplied" data-key="mod-e mod-u">&lt;supplied&gt;
+                        title="Insert supplied" data-key="mod-c mod-u">&lt;supplied&gt;
                     </button>
                     <button data-command="snippet" data-params='&lt;expan>&lt;abbr>$|1|&lt;/abbr>&lt;ex>$|2|&lt;/ex>&lt;/expan>$|3|'
-                        title="Insert expan/abbr" data-key="mod-e mod-p">&lt;expan&gt;
+                        title="Insert expan/abbr" data-key="mod-c mod-p">&lt;expan&gt;
                     </button>
                     <button data-command="snippet" data-params='&lt;gap reason="lost" extent="unknown" unit="character"/&gt;$|1|'
-                        title="Gap extent unknown" data-key="mod-e mod-g">&lt;gap/unknown&gt;</button>
+                        title="Gap extent unknown" data-key="mod-c mod-g">&lt;gap/unknown&gt;</button>
                     <button data-command="snippet" data-params='&lt;gap reason="lost" quantity="$|1|" unit="$|2:line|"/&gt;$|3|'
-                        title="Gap extent known" data-params="mod-e mod-k">&lt;gap&gt;</button>
+                        title="Gap extent known" data-params="mod-c mod-k">&lt;gap&gt;</button>
                 </div>
             </jinn-epidoc-editor>
         </section>
@@ -144,19 +144,19 @@
                 wrapper='<div xmlns="http://www.tei-c.org/ns/1.0"></div>' schema="../src/tei.json"
                 schema-root="div" placeholder="[TEI division content]">
                 <div slot="toolbar">
-                    <button data-command="selectElement" data-key="mod-e mod-s"
+                    <button data-command="selectElement" data-key="mod-c mod-s"
                         title="Select element around current cursor position">&lt;|></button>
-                    <button data-command="encloseWith" data-key="mod-e mod-e"
+                    <button data-command="encloseWith" data-key="mod-c mod-e"
                         title="Enclose selection in new element">&lt;...&gt;</button>
                     <button data-command="removeEnclosing" title="Remove enclosing tags" 
-                    data-key="mod-e mod-r" class="sep">&lt;X></button>
+                    data-key="mod-c mod-r" class="sep">&lt;X></button>
                     <button data-command="snippet" data-params="<p>${_}</p>" title="Insert <p>"
-                        data-key="mod-e mod-p">&lt;p&gt;</button>
+                        data-key="mod-c mod-p">&lt;p&gt;</button>
                     <button data-command="snippet" data-params='<hi rend="${1}">${_}</hi>' 
-                        data-key="mod-e mod-h"
+                        data-key="mod-c mod-h"
                         title="Insert <hi>">&lt;hi&gt;</button>
                     <button data-command="snippet" data-params="<list>&#10;&#09;<item>${_}</item>&#10;</list>" title="Insert <list>"
-                        data-key="mod-e mod-l">&lt;list&gt;</button>
+                        data-key="mod-c mod-l">&lt;list&gt;</button>
                 </div>
             </jinn-xml-editor>
             <h3>XML Output</h3>
@@ -179,12 +179,12 @@
                     <button data-mode="xquery" data-command="snippet" data-params="for ${1:$i} in ${_}">for</button>
                     <button data-mode="xquery" data-command="snippet" data-params="let ${1:$i} := ${_}">let</button>
                     <button data-mode="markdown" data-command="snippet" data-params="[${_}]{${2}}">Link</button>
-                    <button data-mode="html" data-command="selectElement" data-key="mod-e mod-s"
+                    <button data-mode="html" data-command="selectElement" data-key="mod-c mod-s"
                         title="Select element around current cursor position">&lt;|></button>
-                    <button data-mode="html" data-command="encloseWith" data-key="mod-e mod-e"
+                    <button data-mode="html" data-command="encloseWith" data-key="mod-c mod-e"
                         title="Enclose selection in new element">&lt;...&gt;</button>
                     <button data-mode="html" data-command="removeEnclosing" title="Remove enclosing tags" 
-                    data-key="mod-e mod-r" class="sep">&lt;X></button>
+                    data-key="mod-c mod-r" class="sep">&lt;X></button>
                 </div>
             </jinn-codemirror>
         </section>
