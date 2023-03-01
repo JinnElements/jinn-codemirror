@@ -1,3 +1,10 @@
+## [1.11.6](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.5...v1.11.6) (2023-03-01)
+
+
+### Bug Fixes
+
+* do not observe code attribute changes; content should be updated via properties ([ba9b2a4](https://github.com/JinnElements/jinn-codemirror/commit/ba9b2a4a1bf24ae918d71ddcde70f8858e31fe03))
+
 ## [1.11.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.4...v1.11.5) (2023-02-10)
 
 
