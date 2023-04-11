@@ -1,3 +1,10 @@
+## [1.11.8](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.7...v1.11.8) (2023-04-11)
+
+
+### Bug Fixes
+
+* **leiden:** part and column ([997d1ec](https://github.com/JinnElements/jinn-codemirror/commit/997d1ec5abeee9d0438bdc29a12dfca0b0a8c8ed))
+
 ## [1.11.7](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.6...v1.11.7) (2023-04-11)
 
 
