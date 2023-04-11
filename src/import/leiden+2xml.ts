@@ -1,7 +1,7 @@
 import { Tree, TreeCursor } from "@lezer/common";
 import { parser } from "../parser/leiden+/parser.js";
 
-const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div'];
+const blockElements = ['Recto', 'Verso', 'Fragment', 'Part', 'Div', 'Column'];
 
 function text(input: string, node:TreeCursor) {
     return input.substring(node.from, node.to);

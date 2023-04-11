@@ -36,10 +36,16 @@ function transform(node: Node|null, output: string[]) {
                 case 'div':
                     n = elem.getAttribute('n');
                     const subtype = elem.getAttribute('subtype');
-                    if (subtype === 'column') {
-                        output.push(`<D=.${n}.column`);
-                    } else {
-                        output.push(`<D=.${n}`);
+                    switch (subtype) {
+                        case 'column':
+                            output.push(`<D=.${n}.column`);
+                            break;
+                        case 'part':
+                            output.push(`<D=.${n}.part`);
+                            break;
+                        default:
+                            output.push(`<D=.${n}`);
+                            break;
                     }
                     transformElem(elem, output);
                     output.push(`=D>\n`);
