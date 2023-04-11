@@ -1,3 +1,10 @@
+## [1.11.7](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.6...v1.11.7) (2023-04-11)
+
+
+### Bug Fixes
+
+* **jinn-codemirror,epidoc-editor:** prevent editor update if content has not changed; clear leiden editor when closing it ([afa2485](https://github.com/JinnElements/jinn-codemirror/commit/afa24854a0ffefba247ae3f05c7043721bfb4735))
+
 ## [1.11.6](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.5...v1.11.6) (2023-03-01)
 
 
