@@ -167,19 +167,27 @@ export class JinnEpidocEditor extends HTMLElement {
                     return;
                 }
                 
-                openLeidenBtn.classList.remove('hidden');
-                leidenEditor.classList.add('hidden');
-                leidenEditorOpened = false;
+                hideLeiden();
             }
         });
 
-        function showLeiden() {
+        const showLeiden = () => {
             openLeidenBtn.classList.add('hidden');
             leidenEditor.classList.remove('hidden');
             leidenEditorOpened = true;
             leidenEditor.focus();
         }
 
+        const hideLeiden = () => {
+            leidenEditor.classList.add('hidden');
+            openLeidenBtn.classList.remove('hidden');
+            leidenEditorOpened = false;
+            this.xmlEditor?.focus();
+
+            updateXML = false;
+            leidenEditor?.clear();
+        }
+        
         openLeidenBtn.addEventListener('click', () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
@@ -202,17 +210,12 @@ export class JinnEpidocEditor extends HTMLElement {
                     leidenEditor.value = '';
                 }
             } else {
-                leidenEditor.classList.add('hidden');
-                openLeidenBtn.classList.remove('hidden');
-                leidenEditorOpened = false;
-                this.xmlEditor.focus();
+                hideLeiden();
             }
         });
 
         closeLeidenBtn.addEventListener('click', () => {
-            openLeidenBtn.classList.remove('hidden');
-            leidenEditor.classList.add('hidden');
-            this.xmlEditor.focus();
+            hideLeiden();
         });
 
         this.xmlEditor.addEventListener('invalid', (ev) => {

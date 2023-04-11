@@ -251,8 +251,9 @@ export class JinnCodemirror extends HTMLElement {
      * The value edited in the editor as either an Element or string - depending on the mode set.
      */
     set value(value: Element | NodeListOf<ChildNode> | string | null | undefined) {
-        this.setValue(value);
-        if (this._editor && this._config) {
+        const updated = this.setValue(value);
+
+        if (updated && this._editor && this._config) {
             this.content = this._config?.setFromValue(this._value);
         }
     }
@@ -276,6 +277,13 @@ export class JinnCodemirror extends HTMLElement {
     protected getValue(): Element | NodeListOf<ChildNode> | string | null {
         if (!this._value) { return null }
         return this._value;
+    }
+
+    clear() {
+        this._value = '';
+        this._editor.dispatch({
+            changes: {from: 0, to: this._editor.state.doc.length, insert: ''}
+        });
     }
 
     emitUpdateEvent(content: string | NodeListOf<ChildNode> | Element | null | undefined) {
