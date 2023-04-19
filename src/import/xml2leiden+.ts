@@ -68,7 +68,8 @@ function transform(node: Node|null, output: string[]) {
                     if (output.length > 0 && !/\n+$/.test(output[output.length - 1])) {
                         output.push('\n');
                     }
-                    output.push(`${n}. `);
+                    const breakAttr = elem.getAttribute('break');
+                    output.push(`${n}.${breakAttr === 'no' ? '- ': ' '}`);
                     break;
                 case 'supplied':
                     transformSupplied(elem, output);
