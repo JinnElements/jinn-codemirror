@@ -57,6 +57,7 @@ Features extended support for XML and Leiden+ code.
 
 | Method            | Type                                     | Description                       |
 |-------------------|------------------------------------------|-----------------------------------|
+| `clear`           | `(): void`                               |                                   |
 | `emitUpdateEvent` | `(content: any): void`                   |                                   |
 | `focus`           | `(): void`                               | Move keyboard focus to the editor |
 | `setMode`         | `(mode: string, update?: boolean): void` |                                   |

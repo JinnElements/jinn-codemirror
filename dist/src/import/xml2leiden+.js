@@ -34,10 +34,16 @@ function transform(node, output) {
         case "div":
           n = elem.getAttribute("n");
           const subtype = elem.getAttribute("subtype");
-          if (subtype === "column") {
-            output.push(`<D=.${n}.column`);
-          } else {
-            output.push(`<D=.${n}`);
+          switch (subtype) {
+            case "column":
+              output.push(`<D=.${n}.column`);
+              break;
+            case "part":
+              output.push(`<D=.${n}.part`);
+              break;
+            default:
+              output.push(`<D=.${n}`);
+              break;
           }
           transformElem(elem, output);
           output.push(`=D>
@@ -61,7 +67,8 @@ function transform(node, output) {
           if (output.length > 0 && !/\n+$/.test(output[output.length - 1])) {
             output.push("\n");
           }
-          output.push(`${n}. `);
+          const breakAttr = elem.getAttribute("break");
+          output.push(`${n}.${breakAttr === "no" ? "- " : " "}`);
           break;
         case "supplied":
           transformSupplied(elem, output);

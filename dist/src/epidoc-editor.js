@@ -121,17 +121,24 @@ class JinnEpidocEditor extends HTMLElement {
         if (ignoreKeys.indexOf(ev.key) > -1) {
           return;
         }
-        openLeidenBtn.classList.remove("hidden");
-        leidenEditor.classList.add("hidden");
-        leidenEditorOpened = false;
+        hideLeiden();
       }
     });
-    function showLeiden() {
+    const showLeiden = () => {
       openLeidenBtn.classList.add("hidden");
       leidenEditor.classList.remove("hidden");
       leidenEditorOpened = true;
       leidenEditor.focus();
-    }
+    };
+    const hideLeiden = () => {
+      var _a2;
+      leidenEditor.classList.add("hidden");
+      openLeidenBtn.classList.remove("hidden");
+      leidenEditorOpened = false;
+      (_a2 = this.xmlEditor) == null ? void 0 : _a2.focus();
+      updateXML = false;
+      leidenEditor == null ? void 0 : leidenEditor.clear();
+    };
     openLeidenBtn.addEventListener("click", () => {
       var _a2;
       const hidden = leidenEditor.classList.contains("hidden");
@@ -155,16 +162,11 @@ class JinnEpidocEditor extends HTMLElement {
           leidenEditor.value = "";
         }
       } else {
-        leidenEditor.classList.add("hidden");
-        openLeidenBtn.classList.remove("hidden");
-        leidenEditorOpened = false;
-        this.xmlEditor.focus();
+        hideLeiden();
       }
     });
     closeLeidenBtn.addEventListener("click", () => {
-      openLeidenBtn.classList.remove("hidden");
-      leidenEditor.classList.add("hidden");
-      this.xmlEditor.focus();
+      hideLeiden();
     });
     this.xmlEditor.addEventListener("invalid", (ev) => {
       ev.stopPropagation();

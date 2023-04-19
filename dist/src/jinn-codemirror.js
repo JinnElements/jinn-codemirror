@@ -177,8 +177,8 @@ class JinnCodemirror extends HTMLElement {
   }
   set value(value) {
     var _a;
-    this.setValue(value);
-    if (this._editor && this._config) {
+    const updated = this.setValue(value);
+    if (updated && this._editor && this._config) {
       this.content = (_a = this._config) == null ? void 0 : _a.setFromValue(this._value);
     }
   }
@@ -201,6 +201,12 @@ class JinnCodemirror extends HTMLElement {
       return null;
     }
     return this._value;
+  }
+  clear() {
+    this._value = "";
+    this._editor.dispatch({
+      changes: { from: 0, to: this._editor.state.doc.length, insert: "" }
+    });
   }
   emitUpdateEvent(content) {
     this.dispatchEvent(new CustomEvent("update", {

@@ -1,5 +1,5 @@
 import { parser } from "../parser/leiden+/parser.js";
-const blockElements = ["Recto", "Verso", "Fragment", "Part", "Div"];
+const blockElements = ["Recto", "Verso", "Fragment", "Part", "Div", "Column"];
 function text(input, node) {
   return input.substring(node.from, node.to);
 }
