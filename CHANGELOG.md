@@ -1,3 +1,10 @@
+## [1.11.9](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.8...v1.11.9) (2023-04-19)
+
+
+### Bug Fixes
+
+* **xml2leiden:** handle lb/[@break](https://github.com/break)="no" ([fe750b1](https://github.com/JinnElements/jinn-codemirror/commit/fe750b195a39cfb612ed7bb7f77302daafd54f40))
+
 ## [1.11.8](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.7...v1.11.8) (2023-04-11)
 
 
