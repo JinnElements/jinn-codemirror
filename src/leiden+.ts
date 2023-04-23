@@ -2,13 +2,30 @@ import { EditorSelection, Extension } from "@codemirror/state";
 import { Tree, TreeCursor } from "@lezer/common";
 import { EditorView, keymap, KeyBinding, Command } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
-import { Diagnostic, linter, lintGutter } from "@codemirror/lint";
+import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
 import { snippet } from "@codemirror/autocomplete";
 import { leidenPlus2epiDoc, debugLeidenTree } from "./import/leiden+2xml";
 import { EditorConfig, EditorCommands, snippetCommand, wrapCommand } from "./config";
 import { leiden } from "./language";
 import { xml2leidenPlus } from "./import/xml2leiden+";
 import { JinnCodemirror } from "./jinn-codemirror";
+
+const fixAbbrevAction = (node:TreeCursor):Action => {
+    return {
+        name: "Fix",
+        apply: (view:EditorView, from: number, to:number) => {
+            const word = view.state.wordAt(from);
+            if (word) {
+                from = word.from;
+            }
+            const content = view.state.doc.sliceString(from, to);
+            const tx = view.state.update({
+                changes: {from: from, to: to, insert: `(${content.toString()})`}
+            });
+            view.dispatch(tx);
+        }
+    }
+};
 
 const leidenParseLinter = (editor: JinnCodemirror) => (view: EditorView): Diagnostic[] => {
 
@@ -47,7 +64,8 @@ const leidenParseLinter = (editor: JinnCodemirror) => (view: EditorView): Diagno
                         message: 'Invalid abbreviation. Abbreviations must\nuse double parenthesis, e.g. "(C(aesar))"',
                         severity: 'error',
                         from: node.from,
-                        to: node.to
+                        to: node.to,
+                        actions: [ fixAbbrevAction(node) ]
                     });
                 }
                 abbrevs -= 1;
@@ -86,8 +104,13 @@ export const fixNewlinesCommand: Command = (editor) => {
     const content = editor.state.doc.toString();
     let fixed;
     if (content.indexOf('/') !== -1) {
-        const lines = content.split(/(?<!\/)\/(?!\/)/);
-        const split = lines.map((line, idx) => `${idx + 1}. ${line.replace(/^\s+/, '')}`);
+        const lines = content.split(/(?<!\/)\/\/?/);
+        const split = lines.map((line, idx) => {
+            if (/^\s+/.test(line) || idx === 0) {
+                return `${idx + 1}. ${line.replace(/^\s+/, '')}`;
+            }
+            return `${idx + 1}.- ${line.replace(/^\s+/, '')}`;
+        });
         fixed = split.join('\n');
     } else {
         let matchCount = 0;
@@ -120,12 +143,12 @@ export const expansionCommand: Command = (editor) => {
 const commands:EditorCommands = {
     expan: expansionCommand,
     div: wrapCommand('<=\n', '\n=>'),
-    fragment: snippetCommand('<D=.${1:1}.fragment<=\n${2}\n=>=D>'),
-    part: snippetCommand('<D=.${1:A}.part<=\n${2}\n=>=D>'),
+    fragment: snippetCommand('<D=.${1:1}.fragment<=\n${2:_}\n=>=D>${3}'),
+    part: snippetCommand('<D=.${1:A}.part<=\n${2:_}\n=>=D>${3}'),
     recto: wrapCommand('<D=.r<=\n', '\n=>=D>'),
     verso: wrapCommand('<D=.v<=\n', '\n=>=D>'),
     erasure: wrapCommand('〚', '〛'),
-    foreign: snippetCommand('~|${_}|~${gr}'),
+    foreign: snippetCommand('~|${1:_}|~${2:gr}${3}'),
     unclear: toggleUnclearCommand,
     fixNewlines: fixNewlinesCommand,
     snippet: {
