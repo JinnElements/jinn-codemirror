@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.9...v1.12.0) (2023-04-23)
+
+
+### Bug Fixes
+
+* snippets fail if selection contains newlines ([ac29f75](https://github.com/JinnElements/jinn-codemirror/commit/ac29f7563b1121144a1656bc84c34a8c21756a4c))
+
+
+### Features
+
+* **leiden+:** add fix abbreviation action ([8cac4ef](https://github.com/JinnElements/jinn-codemirror/commit/8cac4ef8071c95f9f42e0b824f507b46d06fb627))
+
 ## [1.11.9](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.8...v1.11.9) (2023-04-19)
 
 
