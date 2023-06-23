@@ -131,7 +131,7 @@ export class JinnEpidocEditor extends HTMLElement {
             <style>
                 ${style}
             </style>
-            <jinn-codemirror id="leiden-editor" class="${!this.showLeiden ? 'hidden' : ''}" mode="${this.mode}">
+            <jinn-codemirror id="leiden-editor" class="${this.showLeiden ? '' : 'hidden'}" mode="${this.mode}">
                 <div slot="toolbar">
                     ${ this.modeSelect ? createModeSelect(this.mode) : '' }
                     <slot name="leiden-toolbar"></slot>
@@ -161,6 +161,7 @@ export class JinnEpidocEditor extends HTMLElement {
         // update XML when Leiden editor changes
         leidenEditor.addEventListener('update', (ev) => {
             ev.stopPropagation();
+            this.showLeiden = false;
             // avoid XML to be overwritten after conversion to Leiden+
             if (updateXML) {
                 this.xmlEditor.content = ev.detail.content;
@@ -194,7 +195,7 @@ export class JinnEpidocEditor extends HTMLElement {
             leidenEditor?.clear();
         }
         
-        openLeidenBtn.addEventListener('click', () => {
+        const initLeiden = () => {
             const hidden = leidenEditor.classList.contains('hidden');
             if (hidden) {
                 if (this.xmlEditor.content.length > 0) {
@@ -218,6 +219,9 @@ export class JinnEpidocEditor extends HTMLElement {
             } else {
                 hideLeiden();
             }
+        }
+        openLeidenBtn.addEventListener('click', () => {
+            initLeiden();
         });
 
         closeLeidenBtn.addEventListener('click', () => {
@@ -243,6 +247,14 @@ export class JinnEpidocEditor extends HTMLElement {
                 composed: true,
                 bubbles: true
             }));
+        });
+        this.xmlEditor.addEventListener('update', () => {
+            if (this.showLeiden) {
+                initLeiden();
+                this.showLeiden = false;
+            }
+        }, {
+            once: true
         });
     }
 }
