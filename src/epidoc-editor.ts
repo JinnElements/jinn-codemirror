@@ -197,7 +197,7 @@ export class JinnEpidocEditor extends HTMLElement {
         
         const initLeiden = () => {
             const hidden = leidenEditor.classList.contains('hidden');
-            if (hidden) {
+            if (hidden || this.showLeiden) {
                 if (this.xmlEditor.content.length > 0) {
                     if (!this.valid) {
                         alert('The XML contains errors. Cannot convert to Leiden+');
@@ -251,8 +251,8 @@ export class JinnEpidocEditor extends HTMLElement {
         this.xmlEditor.addEventListener('update', () => {
             if (this.showLeiden) {
                 initLeiden();
-                this.showLeiden = false;
             }
+            this.showLeiden = false;
         }, {
             once: true
         });
