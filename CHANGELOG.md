@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.12.0...v1.13.0) (2023-06-23)
+
+
+### Features
+
+* **epidoc-editor:** add attribute to control if epidoc editor is initially shown ([732692b](https://github.com/JinnElements/jinn-codemirror/commit/732692b26f14b25ea7fd70b12dd913035decf837))
+
 # [1.12.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.11.9...v1.12.0) (2023-04-23)
 
 
