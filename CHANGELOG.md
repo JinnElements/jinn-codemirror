@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.1...v1.13.2) (2023-06-23)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** convert existing xml to leiden+ upon initialization ([e204c8d](https://github.com/JinnElements/jinn-codemirror/commit/e204c8d5c2a1ee915a925b06c12baa1ad942e019))
+
 ## [1.13.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.0...v1.13.1) (2023-06-23)
 
 
