@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.0...v1.13.1) (2023-06-23)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** transform to leiden+ upon intial opening ([70c351b](https://github.com/JinnElements/jinn-codemirror/commit/70c351b3bb28cfcf0a60ea94becacfa276d1fbea))
+
 # [1.13.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.12.0...v1.13.0) (2023-06-23)
 
 
