@@ -92,7 +92,7 @@
             <p>Combines an XML Editor with an option to import and convert a transcription following Leiden conventions. Multiple variants of Leiden are supported, with Leiden+ providing the best coverage as it is backed by a syntax tree. The other two Leiden modes use heuristics and are more prone to produce invalid markup.</p>
             <p>The toolbar and XML snippets are fully configurable in HTML.</p>
             <jinn-epidoc-editor id="epidoc-editor" schema="../src/tei.json" schema-root="div" mode="leiden_plus" mode-select
-                placeholder="[Transcription]">
+                placeholder="[Transcription]" show-leiden="">
                 <div slot="leiden-toolbar">
                     <button data-command="expan" data-mode="leiden_plus" data-key="mod-c mod-x" title="Abbreviation expansion">(a(bcd))</button>
                     <button data-command="snippet" data-mode="leiden_plus" data-key="mod-c mod-u"
@@ -140,7 +140,7 @@
             <h2>XML Editor</h2>
             <p>An XML editor intended for entering a fragment of TEI XML. This editor instance is configured to wrap the content into a TEI div element. Auto-complete will only suggest elements allowed below div.</p>
             <jinn-xml-editor id="xml-editor" unwrap namespace="http://www.tei-c.org/ns/1.0"
-                theme="dark"
+                theme="light"
                 wrapper='<div xmlns="http://www.tei-c.org/ns/1.0"></div>' schema="../src/tei.json"
                 schema-root="div" placeholder="[TEI division content]">
                 <div slot="toolbar">

@@ -91,6 +91,11 @@ export class JinnEpidocEditor extends HTMLElement {
     public placeholder: string = '';
 
     /**
+     * Should the leiden editor be shown initially?
+     */
+    public showLeiden: boolean = false;
+
+    /**
      * The value edited in the editor as either an Element or string -
      * depending on the mode set.
      */
@@ -120,12 +125,13 @@ export class JinnEpidocEditor extends HTMLElement {
         this.modeSelect = this.hasAttribute('mode-select');
         this.mode = this.getAttribute('mode') || 'leiden_plus';
         this.placeholder = this.getAttribute('placeholder') || '';
+        this.showLeiden = this.hasAttribute('show-leiden');
 
         this.shadowRoot.innerHTML = `
             <style>
                 ${style}
             </style>
-            <jinn-codemirror id="leiden-editor" class="hidden" mode="${this.mode}">
+            <jinn-codemirror id="leiden-editor" class="${!this.showLeiden ? 'hidden' : ''}" mode="${this.mode}">
                 <div slot="toolbar">
                     ${ this.modeSelect ? createModeSelect(this.mode) : '' }
                     <slot name="leiden-toolbar"></slot>
@@ -151,7 +157,7 @@ export class JinnEpidocEditor extends HTMLElement {
         }
 
         let updateXML = true;
-        let leidenEditorOpened = false;
+        let leidenEditorOpened = this.showLeiden;
         // update XML when Leiden editor changes
         leidenEditor.addEventListener('update', (ev) => {
             ev.stopPropagation();
