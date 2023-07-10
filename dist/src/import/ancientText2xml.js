@@ -73,12 +73,30 @@ function ancientText2XML(text, importSource) {
     const regexCorrection2EDCS = /\<([^\x00-\x7F]*[aA-zZ]*)(\=)([^\x00-\x7F]*[aA-zZ]*)(?!\/)\>/g;
     const substCorrection2EDCS = "<choice><corr>$1</corr><sic>$3</sic></choice>";
     text = text.replace(regexCorrection2EDCS, substCorrection2EDCS);
-    text = text.replace(/\[6\]/g, '<gap reason="lost" quantity="1" unit="line"/>');
-    text = text.replace(/\[3\]/g, '<gap reason="lost" extent="unknown" unit="character"/>');
-    text = text.replace(/\[3\s([^\x00-\x7F]*[aA-zZ]*)\]/g, '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$1</supplied>');
-    text = text.replace(/\[3\s/g, '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">');
-    text = text.replace(/\s3\s/g, " - - - ");
-    text = text.replace(/\s3\]/g, " - - -]");
+    text = text.replace(
+      /\[6\]/g,
+      '<gap reason="lost" quantity="1" unit="line"/>'
+    );
+    text = text.replace(
+      /\[3\]/g,
+      '<gap reason="lost" extent="unknown" unit="character"/>'
+    );
+    text = text.replace(
+      /\[3\s([^\x00-\x7F]*[aA-zZ]*)\]/g,
+      '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$1</supplied>'
+    );
+    text = text.replace(
+      /\[3\s/g,
+      '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">'
+    );
+    text = text.replace(
+      /\s3\s/g,
+      " - - - "
+    );
+    text = text.replace(
+      /\s3\]/g,
+      " - - -]"
+    );
     text = text.replace(/a\(\)/g, "<abbr>a</abbr>");
   }
   ;
@@ -127,24 +145,69 @@ function ancientText2XML(text, importSource) {
     const length = match.length - 2;
     return '</supplied><gap reason="lost" quantity="' + length + '" unit="character"/><supplied reason="lost">';
   });
-  text = text.replace(/\[(-|–|\.\s?){1,20}ca\.(\s?)([1-9][0-9]*)((-)([1-9][0-9]*))(\s?)(-|–|\.\s?){1,20}\]/g, '<gap reason="lost" atLeast="$3" atMost="$6" unit="character"/>');
-  text = text.replace(/\[(-|–|\.\s?){1,20}ca\.(\s?)([1-9][0-9]*)(\s?)(-|–|\.\s?){1,20}\]/g, '<gap reason="lost" quantity="$3" unit="character" precision="low"/>');
-  text = text.replace(/\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g, '<gap reason="lost" atLeast="$1" atMost="$2" unit="character"/>');
-  text = text.replace(/\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g, '<gap reason="lost" quantity="$1" unit="character" precision="low"/>');
-  text = text.replace(/\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s)/g, '<gap reason="lost" atLeast="$1" atMost="$2" unit="character"/><supplied reason="lost">');
-  text = text.replace(/\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s)/g, '<gap reason="lost" quantity="$1" unit="character" precision="low"/><supplied reason="lost">');
-  text = text.replace(/\s(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g, '</supplied><gap reason="lost" atLeast="$1" atMost="$2" unit="character"/>');
-  text = text.replace(/\s(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g, '</supplied><gap reason="lost" quantity="$1" unit="character" precision="low"/>');
-  text = text.replace(/\s(?:[\.․]){2,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s)/g, '</supplied><gap reason="lost" atLeast="$1" atMost="$2" unit="character"/><supplied reason="lost">');
-  text = text.replace(/\s(?:[\.․]){2,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s)/g, '</supplied><gap reason="lost" quantity="$1" unit="character" precision="low"/><supplied reason="lost">');
-  text = text.replace(/(?:\s|\n)\(([^\x00-\x7F]*[aA-zZ]*)\)/g, " <expan><ex>$1</ex></expan>");
+  text = text.replace(
+    /\[(-|–|\.\s?){1,20}ca\.(\s?)([1-9][0-9]*)((-)([1-9][0-9]*))(\s?)(-|–|\.\s?){1,20}\]/g,
+    '<gap reason="lost" atLeast="$3" atMost="$6" unit="character"/>'
+  );
+  text = text.replace(
+    /\[(-|–|\.\s?){1,20}ca\.(\s?)([1-9][0-9]*)(\s?)(-|–|\.\s?){1,20}\]/g,
+    '<gap reason="lost" quantity="$3" unit="character" precision="low"/>'
+  );
+  text = text.replace(
+    /\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g,
+    '<gap reason="lost" atLeast="$1" atMost="$2" unit="character"/>'
+  );
+  text = text.replace(
+    /\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g,
+    '<gap reason="lost" quantity="$1" unit="character" precision="low"/>'
+  );
+  text = text.replace(
+    /\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s)/g,
+    '<gap reason="lost" atLeast="$1" atMost="$2" unit="character"/><supplied reason="lost">'
+  );
+  text = text.replace(
+    /\[(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s)/g,
+    '<gap reason="lost" quantity="$1" unit="character" precision="low"/><supplied reason="lost">'
+  );
+  text = text.replace(
+    /\s(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g,
+    '</supplied><gap reason="lost" atLeast="$1" atMost="$2" unit="character"/>'
+  );
+  text = text.replace(
+    /\s(?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s?)\]/g,
+    '</supplied><gap reason="lost" quantity="$1" unit="character" precision="low"/>'
+  );
+  text = text.replace(
+    /\s(?:[\.․]){2,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20}(?:\s)/g,
+    '</supplied><gap reason="lost" atLeast="$1" atMost="$2" unit="character"/><supplied reason="lost">'
+  );
+  text = text.replace(
+    /\s(?:[\.․]){2,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:\s?)(?:[\.․]){1,20}(?:\s)/g,
+    '</supplied><gap reason="lost" quantity="$1" unit="character" precision="low"/><supplied reason="lost">'
+  );
+  text = text.replace(
+    /(?:\s|\n)\(([^\x00-\x7F]*[aA-zZ]*)\)/g,
+    " <expan><ex>$1</ex></expan>"
+  );
   text = text.replace(/\[{2}/g, "\u27E6");
   text = text.replace(/\]{2}/g, "\u27E7");
-  text = text.replace(/\[([^\x00-\x7F]*[aA-zZ]*[^\]])\]([^\x00-\x7F]*[aA-zZ]*[^\]])\(([^\x00-\x7F]*?[aA-zZ]*?)\)/g, '<expan><abbr><supplied reason="lost">$1</supplied>$2</abbr><ex>$3</ex></expan>');
-  text = text.replace(/(〚|⟦|\[\[)([^\x00-\x7F]*[aA-zZ]*[^\]])(〛|⟧|]])([^\x00-\x7F]*[aA-zZ]*[^\]])\(([^\x00-\x7F]*?[aA-zZ]*?)\)/g, '<expan><abbr><supplied reason="lost">$1</supplied>$2</abbr><ex>$3</ex></expan>');
-  text = text.replace(/\[(\w*?\s?)(?:(?:(?:\-|\–|\—)\s?){1,20})(\w*?)\](?![^\x00-\x7F]*?[aA-zZ]*?\()/g, '<supplied reason="lost">$1</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$2</supplied>');
+  text = text.replace(
+    /\[([^\x00-\x7F]*[aA-zZ]*[^\]])\]([^\x00-\x7F]*[aA-zZ]*[^\]])\(([^\x00-\x7F]*?[aA-zZ]*?)\)/g,
+    '<expan><abbr><supplied reason="lost">$1</supplied>$2</abbr><ex>$3</ex></expan>'
+  );
+  text = text.replace(
+    /(〚|⟦|\[\[)([^\x00-\x7F]*[aA-zZ]*[^\]])(〛|⟧|]])([^\x00-\x7F]*[aA-zZ]*[^\]])\(([^\x00-\x7F]*?[aA-zZ]*?)\)/g,
+    '<expan><abbr><supplied reason="lost">$1</supplied>$2</abbr><ex>$3</ex></expan>'
+  );
+  text = text.replace(
+    /\[(\w*?\s?)(?:(?:(?:\-|\–|\—)\s?){1,20})(\w*?)\](?![^\x00-\x7F]*?[aA-zZ]*?\()/g,
+    '<supplied reason="lost">$1</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$2</supplied>'
+  );
   text = text.replace(/<supplied reason=\"lost\"><\/supplied>/g, "");
-  text = text.replace(/(?:⟦|〚)(.*?\s?)(?:(?:(?:\-|\–|\—)\s?){1,20})(.*?)(?:⟧|〛)(?![^\x00-\x7F]*?[aA-zZ]*?\()/g, '<del rend="erasure">$1</del><gap reason="lost" extent="unknown" unit="character"/><del rend="erasure">$2</del>');
+  text = text.replace(
+    /(?:⟦|〚)(.*?\s?)(?:(?:(?:\-|\–|\—)\s?){1,20})(.*?)(?:⟧|〛)(?![^\x00-\x7F]*?[aA-zZ]*?\()/g,
+    '<del rend="erasure">$1</del><gap reason="lost" extent="unknown" unit="character"/><del rend="erasure">$2</del>'
+  );
   text = text.replace(/(?:\s)\[(.*?)\](?:\n)/g, ' <supplied reason="lost">$1</supplied>\n');
   text = text.replace(/(?:\s)\[(.*)\](?:\s)/g, ' <supplied reason="lost">$1</supplied> ');
   text = text.replace(/(?:\s)(?:⟦|〚)(.*?)(?:⟧|〛)(?:\n)/g, ' <del rend="erasure">$1</del>\n');
@@ -155,20 +218,56 @@ function ancientText2XML(text, importSource) {
   regex = /([^\x00-\x7F]*[aA-zZ]*)(?:⟦|〚)([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)(?:⟧|〛)/g;
   subst = '<expan><abbr>$1<del rend="erasure">$2</del></abbr><ex>$3</ex></expan>';
   text = text.replace(regex, subst);
-  text = text.replace(/([^\x00-\x7F]*?[aA-zZ]*?[^>])?\[([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])\](?![^\x00-\x7F]*?[aA-zZ]*\()/g, '<expan><abbr>$1<supplied reason="lost">$2</supplied></abbr><ex>$3</ex></expan> <supplied reason="lost">$4</supplied>');
-  text = text.replace(/([^\x00-\x7F]*?[aA-zZ]*?[^\s][^>])?(?:\s?)(?:⟦|〚)([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])(?:⟧|〛)(?![^\x00-\x7F]*?[aA-zZ]*\()/g, '<expan><abbr>$1<del rend="erasure">$2</del></abbr><ex>$3</ex></expan> <del rend="erasure">$4</del>');
-  text = text.replace(/([^\x00-\x7F]*?[aA-zZ]+)\[([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])([^\x00-\x7F]*?[aA-zZ]*?)\](?:([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\))/g, '<expan><abbr>$1<supplied reason="lost">$2</supplied></abbr><ex>$3</ex></expan> <supplied reason="lost">$4</supplied><expan><abbr><supplied reason="lost">$5</supplied>$6</abbr><ex>$7</ex></expan>');
-  text = text.replace(/([^\x00-\x7F]*?[aA-zZ]*?)(?:⟦|〚)([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])([^\x00-\x7F]*?[aA-zZ]*?)(?:⟧|〛)(?:([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\))/g, '<expan><abbr>$1<del rend="erasure">$2</del></abbr><ex>$3</ex></expan> <del rend="erasure">$4</del><expan><abbr><del rend="erasure">$5</del>$6</abbr><ex>$7</ex></expan>');
-  text = text.replace(/<supplied reason="lost"> (?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20} <\/supplied>/g, '<gap reason="lost" atLeast="$1" atMost="$2" unit="character"/>');
-  text = text.replace(/<supplied reason=\"lost\">(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit="character"\/>)<\/supplied>/g, "$1");
+  text = text.replace(
+    /([^\x00-\x7F]*?[aA-zZ]*?[^>])?\[([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])\](?![^\x00-\x7F]*?[aA-zZ]*\()/g,
+    '<expan><abbr>$1<supplied reason="lost">$2</supplied></abbr><ex>$3</ex></expan> <supplied reason="lost">$4</supplied>'
+  );
+  text = text.replace(
+    /([^\x00-\x7F]*?[aA-zZ]*?[^\s][^>])?(?:\s?)(?:⟦|〚)([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])(?:⟧|〛)(?![^\x00-\x7F]*?[aA-zZ]*\()/g,
+    '<expan><abbr>$1<del rend="erasure">$2</del></abbr><ex>$3</ex></expan> <del rend="erasure">$4</del>'
+  );
+  text = text.replace(
+    /([^\x00-\x7F]*?[aA-zZ]+)\[([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])([^\x00-\x7F]*?[aA-zZ]*?)\](?:([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\))/g,
+    '<expan><abbr>$1<supplied reason="lost">$2</supplied></abbr><ex>$3</ex></expan> <supplied reason="lost">$4</supplied><expan><abbr><supplied reason="lost">$5</supplied>$6</abbr><ex>$7</ex></expan>'
+  );
+  text = text.replace(
+    /([^\x00-\x7F]*?[aA-zZ]*?)(?:⟦|〚)([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\)(.*?[^\-\–\—])([^\x00-\x7F]*?[aA-zZ]*?)(?:⟧|〛)(?:([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*?[aA-zZ]*?)\))/g,
+    '<expan><abbr>$1<del rend="erasure">$2</del></abbr><ex>$3</ex></expan> <del rend="erasure">$4</del><expan><abbr><del rend="erasure">$5</del>$6</abbr><ex>$7</ex></expan>'
+  );
+  text = text.replace(
+    /<supplied reason="lost"> (?:[\.․]){1,20}c(?:a?)\.(?:\s?)([1-9][0-9]*)(?:(?:-)([1-9][0-9]*))(?:\s?)(?:[\.․]){1,20} <\/supplied>/g,
+    '<gap reason="lost" atLeast="$1" atMost="$2" unit="character"/>'
+  );
+  text = text.replace(
+    /<supplied reason=\"lost\">(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit="character"\/>)<\/supplied>/g,
+    "$1"
+  );
   text = text.replace(/\[(.[^\[\-\–\—]*)\](?![^\x00-\x7F]*[aA-zZ]*\()/g, '<supplied reason="lost">$1</supplied>');
   text = text.replace(/(?:⟦|〚)(.[^\[]*)\](?![^\x00-\x7F]*[aA-zZ]*\()/g, '<del rend="erasure">$1</supplied>');
-  text = text.replace(/(?:\s)\[((.[^\.<])*)\s/g, ' <supplied reason="lost"><expan><abbr>$1</abbr><ex>$2</ex></expan></supplied>');
-  text = text.replace(/(?!([^\x00-\x7F]*[aA-zZ]*))(\s)([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)\]/g, '$1<supplied reason="lost"><expan><abbr>$2</abbr><ex>$3</ex></expan></supplied>');
-  text = text.replace(/(\s)([^\x00-\x7F]*?[aA-zZ]*?)\]([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*[aA-zZ]*)\)/g, '$1</supplied><expan><abbr><supplied reason="lost">$2</supplied>$3</abbr><ex>$4</ex></expan>');
-  text = text.replace(/(\s)([^\x00-\x7F]+[aA-zZ]+)\[([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)/g, ' <expan><abbr>$2<supplied reason="lost">$3</supplied></abbr><ex>$4</ex></expan> <supplied reason="lost">');
-  text = text.replace(/\[([^\x00-\x7F]*[aA-zZ]*)\(\?\)((\s?(\-|\–|\—)\s?){1,20})\]/g, '<supplied reason="lost" cert="low">$1</supplied><gap reason="lost" extent="unknown" unit="character"/>');
-  text = text.replace(/\[([^\x00-\x7F]*[aA-zZ]*)((\s?(\-|\–|\—)\s?){1,20})\]/g, '<supplied reason="lost">$1</supplied><gap reason="lost" extent="unknown" unit="character"/>');
+  text = text.replace(
+    /(?:\s)\[((.[^\.<])*)\s/g,
+    ' <supplied reason="lost"><expan><abbr>$1</abbr><ex>$2</ex></expan></supplied>'
+  );
+  text = text.replace(
+    /(?!([^\x00-\x7F]*[aA-zZ]*))(\s)([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)\]/g,
+    '$1<supplied reason="lost"><expan><abbr>$2</abbr><ex>$3</ex></expan></supplied>'
+  );
+  text = text.replace(
+    /(\s)([^\x00-\x7F]*?[aA-zZ]*?)\]([^\x00-\x7F]*?[aA-zZ]*?)\(([^\x00-\x7F]*[aA-zZ]*)\)/g,
+    '$1</supplied><expan><abbr><supplied reason="lost">$2</supplied>$3</abbr><ex>$4</ex></expan>'
+  );
+  text = text.replace(
+    /(\s)([^\x00-\x7F]+[aA-zZ]+)\[([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)/g,
+    ' <expan><abbr>$2<supplied reason="lost">$3</supplied></abbr><ex>$4</ex></expan> <supplied reason="lost">'
+  );
+  text = text.replace(
+    /\[([^\x00-\x7F]*[aA-zZ]*)\(\?\)((\s?(\-|\–|\—)\s?){1,20})\]/g,
+    '<supplied reason="lost" cert="low">$1</supplied><gap reason="lost" extent="unknown" unit="character"/>'
+  );
+  text = text.replace(
+    /\[([^\x00-\x7F]*[aA-zZ]*)((\s?(\-|\–|\—)\s?){1,20})\]/g,
+    '<supplied reason="lost">$1</supplied><gap reason="lost" extent="unknown" unit="character"/>'
+  );
   regex = /([^\x00-\x7F]*[aA-zZ]*)\[([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)(\s)?([^\x00-\x7F]*[aA-zZ]*)?(\s)?(\])/g;
   subst = '<expan><abbr>$1<supplied reason="lost">$2</supplied></abbr><ex>$3</ex></expan><supplied reason="lost">$4$5</supplied>';
   text = text.replace(regex, subst);
@@ -201,11 +300,22 @@ function ancientText2XML(text, importSource) {
   text = text.replace(/\[(-|–|\—\s?){1,20}([^\x00-\x7F]*[aA-zZ]*)\]/g, '<gap reason="lost" extent="unknown" unit="character"/>');
   text = text.replace(/\[(-|–|\—\s?){1,20}([^\x00-\x7F]*[aA-zZ]*)\]/g, '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$2</supplied>');
   text = text.replace(/(?:⟦|〚)(-|–|\—\s?){1,20}([^\x00-\x7F]*[aA-zZ]*)(?:⟧|〛)/g, '<gap reason="lost" extent="unknown" unit="character"/><del rend="erasure">$2</supplied>');
-  text = text.replace(/\[(?!([\-\–\—]))(((?!([\-\–\—\[\]]))[^\x00-\x7F]*[aA-zZ]*(\s?)){1,10})(([\-\—\–])\s?){1,20}\]/g, '<supplied reason="lost">$2</supplied><gap reason="lost" extent="unknown" unit="character"/>');
-  text = text.replace(/(([\-\—\–])\s?){1,20}\]/g, '<gap reason="lost" extent="unknown" unit="character"/>');
+  text = text.replace(
+    /*                                /\[(?!(\u2013|\u2014))([^\x00-\x7F]*[aA-zZ]*)((\s?)(\u2013|\u2014)\s?){1,20}\]/g,*/
+    /*                                /\[(?!([\-\–\—]))([^\x00-\x7F]*[aA-zZ]*)((\s?)([\-\—\–])\s?){1,20}\]/g,                            //==>before 31/03/2020 and attempt to match [wor word - - -]*/
+    /\[(?!([\-\–\—]))(((?!([\-\–\—\[\]]))[^\x00-\x7F]*[aA-zZ]*(\s?)){1,10})(([\-\—\–])\s?){1,20}\]/g,
+    '<supplied reason="lost">$2</supplied><gap reason="lost" extent="unknown" unit="character"/>'
+  );
+  text = text.replace(
+    /(([\-\—\–])\s?){1,20}\]/g,
+    '<gap reason="lost" extent="unknown" unit="character"/>'
+  );
   text = text.replace(/<expan><abbr>\[/g, '<supplied reason="lost"><expan><abbr>');
   text = text.replace(/<\/expan> <\/supplied></g, "</expan></supplied> <");
-  text = text.replace(/<supplied reason=\"lost\"><expan><abbr>([^\x00-\x7F]*?[aA-zZ]*?)\]/g, '<expan><abbr><supplied reason="lost">$1</supplied>');
+  text = text.replace(
+    /<supplied reason=\"lost\"><expan><abbr>([^\x00-\x7F]*?[aA-zZ]*?)\]/g,
+    '<expan><abbr><supplied reason="lost">$1</supplied>'
+  );
   text = text.replace(/<expan><abbr><\/abbr><ex>/g, "<expan><ex>");
   const regexSuppliedClean = /\[/g;
   const substSuppliedClean = '<supplied reason="lost">';
@@ -214,17 +324,38 @@ function ancientText2XML(text, importSource) {
   const substSuppliedCleanClose = "</supplied>";
   text = text.replace(regexSuppliedCleanClose, substSuppliedCleanClose);
   text = text.replace(/<\/ex><\/supplied><\/expan>/g, "</ex></expan></supplied>");
-  text = text.replace(/((\s?(\-|\—|\–)\s?){1,20})<\/supplied>/g, '</supplied><gap reason="lost" extent="unknown" unit="character"/>');
-  text = text.replace(/((\s?(\-|\—|\–)\s?){1,20})<\/supplied>/g, '</supplied><gap reason="lost" extent="unknown" unit="character"/>');
-  text = text.replace(/<supplied reason=\"lost\">((\s?(\-|\—|\–)\s?){1,20})/g, '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">');
-  text = text.replace(/<supplied reason=\"lost\"><\/supplied><gap reason=\"lost\" extent=\"unknown\" unit=\"character\"\/><supplied reason=\"lost\"><\/supplied>/g, '</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">');
+  text = text.replace(
+    /((\s?(\-|\—|\–)\s?){1,20})<\/supplied>/g,
+    '</supplied><gap reason="lost" extent="unknown" unit="character"/>'
+  );
+  text = text.replace(
+    /((\s?(\-|\—|\–)\s?){1,20})<\/supplied>/g,
+    '</supplied><gap reason="lost" extent="unknown" unit="character"/>'
+  );
+  text = text.replace(
+    /<supplied reason=\"lost\">((\s?(\-|\—|\–)\s?){1,20})/g,
+    '<gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">'
+  );
+  text = text.replace(
+    /<supplied reason=\"lost\"><\/supplied><gap reason=\"lost\" extent=\"unknown\" unit=\"character\"\/><supplied reason=\"lost\"><\/supplied>/g,
+    '</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">'
+  );
   text = text.replace(/<supplied reason=\"lost\"> <\/supplied>/g, "");
   text = text.replace(/<del rend=\"erasure\">\s?<\/del>/g, "");
   text = text.replace(/<\/supplied>\s?<\/supplied>/g, "</supplied>");
   text = text.replace(/\/><\/supplied><gap/g, "/><gap");
-  text = text.replace(/\[(?!([\-\–\—]))((?:\s?(?:(?!(?:[\-\–\—\[\]]))[^\x00-\x7F]*[aA-zZ](?!\s)*)){1,10})(?:(?:\s?[\-\—\–])\s?){1,20}((?:(?!([\-\–\—\[\]]))[^\x00-\x7F]*[aA-zZ]*))\]/g, '<supplied reason="lost">$2</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$3</supplied>');
-  text = text.replace(/(\s?([\-\—\–])\s?){1,20}/g, '</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">');
-  text = text.replace(/\[(.[^\[]*)(\s)([^\x00-\x7F]*[aA-zZ]*)\]([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)/g, '<supplied reason="lost">$1</supplied><expan><abbr><supplied reason="lost">$3</supplied>$4</abbr><ex>$5</ex></expan>');
+  text = text.replace(
+    /\[(?!([\-\–\—]))((?:\s?(?:(?!(?:[\-\–\—\[\]]))[^\x00-\x7F]*[aA-zZ](?!\s)*)){1,10})(?:(?:\s?[\-\—\–])\s?){1,20}((?:(?!([\-\–\—\[\]]))[^\x00-\x7F]*[aA-zZ]*))\]/g,
+    '<supplied reason="lost">$2</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">$3</supplied>'
+  );
+  text = text.replace(
+    /(\s?([\-\—\–])\s?){1,20}/g,
+    '</supplied><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost">'
+  );
+  text = text.replace(
+    /\[(.[^\[]*)(\s)([^\x00-\x7F]*[aA-zZ]*)\]([^\x00-\x7F]*[aA-zZ]*)\(([^\x00-\x7F]*[aA-zZ]*)\)/g,
+    '<supplied reason="lost">$1</supplied><expan><abbr><supplied reason="lost">$3</supplied>$4</abbr><ex>$5</ex></expan>'
+  );
   const regexIllegibleCharacter = /([+])+/g;
   text = text.replace(regexIllegibleCharacter, function(match) {
     console.log("Ici match:" + match.length);
@@ -236,7 +367,10 @@ function ancientText2XML(text, importSource) {
     const length = match.length - 2;
     return '<gap reason="illegible" quantity="' + length + '" unit="character"/>';
   });
-  text = text.replace(/<supplied reason=\"lost\"> <gap/g, " <gap");
+  text = text.replace(
+    /<supplied reason=\"lost\"> <gap/g,
+    " <gap"
+  );
   const regexHed = /(hed\.)̣/gi;
   const substHed = '<g type="hedera">\u2766</g>';
   text = text.replace(regexHed, substHed);
@@ -268,10 +402,22 @@ function ancientText2XML(text, importSource) {
   const regexUnclearClean = /(\<\/unclear\>\<unclear\>)/g;
   const substUnclearClean = "";
   text = text.replace(regexUnclearClean, substUnclearClean);
-  text = text.replace(/(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit=\"character\"\/>)<expan><abbr>((?:[^\x00-\x7F]*?[aA-zZ]*?)*)<\/supplied>/g, '$1<expan><abbr><supplied reason="lost">$2</supplied>');
-  text = text.replace(/(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit=\"character\"\/>)<\/supplied>/g, "$1");
-  text = text.replace(/(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit=\"character\"\/>)<expan><abbr>((?:[^\x00-\x7F]*?[aA-zZ]*?)*)<\/supplied>/g, '$1<expan><abbr><supplied reason="lost">$2</supplied>');
-  text = text.replace(/(<gap reason=\"lost\" quantity=\"[0-9]*\" unit=\"character\" precision=\"low\"\/>)<\/supplied>/g, "$1");
+  text = text.replace(
+    /(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit=\"character\"\/>)<expan><abbr>((?:[^\x00-\x7F]*?[aA-zZ]*?)*)<\/supplied>/g,
+    '$1<expan><abbr><supplied reason="lost">$2</supplied>'
+  );
+  text = text.replace(
+    /(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit=\"character\"\/>)<\/supplied>/g,
+    "$1"
+  );
+  text = text.replace(
+    /(<gap reason=\"lost\" atLeast=\"[0-9]*\" atMost=\"[0-9]\" unit=\"character\"\/>)<expan><abbr>((?:[^\x00-\x7F]*?[aA-zZ]*?)*)<\/supplied>/g,
+    '$1<expan><abbr><supplied reason="lost">$2</supplied>'
+  );
+  text = text.replace(
+    /(<gap reason=\"lost\" quantity=\"[0-9]*\" unit=\"character\" precision=\"low\"\/>)<\/supplied>/g,
+    "$1"
+  );
   text = text.replace(/(\/\>)\s(\<lb n=\"[0-9]*\"\/\>)/g, "$1\n$2");
   text = text.replace(/unit=\"line\"\/>\s(\w)/g, 'unit="line"/>$1');
   text = text.replace(/ ?∙ ?/g, ' <g type="interpunct">\u25B4</g> ');

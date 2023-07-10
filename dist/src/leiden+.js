@@ -27,6 +27,22 @@ import { leidenPlus2epiDoc } from "./import/leiden+2xml";
 import { EditorConfig, snippetCommand, wrapCommand } from "./config";
 import { leiden } from "./language";
 import { xml2leidenPlus } from "./import/xml2leiden+";
+const fixAbbrevAction = (node) => {
+  return {
+    name: "Fix",
+    apply: (view, from, to) => {
+      const word = view.state.wordAt(from);
+      if (word) {
+        from = word.from;
+      }
+      const content = view.state.doc.sliceString(from, to);
+      const tx = view.state.update({
+        changes: { from, to, insert: `(${content.toString()})` }
+      });
+      view.dispatch(tx);
+    }
+  };
+};
 const leidenParseLinter = (editor) => (view) => {
   function emitEvent(valid) {
     editor.valid = valid;
@@ -62,7 +78,8 @@ const leidenParseLinter = (editor) => (view) => {
             message: 'Invalid abbreviation. Abbreviations must\nuse double parenthesis, e.g. "(C(aesar))"',
             severity: "error",
             from: node.from,
-            to: node.to
+            to: node.to,
+            actions: [fixAbbrevAction(node)]
           });
         }
         abbrevs -= 1;
@@ -98,8 +115,13 @@ const fixNewlinesCommand = (editor) => {
   const content = editor.state.doc.toString();
   let fixed;
   if (content.indexOf("/") !== -1) {
-    const lines = content.split(/(?<!\/)\/(?!\/)/);
-    const split = lines.map((line, idx) => `${idx + 1}. ${line.replace(/^\s+/, "")}`);
+    const lines = content.split(new RegExp("(?<!\\/)\\/\\/?"));
+    const split = lines.map((line, idx) => {
+      if (/^\s+/.test(line) || idx === 0) {
+        return `${idx + 1}. ${line.replace(/^\s+/, "")}`;
+      }
+      return `${idx + 1}.- ${line.replace(/^\s+/, "")}`;
+    });
     fixed = split.join("\n");
   } else {
     let matchCount = 0;
@@ -130,12 +152,12 @@ const expansionCommand = (editor) => {
 const commands = {
   expan: expansionCommand,
   div: wrapCommand("<=\n", "\n=>"),
-  fragment: snippetCommand("<D=.${1:1}.fragment<=\n${2}\n=>=D>"),
-  part: snippetCommand("<D=.${1:A}.part<=\n${2}\n=>=D>"),
+  fragment: snippetCommand("<D=.${1:1}.fragment<=\n${2:_}\n=>=D>${3}"),
+  part: snippetCommand("<D=.${1:A}.part<=\n${2:_}\n=>=D>${3}"),
   recto: wrapCommand("<D=.r<=\n", "\n=>=D>"),
   verso: wrapCommand("<D=.v<=\n", "\n=>=D>"),
   erasure: wrapCommand("\u301A", "\u301B"),
-  foreign: snippetCommand("~|${_}|~${gr}"),
+  foreign: snippetCommand("~|${1:_}|~${2:gr}${3}"),
   unclear: toggleUnclearCommand,
   fixNewlines: fixNewlinesCommand,
   snippet: {

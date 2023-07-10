@@ -73,6 +73,9 @@ class JinnCodemirror extends HTMLElement {
         break;
     }
   }
+  /**
+   * Move keyboard focus to the editor
+   */
   focus() {
     if (this._editor) {
       this._editor.focus();
@@ -81,10 +84,20 @@ class JinnCodemirror extends HTMLElement {
   get placeholder() {
     return this._placeholder;
   }
+  /**
+   * A placeholder string to be shown if the user has not yet entered anything.
+   * 
+   * @attr {string} placeholder
+   */
   set placeholder(label) {
     this._placeholder = label;
     this.setMode(this.mode);
   }
+  /**
+   * The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'markdown', 'leiden_plus', 'edcs', 'phi' or 'default'.
+   * 
+   * @attr {string} mode
+   */
   set mode(mode) {
     this.setMode(mode);
   }
@@ -117,7 +130,7 @@ class JinnCodemirror extends HTMLElement {
       if (update) {
         this.content = this._config.setFromValue(this._value);
       }
-    });
+    }).catch((error) => console.error(error));
   }
   configure() {
     var _a;
@@ -162,19 +175,27 @@ class JinnCodemirror extends HTMLElement {
   get valid() {
     return Boolean(this.hasAttribute("valid"));
   }
+  /**
+   * The content edited in the editor as a string.
+   */
   set content(text) {
     if (!this._editor) {
       console.log("no editor");
       return;
     }
-    setTimeout(() => this._editor.dispatch({
-      changes: { from: 0, to: this._editor.state.doc.length, insert: text }
-    }));
+    setTimeout(
+      () => this._editor.dispatch({
+        changes: { from: 0, to: this._editor.state.doc.length, insert: text }
+      })
+    );
   }
   get content() {
     var _a;
     return ((_a = this._editor) == null ? void 0 : _a.state.doc.toString()) || "";
   }
+  /**
+   * The value edited in the editor as either an Element or string - depending on the mode set.
+   */
   set value(value) {
     var _a;
     const updated = this.setValue(value);

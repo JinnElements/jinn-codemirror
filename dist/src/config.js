@@ -72,7 +72,12 @@ const snippetCommand = (template) => (editor) => {
   template = template.replace(/\$\|([^|]+)\|/g, "${$1}");
   editor.state.selection.ranges.forEach((range) => {
     const content = editor.state.doc.slice(range.from, range.to);
-    const snip = snippet(template.replace(/\${(?:\d+:)?_}/, `\${${content.toString()}}`));
+    if (content.length > 0) {
+      template = template.replace(/\${(?:\d+:)?_}/, content.toString());
+    } else {
+      template = template.replace(/\${(\d+:)?_}/, "${$1}");
+    }
+    const snip = snippet(template);
     snip(editor, { label: "" }, range.from, range.to);
   });
   return true;

@@ -39,25 +39,27 @@ const eXistLinter = (editor, uri) => (view) => {
     emitEvent(true);
     return Promise.resolve(diagnostics);
   }
-  return new Promise((resolve) => fetch(uri, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/x-www-form-urlencoded"
-    },
-    body: new URLSearchParams({ code: view.state.doc.toString() || "" }).toString()
-  }).then((response) => response.json()).then((json) => {
-    if (json.status === "fail") {
-      const line = view.state.doc.lineAt(json.line);
-      diagnostics.push({
-        message: json.message,
-        severity: "error",
-        from: line.from + json.column,
-        to: line.from + line.length
-      });
-    }
-    resolve(diagnostics);
-    emitEvent(diagnostics.length === 0);
-  }));
+  return new Promise(
+    (resolve) => fetch(uri, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({ code: view.state.doc.toString() || "" }).toString()
+    }).then((response) => response.json()).then((json) => {
+      if (json.status === "fail") {
+        const line = view.state.doc.lineAt(json.line);
+        diagnostics.push({
+          message: json.message,
+          severity: "error",
+          from: line.from + json.column,
+          to: line.from + line.length
+        });
+      }
+      resolve(diagnostics);
+      emitEvent(diagnostics.length === 0);
+    })
+  );
 };
 class XQueryConfig extends EditorConfig {
   constructor(editor, toolbar = [], linterUri = null) {

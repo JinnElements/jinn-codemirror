@@ -3,6 +3,11 @@ import { XMLConfig } from "./xml";
 class JinnXMLEditor extends JinnCodemirror {
   constructor() {
     super();
+    /**
+     * If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content. The wrapper element itself will not be shown in the editor.
+     * 
+     * @attr {string} unwrap
+     */
     this.unwrap = false;
     this.schema = null;
     this.schemaRoot = null;
