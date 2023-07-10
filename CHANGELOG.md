@@ -1,3 +1,10 @@
+## [1.13.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.2...v1.13.3) (2023-07-10)
+
+
+### Bug Fixes
+
+* **jinn-codemirror:** set minimum height for cursor ([a117859](https://github.com/JinnElements/jinn-codemirror/commit/a1178598ef5f5997b5079f23588305ddb75b7db0))
+
 ## [1.13.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.1...v1.13.2) (2023-06-23)
 
 
