@@ -365,6 +365,10 @@ export class JinnCodemirror extends HTMLElement {
                 width: 100%;
                 background-color: var(--jinn-codemirror-background-color, #fff);
             }
+
+            .cm-cursor {
+                min-height: 1rem;
+            }
         `;
     }
 }
