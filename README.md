@@ -117,6 +117,7 @@ Combines an XML editor with an option to import and convert markup following var
 | `placeholder` |               | `string`               | ""            |                                                  |
 | `schema`      |               | `string \| null`       | null          | an optional schema description (JSON syntax) to load for the XML editor |
 | `schemaRoot`  | `schema-root` | `string`               | null          | determines the root element for autocomplete     |
+| `showLeiden`  |               | `boolean`              | false         | Should the leiden editor be shown initially?     |
 | `unwrap`      |               | `boolean \| undefined` | false         | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content.<br />The wrapper element itself will not be shown in the editor. |
 | `valid`       |               | `boolean \| undefined` | true          |                                                  |
 | `value`       |               |                        |               | The value edited in the editor as either an Element or string -<br />depending on the mode set. |
