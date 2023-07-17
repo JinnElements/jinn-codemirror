@@ -1,3 +1,10 @@
+## [1.13.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.3...v1.13.4) (2023-07-17)
+
+
+### Bug Fixes
+
+* **ancientText:** avoid spread operator for browser compatibility ([51d6869](https://github.com/JinnElements/jinn-codemirror/commit/51d6869982c091a74365169210adabd6f4b98413))
+
 ## [1.13.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.2...v1.13.3) (2023-07-10)
 
 
