@@ -44,10 +44,9 @@ export class AncientTextConfig extends EditorConfig {
     _sourceType: SourceType;
 
     constructor(editor: JinnCodemirror, toolbar: HTMLElement[]|undefined = [], sourceType: SourceType) {
-        super(editor, toolbar, {
-            ...commands, 
+        super(editor, toolbar, Object.assign(commands, {
             convert: convertToLeidenPlusCommand(editor, sourceType)
-        });
+        }));
         this._sourceType = sourceType;
     }
     
