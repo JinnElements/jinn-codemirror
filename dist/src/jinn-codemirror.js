@@ -18,7 +18,7 @@ class JinnCodemirror extends HTMLElement {
     this.attachShadow({ mode: "open" });
   }
   static get observedAttributes() {
-    return ["placeholder", "mode"];
+    return ["placeholder", "mode", "code"];
   }
   connectedCallback() {
     var _a, _b, _c, _d;
@@ -71,6 +71,8 @@ class JinnCodemirror extends HTMLElement {
       case "mode":
         this.mode = newValue;
         break;
+      case "code":
+        this.value = newValue;
     }
   }
   /**
@@ -130,7 +132,7 @@ class JinnCodemirror extends HTMLElement {
       if (update) {
         this.content = this._config.setFromValue(this._value);
       }
-    }).catch((error) => console.error(error));
+    });
   }
   configure() {
     var _a;
@@ -223,6 +225,9 @@ class JinnCodemirror extends HTMLElement {
     }
     return this._value;
   }
+  set code(text) {
+    this.value = text;
+  }
   clear() {
     this._value = "";
     this._editor.dispatch({
@@ -301,6 +306,10 @@ class JinnCodemirror extends HTMLElement {
             :host > div {
                 width: 100%;
                 background-color: var(--jinn-codemirror-background-color, #fff);
+            }
+
+            .cm-cursor {
+                min-height: 1rem;
             }
         `;
   }
