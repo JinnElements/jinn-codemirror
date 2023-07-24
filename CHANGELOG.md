@@ -1,3 +1,10 @@
+## [1.13.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.4...v1.13.5) (2023-07-24)
+
+
+### Bug Fixes
+
+* **jinn-codemirror:** 'code' should be an observable attribute/property ([eecee26](https://github.com/JinnElements/jinn-codemirror/commit/eecee26e42cb7e7dc062c8d791856ee958485a03))
+
 ## [1.13.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.3...v1.13.4) (2023-07-17)
 
 
