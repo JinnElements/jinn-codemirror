@@ -48,7 +48,7 @@ export class JinnCodemirror extends HTMLElement {
     _editor?: EditorView;
     _config?: EditorConfig;
 
-    static get observedAttributes() { return ['placeholder', 'mode']; }
+    static get observedAttributes() { return ['placeholder', 'mode', 'code']; }
 
     constructor() {
         super();
@@ -111,6 +111,8 @@ export class JinnCodemirror extends HTMLElement {
             case 'mode':
                 this.mode = newValue;
                 break;
+            case 'code':
+                this.value = newValue;
         }
     }
 
@@ -277,6 +279,10 @@ export class JinnCodemirror extends HTMLElement {
     protected getValue(): Element | NodeListOf<ChildNode> | string | null {
         if (!this._value) { return null }
         return this._value;
+    }
+
+    set code(text: string) {
+        this.value = text;
     }
 
     clear() {

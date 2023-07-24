@@ -34,16 +34,11 @@ The component comes in 3 flavours:
 Source code editor component based on [codemirror](https://codemirror.net/).
 Features extended support for XML and Leiden+ code.
 
-#### Attributes
-
-| Attribute | Type     | Description                                      |
-|-----------|----------|--------------------------------------------------|
-| `code`    | `string` | specifies initial content to be inserted at startup for editing |
-
 #### Properties
 
 | Property      | Attribute     | Type                          | Description                                      |
 |---------------|---------------|-------------------------------|--------------------------------------------------|
+| `code`        | `code`        | `string`                      | specifies initial content to be inserted at startup for editing |
 | `content`     |               | `string`                      | The content edited in the editor as a string.    |
 | `linter`      | `linter`      | `string`                      | XQuery mode: the API endpoint to use for linting. |
 | `mode`        | `mode`        | `string`                      | The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'markdown', 'leiden_plus', 'edcs', 'phi' or 'default'. |
