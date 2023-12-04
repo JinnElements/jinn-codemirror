@@ -71,13 +71,17 @@ async function prepare() {
 	if (!fs.existsSync(distDir)) {
 		fs.mkdirSync(distDir);
 	}
+    const cssDir = path.join(__dirname, "..", "css");
+    if (!fs.existsSync(cssDir)) {
+		fs.mkdirSync(cssDir);
+	}
 
     replace('demo/index.html', '.', [
         {regex: /..\/src\/jinn-codemirror-bundle.ts/, replacement: 'dist/jinn-codemirror-bundle.js'},
         {regex: /..\/src\/tei.json/g, replacement: 'dist/tei.json'}
     ]);
     await mfs.copy('src/tei.json', 'dist');
-    await mfs.copy('node_modules/tom-select/dist/css/*.css', 'dist/css');
+    await mfs.copy('node_modules/tom-select/dist/css/*.css', 'css');
 }
 
 const args = commandLineArgs([

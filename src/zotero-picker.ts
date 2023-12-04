@@ -155,7 +155,7 @@ export class ZoteroPicker extends HTMLElement {
         if (context.getElementById('__jinn-zotero-picker-css')) {
             return;
         }
-        const themes = resolveURL('../dist/css');
+        const themes = resolveURL('../css');
         const link = document.createElement('link');
         link.id = '__jinn-zotero-picker-css';
         link.href = `${themes}/tom-select.${theme}.min.css`;
