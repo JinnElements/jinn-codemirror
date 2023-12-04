@@ -7,7 +7,7 @@ import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
 import { JinnXMLEditor } from "./xml-editor";
-import { commands, inputPanel } from "./xml-commands";
+import { commands, encloseWithPanel, zoteroPanel } from "./xml-commands";
 import { Completion } from "@codemirror/autocomplete";
 
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
@@ -162,7 +162,8 @@ export class XMLConfig extends EditorConfig {
 
     private getDefaultExtensions (): Extension[] {
         return [
-            inputPanel(),
+            encloseWithPanel(),
+            zoteroPanel(),
             linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
             lintGutter({markerFilter})
         ];

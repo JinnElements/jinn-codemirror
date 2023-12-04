@@ -69,6 +69,10 @@
             [slot] .sep {
                 border-right: 1px solid #D0D0D0;
             }
+
+            .ts-control .item {
+                background-color: aquamarine;
+            }
         </style>
         <script type="module" src="dist/jinn-codemirror-bundle.js"></script>
     </head>
@@ -86,6 +90,7 @@
             <p>A plain javascript web component based on <a href="https://codemirror.net/">codemirror</a>. 
                 It adds support for toolbars, XML-specific shortcuts, linting for XML and XQuery, and helpers for the 
                 transcription of epigraphic documents.</p>
+            <jinn-zotero-picker group="2519759" value="Gruterus"></jinn-zotero-picker>
         </section>
         <section class="epidoc">
             <h2>EpiDoc Editor</h2>
@@ -157,6 +162,7 @@
                         title="Insert <hi>">&lt;hi&gt;</button>
                     <button data-command="snippet" data-params="<list>&#10;&#09;<item>${_}</item>&#10;</list>" title="Insert <list>"
                         data-key="mod-c mod-l">&lt;list&gt;</button>
+                    <button data-command="zotero">&lt;ref&gt;</button>
                 </div>
             </jinn-xml-editor>
             <h3>XML Output</h3>

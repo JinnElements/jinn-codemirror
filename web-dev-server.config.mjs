@@ -13,4 +13,17 @@ export default {
     },
     esbuildPlugin({ ts: true })
   ],
+  middlewares: [
+    // Custom middleware to serve static content from a specific directory
+    (ctx, next) => {
+      // Check if the request path starts with "/static"
+      if (ctx.url.startsWith('/css')) {
+        // Specify the directory from which to serve static content
+        ctx.filePath = `./dist/css${ctx.url}`;
+      }
+
+      // Call the next middleware in the stack
+      return next();
+    },
+  ],
 };
