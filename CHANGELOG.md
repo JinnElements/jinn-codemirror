@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.14.0...v1.14.1) (2023-12-04)
+
+
+### Bug Fixes
+
+* CSS loading ([5621160](https://github.com/JinnElements/jinn-codemirror/commit/562116065403f533c8c3690b7cd0393b15cc6027))
+
 # [1.14.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.5...v1.14.0) (2023-12-04)
 
 
