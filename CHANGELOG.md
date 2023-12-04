@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.5...v1.14.0) (2023-12-04)
+
+
+### Features
+
+* add zotero picker for bibliographic references to XML editor ([ab006d5](https://github.com/JinnElements/jinn-codemirror/commit/ab006d54bd86024ab3057fc45759a8aa5d4d56d0))
+
 ## [1.13.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.13.4...v1.13.5) (2023-07-24)
 
 
