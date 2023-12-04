@@ -22,7 +22,7 @@ import { xml } from "@codemirror/lang-xml";
 import { EditorConfig } from "./config";
 import { linter, lintGutter } from "@codemirror/lint";
 import { syntaxTree } from "@codemirror/language";
-import { commands, inputPanel } from "./xml-commands";
+import { commands, encloseWithPanel, zoteroPanel } from "./xml-commands";
 const isNamespaceNode = (view, node) => {
   return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns";
 };
@@ -147,7 +147,8 @@ class XMLConfig extends EditorConfig {
   }
   getDefaultExtensions() {
     return [
-      inputPanel(),
+      encloseWithPanel(),
+      zoteroPanel(),
       linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), { delay, markerFilter }),
       lintGutter({ markerFilter })
     ];

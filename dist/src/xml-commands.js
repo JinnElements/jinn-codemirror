@@ -2,20 +2,70 @@ import { EditorSelection, StateEffect, StateField } from "@codemirror/state";
 import { EditorView, showPanel } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { wrapCommand, snippetCommand } from "./config";
-const toggleInputPanel = StateEffect.define();
-const inputPanelState = StateField.define({
+import "./zotero-picker";
+let zoteroGroup = null;
+const toggleZoteroPane = StateEffect.define();
+const zoteroState = StateField.define({
   create: () => false,
   update(value, tr) {
     for (let e of tr.effects) {
-      if (e.is(toggleInputPanel)) {
+      if (e.is(
+        toggleZoteroPane
+      )) {
         value = e.value;
       }
     }
     return value;
   },
-  provide: (f) => showPanel.from(f, (on) => on ? createInputPanel : null)
+  provide: (f) => showPanel.from(f, (on) => on ? createZoteroPanel : null)
 });
-function createInputPanel(view) {
+function createZoteroPanel(view) {
+  const dom = document.createElement("div");
+  dom.className = "cm-input-panel";
+  const input = document.createElement("jinn-zotero-picker");
+  if (zoteroGroup) {
+    input.setAttribute("group", zoteroGroup);
+  }
+  input.placeholder = "Zotero reference";
+  input.addEventListener("change", (ev) => {
+    view.dispatch({ effects: toggleZoteroPane.of(false) });
+    if (ev.detail) {
+      wrapCommand(`<ref key="${ev.detail}">`, `</ref>`)(view);
+    }
+    view.focus();
+  });
+  dom.appendChild(input);
+  return { top: false, dom, mount: () => setTimeout(() => input.focus(), 50) };
+}
+const zoteroTheme = EditorView.baseTheme({
+  ".cm-input-panel": {
+    padding: "5px 10px",
+    display: "block"
+  },
+  ".cm-input-panel jinn-zotero-picker": {
+    width: "100%",
+    height: "auto"
+  }
+});
+function zoteroPanel() {
+  return [zoteroState, zoteroTheme];
+}
+const toggleEncloseWith = StateEffect.define();
+const encloseWithState = StateField.define({
+  create: () => false,
+  update(value, tr) {
+    for (let e of tr.effects) {
+      if (e.is(
+        toggleEncloseWith
+      )) {
+        value = e.value;
+      }
+    }
+    return value;
+  },
+  provide: (f) => showPanel.from(f, (on) => on ? createEncloseWithPanel : null)
+});
+function createEncloseWithPanel(view) {
   const dom = document.createElement("div");
   dom.className = "cm-input-panel";
   const input = document.createElement("input");
@@ -32,13 +82,13 @@ function createInputPanel(view) {
         }
       case "Esc":
       case "Escape":
-        view.dispatch({ effects: toggleInputPanel.of(false) });
+        view.dispatch({ effects: toggleEncloseWith.of(false) });
     }
   });
   dom.appendChild(input);
   return { top: false, dom, mount: () => setTimeout(() => input.focus(), 50) };
 }
-const inputPanelTheme = EditorView.baseTheme({
+const encloseWithTheme = EditorView.baseTheme({
   ".cm-input-panel": {
     padding: "5px 10px",
     fontFamily: "monospace"
@@ -47,11 +97,16 @@ const inputPanelTheme = EditorView.baseTheme({
     width: "100%"
   }
 });
-function inputPanel() {
-  return [inputPanelState, inputPanelTheme];
+function encloseWithPanel() {
+  return [encloseWithState, encloseWithTheme];
 }
+const zoteroCommand = (group) => (editor) => {
+  zoteroGroup = group;
+  editor.dispatch({ effects: toggleZoteroPane.of(!editor.state.field(zoteroState)) });
+  return true;
+};
 const encloseWithCommand = (editor) => {
-  editor.dispatch({ effects: toggleInputPanel.of(!editor.state.field(inputPanelState)) });
+  editor.dispatch({ effects: toggleEncloseWith.of(!editor.state.field(encloseWithState)) });
   return true;
 };
 const selectElementCommand = (editor) => {
@@ -118,12 +173,17 @@ const commands = {
   encloseWith: encloseWithCommand,
   snippet: {
     create: (template) => snippetCommand(template)
+  },
+  zotero: {
+    create: (group) => zoteroCommand(group)
   }
 };
 export {
   commands,
   encloseWithCommand,
-  inputPanel,
+  encloseWithPanel,
   removeEnclosingCommand,
-  selectElementCommand
+  selectElementCommand,
+  zoteroCommand,
+  zoteroPanel
 };
