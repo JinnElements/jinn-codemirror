@@ -19,6 +19,7 @@ import { MarkdownConfig } from "./markdown";
  * @attr {string} linter - in XQuery mode: API endpoint to use for linting
  * @attr {string} code - specifies initial content to be inserted at startup for editing
  * @slot toolbar - toolbar to be shown
+ * @slot header - optional header to be displayed above the toolbar
  * @fires update - fired when the content of the editor has changed
  * @fires valid - fired if the content of the editor is valid (requires a linter to be supported)
  * @fires invalid - fired if the content of the editor is invalid (requires a linter to be supported)
@@ -233,6 +234,9 @@ export class JinnCodemirror extends HTMLElement {
         return Boolean(this.hasAttribute('valid'))
     }
 
+    /**
+     * Show a status message below the editor.
+     */
     set status(msg:string) {
         this._config.status = msg;
     }

@@ -57,6 +57,11 @@ function createModeSelect(mode: string) {
  * Combines an XML editor with an option to import and convert markup following variants 
  * of the Leiden convention.
  * 
+ * @slot leiden-header - optional header to be displayed above the toolbar of the leiden editor
+ * @slot xml-header - optional header to be displayed above the toolbar of the xml editor
+ * @slot leiden-toolbar - toolbar for the leiden editor
+ * @slot xml-toolbar - toolbar for the xml editor
+ * @slot open-leiden - control (button by default) which opens/closes the leiden editor
  */
 export class JinnEpidocEditor extends HTMLElement {
 
