@@ -60,6 +60,9 @@ export class JinnCodemirror extends HTMLElement {
         css.innerHTML = this.styles();
         this.shadowRoot?.appendChild(css);
 
+        const headerSlot = document.createElement('slot');
+        headerSlot.name = 'header';
+        this.shadowRoot?.appendChild(headerSlot);
         const toolbarSlot = document.createElement('slot');
         toolbarSlot.name = 'toolbar';
         this.shadowRoot?.appendChild(toolbarSlot);
@@ -230,6 +233,10 @@ export class JinnCodemirror extends HTMLElement {
         return Boolean(this.hasAttribute('valid'))
     }
 
+    set status(msg:string) {
+        this._config.status = msg;
+    }
+
     /**
      * The content edited in the editor as a string.
      */
@@ -374,6 +381,10 @@ export class JinnCodemirror extends HTMLElement {
 
             .cm-cursor {
                 min-height: 1rem;
+            }
+
+            .status {
+                padding-left: .5rem;
             }
         `;
     }

@@ -51,24 +51,28 @@
             .hidden {
                 display: none;
             }
-            [slot] {
+            [slot=toolbar] {
                 display: flex;
                 column-gap: 4px;
                 width: 100%;
                 padding: 4px 0;
             }
-            [slot] *, jinn-epidoc-editor::part(button) {
+            [slot="leiden-toolbar"] *, [slot="xml-toolbar"] *, jinn-epidoc-editor::part(button) {
                 font-size: .85rem;
                 border: 1px solid transparent;
                 background-color: inherit;
             }
-            [slot] *:hover, jinn-epidoc-editor::part(button):hover {
+            [slot="leiden-toolbar"] *:hover, [slot="xml-toolbar"] *:hover, jinn-epidoc-editor::part(button):hover {
                 border: 1px solid orange;
             }
-            [slot] .sep {
+            [slot="leiden-toolbar"] .sep, [slot="xml-toolbar"] .sep {
                 border-right: 1px solid #D0D0D0;
             }
 
+            [slot="xml-header"], [slot="leiden-header"] {
+                padding-left: .5rem;
+            }
+            
             .ts-control .item {
                 background-color: aquamarine;
             }
@@ -89,7 +93,6 @@
             <p>A plain javascript web component based on <a href="https://codemirror.net/">codemirror</a>. 
                 It adds support for toolbars, XML-specific shortcuts, linting for XML and XQuery, and helpers for the 
                 transcription of epigraphic documents.</p>
-            <jinn-zotero-picker group="2519759" value="Gruterus"></jinn-zotero-picker>
         </section>
         <section class="epidoc">
             <h2>EpiDoc Editor</h2>
@@ -97,6 +100,10 @@
             <p>The toolbar and XML snippets are fully configurable in HTML.</p>
             <jinn-epidoc-editor id="epidoc-editor" schema="../src/tei.json" schema-root="div" mode="leiden_plus" mode-select
                 placeholder="[Transcription]" show-leiden="">
+                <h3 slot="leiden-header">Leiden+ Editor</h3>
+                <div slot="open-leiden">
+                    <button title="Import from Leiden markup">Edit as Leiden+</button>
+                </div>
                 <div slot="leiden-toolbar">
                     <button data-command="expan" data-mode="leiden_plus" data-key="mod-c mod-x" title="Abbreviation expansion">(a(bcd))</button>
                     <button data-command="snippet" data-mode="leiden_plus" data-key="mod-c mod-u"
@@ -114,6 +121,7 @@
                     <button data-command="convert" data-mode="edcs" data-key="mod-c mod-c">Convert to Leiden+</button>
                     <button data-command="fixNewlines" data-mode="leiden_plus" title="Add missing line numbers">&#x21A9;</button>
                 </div>
+                <h3 slot="xml-header">EpiDoc XML Editor</h3>
                 <div slot="xml-toolbar">
                     <button data-command="selectElement" data-key="mod-c mod-s"
                         title="Select element around current cursor position">&lt;|></button>
@@ -194,6 +202,11 @@
             </jinn-codemirror>
         </section>
 
+        <section>
+            <h2>Zotero Picker</h2>
+
+            <jinn-zotero-picker group="2519759" value="Gruterus"></jinn-zotero-picker>
+        </section>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 const epidoc = document.getElementById('epidoc-editor');

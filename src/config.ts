@@ -1,5 +1,5 @@
 import { basicSetup } from "codemirror";
-import { EditorView, placeholder } from "@codemirror/view";
+import { EditorView, placeholder, Panel, showPanel } from "@codemirror/view";
 import { Command, ViewPlugin, ViewUpdate, keymap, KeyBinding } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorStateConfig, Extension, EditorSelection } from "@codemirror/state";
@@ -131,6 +131,7 @@ export abstract class EditorConfig {
     keymap: KeyBinding[];
     commands: EditorCommands;
     threshold: number = 300;
+    _status: HTMLDivElement|null = null;
 
     constructor(editor:JinnCodemirror, toolbar: HTMLElement[] = [], commands: EditorCommands = defaultCommands) {
         this.editor = editor;
@@ -186,6 +187,15 @@ export abstract class EditorConfig {
             }
         });
 
+        const createStatusPanel = (view: EditorView): Panel => {
+            this._status = document.createElement("div");
+            this._status.className = 'status';
+            this._status.part = 'status';
+            return {
+              dom: this._status
+            }
+        };
+
         const customExtensions = await this.getExtensions(this.editor);
         const extensions = [
             basicSetup, 
@@ -193,8 +203,10 @@ export abstract class EditorConfig {
             keymap.of([indentWithTab, ...this.keymap]),
             placeholder(this.editor.placeholder),
             ...customExtensions, 
-            updateListener
+            updateListener,
+            showPanel.of(createStatusPanel)
         ];
+
         if (this.editor && this.editor.theme) {
             const extTheme = theme(this.editor.theme);
             if (extTheme) {
@@ -238,4 +250,10 @@ export abstract class EditorConfig {
     }
 
     abstract serialize(): Element | NodeListOf<ChildNode> | string | null | undefined;
+
+    set status(msg:string) {
+        if (this._status) {
+            this._status.innerHTML = msg;
+        }
+    }
 }

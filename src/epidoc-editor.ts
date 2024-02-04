@@ -54,7 +54,8 @@ function createModeSelect(mode: string) {
 }
 
 /**
- * Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
+ * Combines an XML editor with an option to import and convert markup following variants 
+ * of the Leiden convention.
  * 
  */
 export class JinnEpidocEditor extends HTMLElement {
@@ -132,6 +133,7 @@ export class JinnEpidocEditor extends HTMLElement {
                 ${style}
             </style>
             <jinn-codemirror id="leiden-editor" class="${this.showLeiden ? '' : 'hidden'}" mode="${this.mode}">
+                <div slot="header"><slot name="leiden-header"></slot></div>
                 <div slot="toolbar">
                     ${ this.modeSelect ? createModeSelect(this.mode) : '' }
                     <slot name="leiden-toolbar"></slot>
@@ -140,8 +142,11 @@ export class JinnEpidocEditor extends HTMLElement {
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}"
                 schema-root="${this.schemaRoot}" placeholder="${this.placeholder}">
+                <div slot="header"><slot name="xml-header"></slot></div>
                 <div slot="toolbar">
-                    <button part="button" id="import" title="Import from Leiden markup">Leiden Editor</button>
+                    <slot name="open-leiden" id="import" class="${this.showLeiden ? 'hidden' : ''}">
+                        <button part="button" title="Import from Leiden markup">Leiden Editor</button>
+                    </slot>
                     <slot name="xml-toolbar"></slot>
                 </div>
             </jinn-xml-editor>
@@ -149,7 +154,7 @@ export class JinnEpidocEditor extends HTMLElement {
          
         this.xmlEditor = this.shadowRoot?.querySelector('#xml-editor');
         const leidenEditor:JinnCodemirror | null | undefined = this.shadowRoot?.querySelector('#leiden-editor');
-        const openLeidenBtn:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#import');
+        const openLeidenBtn:HTMLSlotElement | null | undefined = this.shadowRoot?.querySelector('#import');
         const closeLeidenBtn:HTMLButtonElement | null | undefined = this.shadowRoot?.querySelector('#close-leiden');
 
         if (!(this.xmlEditor && leidenEditor && openLeidenBtn && closeLeidenBtn)) {
@@ -206,12 +211,17 @@ export class JinnEpidocEditor extends HTMLElement {
                     const value = this.xmlEditor?.value;
                     updateXML = false;
                     leidenEditor.setMode('leiden_plus', false);
-                    showLeiden();
-                    if (this.unwrap && value instanceof Element) {
-                        leidenEditor.value = value.childNodes;
-                    } else {
-                        leidenEditor.value = value;
+                    try {
+                        if (this.unwrap && value instanceof Element) {
+                            leidenEditor.value = value.childNodes;
+                        } else {
+                            leidenEditor.value = value;
+                        }
+                        this.xmlEditor.status = '';
+                    } catch (e) {
+                        this.xmlEditor.status = e.message;
                     }
+                    showLeiden();
                 } else {
                     showLeiden();
                     leidenEditor.value = '';
