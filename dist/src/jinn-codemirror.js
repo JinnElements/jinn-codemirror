@@ -21,17 +21,20 @@ class JinnCodemirror extends HTMLElement {
     return ["placeholder", "mode", "code"];
   }
   connectedCallback() {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     const css = document.createElement("style");
     css.innerHTML = this.styles();
     (_a = this.shadowRoot) == null ? void 0 : _a.appendChild(css);
+    const headerSlot = document.createElement("slot");
+    headerSlot.name = "header";
+    (_b = this.shadowRoot) == null ? void 0 : _b.appendChild(headerSlot);
     const toolbarSlot = document.createElement("slot");
     toolbarSlot.name = "toolbar";
-    (_b = this.shadowRoot) == null ? void 0 : _b.appendChild(toolbarSlot);
+    (_c = this.shadowRoot) == null ? void 0 : _c.appendChild(toolbarSlot);
     const wrapper = document.createElement("div");
     wrapper.id = "editor";
-    (_c = this.shadowRoot) == null ? void 0 : _c.appendChild(wrapper);
-    this.registerToolbar((_d = this.shadowRoot) == null ? void 0 : _d.querySelector("[name=toolbar]"));
+    (_d = this.shadowRoot) == null ? void 0 : _d.appendChild(wrapper);
+    this.registerToolbar((_e = this.shadowRoot) == null ? void 0 : _e.querySelector("[name=toolbar]"));
     this._placeholder = this.getAttribute("placeholder") || "";
     this.namespace = this.getAttribute("namespace");
     this.linter = this.getAttribute("linter");

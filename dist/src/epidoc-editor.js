@@ -98,6 +98,7 @@ class JinnEpidocEditor extends HTMLElement {
                 ${style}
             </style>
             <jinn-codemirror id="leiden-editor" class="${this.showLeiden ? "" : "hidden"}" mode="${this.mode}">
+                <div slot="header"><slot name="leiden-header"></slot></slot>
                 <div slot="toolbar">
                     ${this.modeSelect ? createModeSelect(this.mode) : ""}
                     <slot name="leiden-toolbar"></slot>
@@ -106,6 +107,7 @@ class JinnEpidocEditor extends HTMLElement {
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? "unwrap" : ""} schema="${this.schema}"
                 schema-root="${this.schemaRoot}" placeholder="${this.placeholder}">
+                <div slot="header"><slot name="xml-header"></slot></slot>
                 <div slot="toolbar">
                     <button part="button" id="import" title="Import from Leiden markup">Leiden Editor</button>
                     <slot name="xml-toolbar"></slot>
