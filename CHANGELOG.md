@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.14.1...v1.15.0) (2024-02-04)
+
+
+### Features
+
+* support headers and status bar ([1cf9633](https://github.com/JinnElements/jinn-codemirror/commit/1cf96336307f4ac26fe49fc538cb8b960d3d3c76))
+
 ## [1.14.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.14.0...v1.14.1) (2023-12-04)
 
 
