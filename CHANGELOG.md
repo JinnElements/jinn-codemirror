@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.16.0...v1.17.0) (2024-03-29)
+
+
+### Features
+
+* add material and solarized themes ([90078ee](https://github.com/JinnElements/jinn-codemirror/commit/90078ee95e50a20e906086f1780daec57de69e21))
+
 # [1.16.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.15.0...v1.16.0) (2024-03-29)
 
 
