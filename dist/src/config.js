@@ -6,10 +6,20 @@ import { EditorSelection } from "@codemirror/state";
 import { indentWithTab } from "@codemirror/commands";
 import { snippet } from "@codemirror/autocomplete";
 import { oneDarkTheme } from "@codemirror/theme-one-dark";
+import { materialDark, materialLight } from "@uiw/codemirror-theme-material";
+import { solarizedDark, solarizedLight } from "@uiw/codemirror-theme-solarized";
 function theme(name) {
   switch (name) {
     case "dark":
       return oneDarkTheme;
+    case "material-dark":
+      return materialDark;
+    case "material-light":
+      return materialLight;
+    case "solarized-dark":
+      return solarizedDark;
+    case "solarized-light":
+      return solarizedLight;
     default:
       return null;
   }
