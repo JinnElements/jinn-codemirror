@@ -5,6 +5,7 @@ import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
 import { XQueryConfig } from "./xquery";
 import { CSSConfig } from "./css";
+import { JSONConfig } from "./json";
 import { PlainConfig } from "./plain";
 import { TeXConfig } from "./tex";
 import { EditorConfig, SourceType, initCommand } from "./config";
@@ -203,6 +204,9 @@ export class JinnCodemirror extends HTMLElement {
                 break;
             case SourceType.css:
                 this._config = new CSSConfig(this, toolbar);
+                break;
+            case SourceType.json:
+                this._config = new JSONConfig(this, toolbar);
                 break;
             case SourceType.tex:
                 this._config = new TeXConfig(this, toolbar);
