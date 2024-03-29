@@ -91,7 +91,7 @@ function transform(node, output) {
           output.push(`|~${elem.getAttribute("xml:lang")}`);
           break;
         default:
-          transformElem(elem, output);
+          throw new Error(`Cannot transform element ${elem.localName} to Leiden`);
           break;
       }
       break;

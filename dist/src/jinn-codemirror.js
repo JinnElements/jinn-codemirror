@@ -5,6 +5,7 @@ import { LeidenConfig } from "./leiden+";
 import { AncientTextConfig } from "./ancientText";
 import { XQueryConfig } from "./xquery";
 import { CSSConfig } from "./css";
+import { JSONConfig } from "./json";
 import { PlainConfig } from "./plain";
 import { TeXConfig } from "./tex";
 import { SourceType, initCommand } from "./config";
@@ -21,20 +22,19 @@ class JinnCodemirror extends HTMLElement {
     return ["placeholder", "mode", "code"];
   }
   connectedCallback() {
-    var _a, _b, _c, _d, _e;
     const css = document.createElement("style");
     css.innerHTML = this.styles();
-    (_a = this.shadowRoot) == null ? void 0 : _a.appendChild(css);
+    this.shadowRoot?.appendChild(css);
     const headerSlot = document.createElement("slot");
     headerSlot.name = "header";
-    (_b = this.shadowRoot) == null ? void 0 : _b.appendChild(headerSlot);
+    this.shadowRoot?.appendChild(headerSlot);
     const toolbarSlot = document.createElement("slot");
     toolbarSlot.name = "toolbar";
-    (_c = this.shadowRoot) == null ? void 0 : _c.appendChild(toolbarSlot);
+    this.shadowRoot?.appendChild(toolbarSlot);
     const wrapper = document.createElement("div");
     wrapper.id = "editor";
-    (_d = this.shadowRoot) == null ? void 0 : _d.appendChild(wrapper);
-    this.registerToolbar((_e = this.shadowRoot) == null ? void 0 : _e.querySelector("[name=toolbar]"));
+    this.shadowRoot?.appendChild(wrapper);
+    this.registerToolbar(this.shadowRoot?.querySelector("[name=toolbar]"));
     this._placeholder = this.getAttribute("placeholder") || "";
     this.namespace = this.getAttribute("namespace");
     this.linter = this.getAttribute("linter");
@@ -107,8 +107,7 @@ class JinnCodemirror extends HTMLElement {
     this.setMode(mode);
   }
   setMode(mode, update = true) {
-    var _a, _b, _c;
-    const wrapper = (_a = this.shadowRoot) == null ? void 0 : _a.getElementById("editor");
+    const wrapper = this.shadowRoot?.getElementById("editor");
     if (!wrapper) {
       return;
     }
@@ -118,13 +117,13 @@ class JinnCodemirror extends HTMLElement {
     }
     this._mode = SourceType[mode];
     console.log(`<jinn-codemirror> mode: ${this.mode}`);
-    this.activateToolbar((_b = this.shadowRoot) == null ? void 0 : _b.querySelector("[name=toolbar]"));
+    this.activateToolbar(this.shadowRoot?.querySelector("[name=toolbar]"));
     this.configure();
     const select = this.querySelector("[name=modes]");
     if (select && select instanceof HTMLSelectElement) {
       select.value = this._mode;
     }
-    (_c = this._config) == null ? void 0 : _c.getConfig().then((stateConfig) => {
+    this._config?.getConfig().then((stateConfig) => {
       this._editor = new EditorView({
         state: EditorState.create(stateConfig),
         parent: wrapper
@@ -138,8 +137,7 @@ class JinnCodemirror extends HTMLElement {
     });
   }
   configure() {
-    var _a;
-    const toolbar = this.getToolbarControls((_a = this.shadowRoot) == null ? void 0 : _a.querySelector("[name=toolbar]"));
+    const toolbar = this.getToolbarControls(this.shadowRoot?.querySelector("[name=toolbar]"));
     switch (this._mode) {
       case SourceType.edcs:
       case SourceType.phi:
@@ -153,6 +151,9 @@ class JinnCodemirror extends HTMLElement {
         break;
       case SourceType.css:
         this._config = new CSSConfig(this, toolbar);
+        break;
+      case SourceType.json:
+        this._config = new JSONConfig(this, toolbar);
         break;
       case SourceType.tex:
         this._config = new TeXConfig(this, toolbar);
@@ -181,6 +182,12 @@ class JinnCodemirror extends HTMLElement {
     return Boolean(this.hasAttribute("valid"));
   }
   /**
+   * Show a status message below the editor.
+   */
+  set status(msg) {
+    this._config.status = msg;
+  }
+  /**
    * The content edited in the editor as a string.
    */
   set content(text) {
@@ -195,17 +202,15 @@ class JinnCodemirror extends HTMLElement {
     );
   }
   get content() {
-    var _a;
-    return ((_a = this._editor) == null ? void 0 : _a.state.doc.toString()) || "";
+    return this._editor?.state.doc.toString() || "";
   }
   /**
    * The value edited in the editor as either an Element or string - depending on the mode set.
    */
   set value(value) {
-    var _a;
     const updated = this.setValue(value);
     if (updated && this._editor && this._config) {
-      this.content = (_a = this._config) == null ? void 0 : _a.setFromValue(this._value);
+      this.content = this._config?.setFromValue(this._value);
     }
   }
   get value() {
@@ -255,7 +260,7 @@ class JinnCodemirror extends HTMLElement {
     return null;
   }
   registerToolbar(slot) {
-    slot == null ? void 0 : slot.assignedElements().forEach((elem) => {
+    slot?.assignedElements().forEach((elem) => {
       elem.querySelectorAll("slot").forEach((sl) => this.registerToolbar(sl));
       elem.querySelectorAll("[data-command]").forEach((btn) => {
         const cmdName = btn.dataset.command;
@@ -263,7 +268,6 @@ class JinnCodemirror extends HTMLElement {
           btn.title = `${btn.title} (${btn.getAttribute("data-key")})`;
         }
         btn.addEventListener("click", () => {
-          var _a;
           if (!this._config) {
             return;
           }
@@ -274,7 +278,7 @@ class JinnCodemirror extends HTMLElement {
             if (func) {
               func(this._editor);
               if (cmdName !== "encloseWithCommand") {
-                (_a = this._editor) == null ? void 0 : _a.focus();
+                this._editor?.focus();
               }
             }
           }
@@ -283,7 +287,7 @@ class JinnCodemirror extends HTMLElement {
     });
   }
   activateToolbar(slot) {
-    slot == null ? void 0 : slot.assignedElements().forEach((elem) => {
+    slot?.assignedElements().forEach((elem) => {
       elem.querySelectorAll("slot").forEach((sl) => this.activateToolbar(sl));
       elem.querySelectorAll("[data-command]").forEach((elem2) => {
         const btn = elem2;
@@ -296,7 +300,7 @@ class JinnCodemirror extends HTMLElement {
     });
   }
   getToolbarControls(slot, toolbar = []) {
-    slot == null ? void 0 : slot.assignedElements().forEach((elem) => {
+    slot?.assignedElements().forEach((elem) => {
       elem.querySelectorAll("[data-command]").forEach((btn) => {
         toolbar.push(btn);
       });
@@ -313,6 +317,10 @@ class JinnCodemirror extends HTMLElement {
 
             .cm-cursor {
                 min-height: 1rem;
+            }
+
+            .status {
+                padding-left: .5rem;
             }
         `;
   }

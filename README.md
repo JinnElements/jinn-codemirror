@@ -44,6 +44,7 @@ Features extended support for XML and Leiden+ code.
 | `mode`        | `mode`        | `string`                      | The mode to use. Currently supported are 'xml', 'xquery', 'css', 'html', 'tex', 'markdown', 'leiden_plus', 'edcs', 'phi' or 'default'. |
 | `namespace`   |               | `string \| null \| undefined` | Default element namespace to enforce on the root element in XML mode |
 | `placeholder` | `placeholder` | `string`                      | A placeholder string to be shown if the user has not yet entered anything. |
+| `status`      |               | `string`                      | Show a status message below the editor.          |
 | `theme`       |               | `string \| null \| undefined` | Editor theme to use. Currently only `dark` is supported. |
 | `valid`       |               | `boolean`                     |                                                  |
 | `value`       |               |                               | The value edited in the editor as either an Element or string - depending on the mode set. |
@@ -68,9 +69,10 @@ Features extended support for XML and Leiden+ code.
 
 #### Slots
 
-| Name      | Description         |
-|-----------|---------------------|
-| `toolbar` | toolbar to be shown |
+| Name      | Description                                      |
+|-----------|--------------------------------------------------|
+| `header`  | optional header to be displayed above the toolbar |
+| `toolbar` | toolbar to be shown                              |
 
 ### jinn-xml-editor
 
@@ -101,7 +103,8 @@ content. Setting the property requires that a DOM element is passed via value.
 
 ### jinn-epidoc-editor
 
-Combines an XML editor with an option to import and convert markup following variants of the Leiden convention.
+Combines an XML editor with an option to import and convert markup following variants 
+of the Leiden convention.
 
 #### Properties
 
@@ -124,3 +127,13 @@ Combines an XML editor with an option to import and convert markup following var
 |-----------|
 | `invalid` |
 | `valid`   |
+
+#### Slots
+
+| Name             | Description                                      |
+|------------------|--------------------------------------------------|
+| `leiden-header`  | optional header to be displayed above the toolbar of the leiden editor |
+| `leiden-toolbar` | toolbar for the leiden editor                    |
+| `open-leiden`    | control (button by default) which opens/closes the leiden editor |
+| `xml-header`     | optional header to be displayed above the toolbar of the xml editor |
+| `xml-toolbar`    | toolbar for the xml editor                       |

@@ -1,25 +1,5 @@
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 import { basicSetup } from "codemirror";
-import { EditorView, placeholder } from "@codemirror/view";
+import { EditorView, placeholder, showPanel } from "@codemirror/view";
 import { ViewPlugin, keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorSelection } from "@codemirror/state";
@@ -45,6 +25,7 @@ var SourceType = /* @__PURE__ */ ((SourceType2) => {
   SourceType2["css"] = "css";
   SourceType2["tex"] = "tex";
   SourceType2["markdown"] = "markdown";
+  SourceType2["json"] = "json";
   return SourceType2;
 })(SourceType || {});
 ;
@@ -110,6 +91,7 @@ const defaultCommands = {
 class EditorConfig {
   constructor(editor, toolbar = [], commands = defaultCommands) {
     this.threshold = 300;
+    this._status = null;
     this.editor = editor;
     this.commands = commands;
     this.keymap = [];
@@ -133,51 +115,58 @@ class EditorConfig {
       });
     }
   }
-  getConfig() {
-    return __async(this, null, function* () {
-      const self = this;
-      let runningUpdate = null;
-      const updateListener = ViewPlugin.fromClass(class {
-        update(update) {
-          if (update.docChanged) {
-            if (runningUpdate) {
-              clearTimeout(runningUpdate);
-            }
-            runningUpdate = setTimeout(() => {
-              const tree = syntaxTree(update.state);
-              const lines = update.state.doc.toJSON();
-              const content = self.onUpdate(tree, lines.join("\n"));
-              try {
-                const serialized = self.serialize();
-                if (serialized != null) {
-                  self.editor._value = serialized;
-                  self.editor.emitUpdateEvent(content);
-                }
-              } catch (e) {
-              }
-            }, self.threshold);
+  async getConfig() {
+    const self = this;
+    let runningUpdate = null;
+    const updateListener = ViewPlugin.fromClass(class {
+      update(update) {
+        if (update.docChanged) {
+          if (runningUpdate) {
+            clearTimeout(runningUpdate);
           }
-        }
-      });
-      const customExtensions = yield this.getExtensions(this.editor);
-      const extensions = [
-        basicSetup,
-        EditorView.lineWrapping,
-        keymap.of([indentWithTab, ...this.keymap]),
-        placeholder(this.editor.placeholder),
-        ...customExtensions,
-        updateListener
-      ];
-      if (this.editor && this.editor.theme) {
-        const extTheme = theme(this.editor.theme);
-        if (extTheme) {
-          extensions.push(extTheme);
-        } else {
-          console.error("<jinn-codemirror> Unknown theme: %s", this.editor.theme);
+          runningUpdate = setTimeout(() => {
+            const tree = syntaxTree(update.state);
+            const lines = update.state.doc.toJSON();
+            const content = self.onUpdate(tree, lines.join("\n"));
+            try {
+              const serialized = self.serialize();
+              if (serialized != null) {
+                self.editor._value = serialized;
+                self.editor.emitUpdateEvent(content);
+              }
+            } catch (e) {
+            }
+          }, self.threshold);
         }
       }
-      return { extensions };
     });
+    const createStatusPanel = (view) => {
+      this._status = document.createElement("div");
+      this._status.className = "status";
+      this._status.part = "status";
+      return {
+        dom: this._status
+      };
+    };
+    const customExtensions = await this.getExtensions(this.editor);
+    const extensions = [
+      basicSetup,
+      EditorView.lineWrapping,
+      keymap.of([indentWithTab, ...this.keymap]),
+      placeholder(this.editor.placeholder),
+      ...customExtensions,
+      updateListener,
+      showPanel.of(createStatusPanel)
+    ];
+    if (this.editor && this.editor.theme) {
+      const extTheme = theme(this.editor.theme);
+      if (extTheme) {
+        extensions.push(extTheme);
+      } else {
+        console.error("<jinn-codemirror> Unknown theme: %s", this.editor.theme);
+      }
+    }
+    return { extensions };
   }
   getCommands() {
     return this.commands;
@@ -204,6 +193,11 @@ class EditorConfig {
       return value;
     }
     return JSON.stringify(value);
+  }
+  set status(msg) {
+    if (this._status) {
+      this._status.innerHTML = msg;
+    }
   }
 }
 export {

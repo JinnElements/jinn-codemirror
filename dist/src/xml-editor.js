@@ -42,8 +42,7 @@ class JinnXMLEditor extends JinnCodemirror {
     }
   }
   configure() {
-    var _a;
-    const toolbar = this.getToolbarControls((_a = this.shadowRoot) == null ? void 0 : _a.querySelector("[name=toolbar]"));
+    const toolbar = this.getToolbarControls(this.shadowRoot?.querySelector("[name=toolbar]"));
     const checkNamespace = this.hasAttribute("check-namespace");
     this._config = new XMLConfig(this, toolbar, this.namespace, checkNamespace, this.unwrap);
   }
@@ -55,7 +54,6 @@ class JinnXMLEditor extends JinnCodemirror {
     super.emitUpdateEvent(this._wrapper);
   }
   updateValue() {
-    var _a, _b;
     if (!this._wrapper) {
       console.log("no wrapper !!!");
       return null;
@@ -66,22 +64,21 @@ class JinnXMLEditor extends JinnCodemirror {
     } else if (this._value instanceof NodeList) {
       for (let i = 0; i < this._value.length; i++) {
         const child = this._wrapper.ownerDocument.importNode(this._value[i], true);
-        (_a = this._wrapper) == null ? void 0 : _a.appendChild(child);
+        this._wrapper?.appendChild(child);
       }
       ;
     } else if (!(this._value instanceof Node)) {
       console.error("<xml-editor> Value is not a node");
       throw new Error("value is not a node");
     } else {
-      (_b = this._wrapper) == null ? void 0 : _b.appendChild(this._value);
+      this._wrapper?.appendChild(this._value);
     }
   }
   setValue(value) {
-    var _a, _b;
     if (!this.unwrap) {
       return super.setValue(value);
     }
-    if (((_a = this._config) == null ? void 0 : _a.setFromValue(this._wrapper)) === ((_b = this._config) == null ? void 0 : _b.setFromValue(value))) {
+    if (this._config?.setFromValue(this._wrapper) === this._config?.setFromValue(value)) {
       return false;
     }
     if (!value) {
@@ -96,7 +93,7 @@ class JinnXMLEditor extends JinnCodemirror {
       value = fragment.firstElementChild;
     }
     this._wrapper = value;
-    this._value = value == null ? void 0 : value.childNodes;
+    this._value = value?.childNodes;
     return true;
   }
   getValue() {

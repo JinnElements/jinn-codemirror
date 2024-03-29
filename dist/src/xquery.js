@@ -1,23 +1,3 @@
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 import { StreamLanguage } from "@codemirror/language";
 import { xQuery } from "@codemirror/legacy-modes/mode/xquery";
 import { linter, lintGutter } from "@codemirror/lint";
@@ -66,14 +46,12 @@ class XQueryConfig extends EditorConfig {
     super(editor, toolbar);
     this.linterUri = linterUri;
   }
-  getExtensions(editor) {
-    return __async(this, null, function* () {
-      return [
-        StreamLanguage.define(xQuery),
-        linter(eXistLinter(editor, this.linterUri)),
-        lintGutter()
-      ];
-    });
+  async getExtensions(editor) {
+    return [
+      StreamLanguage.define(xQuery),
+      linter(eXistLinter(editor, this.linterUri)),
+      lintGutter()
+    ];
   }
   serialize() {
     return this.editor.content;

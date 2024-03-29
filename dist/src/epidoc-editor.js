@@ -85,7 +85,6 @@ class JinnEpidocEditor extends HTMLElement {
     return this.xmlEditor.value;
   }
   connectedCallback() {
-    var _a, _b, _c, _d;
     this.unwrap = this.hasAttribute("unwrap");
     this.schema = this.getAttribute("schema");
     this.schemaRoot = this.getAttribute("schema-root");
@@ -98,7 +97,7 @@ class JinnEpidocEditor extends HTMLElement {
                 ${style}
             </style>
             <jinn-codemirror id="leiden-editor" class="${this.showLeiden ? "" : "hidden"}" mode="${this.mode}">
-                <div slot="header"><slot name="leiden-header"></slot></slot>
+                <div slot="header"><slot name="leiden-header"></slot></div>
                 <div slot="toolbar">
                     ${this.modeSelect ? createModeSelect(this.mode) : ""}
                     <slot name="leiden-toolbar"></slot>
@@ -107,17 +106,19 @@ class JinnEpidocEditor extends HTMLElement {
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? "unwrap" : ""} schema="${this.schema}"
                 schema-root="${this.schemaRoot}" placeholder="${this.placeholder}">
-                <div slot="header"><slot name="xml-header"></slot></slot>
+                <div slot="header"><slot name="xml-header"></slot></div>
                 <div slot="toolbar">
-                    <button part="button" id="import" title="Import from Leiden markup">Leiden Editor</button>
+                    <slot name="open-leiden" id="import" class="${this.showLeiden ? "hidden" : ""}">
+                        <button part="button" title="Import from Leiden markup">Leiden Editor</button>
+                    </slot>
                     <slot name="xml-toolbar"></slot>
                 </div>
             </jinn-xml-editor>
         `;
-    this.xmlEditor = (_a = this.shadowRoot) == null ? void 0 : _a.querySelector("#xml-editor");
-    const leidenEditor = (_b = this.shadowRoot) == null ? void 0 : _b.querySelector("#leiden-editor");
-    const openLeidenBtn = (_c = this.shadowRoot) == null ? void 0 : _c.querySelector("#import");
-    const closeLeidenBtn = (_d = this.shadowRoot) == null ? void 0 : _d.querySelector("#close-leiden");
+    this.xmlEditor = this.shadowRoot?.querySelector("#xml-editor");
+    const leidenEditor = this.shadowRoot?.querySelector("#leiden-editor");
+    const openLeidenBtn = this.shadowRoot?.querySelector("#import");
+    const closeLeidenBtn = this.shadowRoot?.querySelector("#close-leiden");
     if (!(this.xmlEditor && leidenEditor && openLeidenBtn && closeLeidenBtn)) {
       throw new Error("One or more components were not initialized");
     }
@@ -146,16 +147,14 @@ class JinnEpidocEditor extends HTMLElement {
       leidenEditor.focus();
     };
     const hideLeiden = () => {
-      var _a2;
       leidenEditor.classList.add("hidden");
       openLeidenBtn.classList.remove("hidden");
       leidenEditorOpened = false;
-      (_a2 = this.xmlEditor) == null ? void 0 : _a2.focus();
+      this.xmlEditor?.focus();
       updateXML = false;
-      leidenEditor == null ? void 0 : leidenEditor.clear();
+      leidenEditor?.clear();
     };
     const initLeiden = () => {
-      var _a2;
       const hidden = leidenEditor.classList.contains("hidden");
       if (hidden || this.showLeiden) {
         if (this.xmlEditor.content.length > 0) {
@@ -163,15 +162,20 @@ class JinnEpidocEditor extends HTMLElement {
             alert("The XML contains errors. Cannot convert to Leiden+");
             return;
           }
-          const value = (_a2 = this.xmlEditor) == null ? void 0 : _a2.value;
+          const value = this.xmlEditor?.value;
           updateXML = false;
           leidenEditor.setMode("leiden_plus", false);
-          showLeiden();
-          if (this.unwrap && value instanceof Element) {
-            leidenEditor.value = value.childNodes;
-          } else {
-            leidenEditor.value = value;
+          try {
+            if (this.unwrap && value instanceof Element) {
+              leidenEditor.value = value.childNodes;
+            } else {
+              leidenEditor.value = value;
+            }
+            this.xmlEditor.status = "";
+          } catch (e) {
+            this.xmlEditor.status = e.message;
           }
+          showLeiden();
         } else {
           showLeiden();
           leidenEditor.value = "";

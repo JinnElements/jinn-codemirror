@@ -1,23 +1,3 @@
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 import { xml } from "@codemirror/lang-xml";
 import { EditorConfig } from "./config";
 import { linter, lintGutter } from "@codemirror/lint";
@@ -153,34 +133,30 @@ class XMLConfig extends EditorConfig {
       lintGutter({ markerFilter })
     ];
   }
-  getExtensions() {
-    return __async(this, null, function* () {
-      const schemaUrl = this.editor.schema;
-      if (schemaUrl) {
-        const schema = yield this.loadSchema(schemaUrl);
-        return this.getDefaultExtensions().concat(xml(schema));
-      }
-      return this.getDefaultExtensions().concat(xml());
-    });
+  async getExtensions() {
+    const schemaUrl = this.editor.schema;
+    if (schemaUrl) {
+      const schema = await this.loadSchema(schemaUrl);
+      return this.getDefaultExtensions().concat(xml(schema));
+    }
+    return this.getDefaultExtensions().concat(xml());
   }
-  loadSchema(url) {
-    return __async(this, null, function* () {
-      const json = yield fetch(url).then((response) => response.json());
-      let elements = json.elements;
-      const entryPoint = this.editor.schemaRoot;
-      if (entryPoint) {
-        const root = json.elements.find((elem) => elem.name === entryPoint);
-        if (root) {
-          const filtered = /* @__PURE__ */ new Map();
-          const elemMap = /* @__PURE__ */ new Map();
-          json.elements.forEach((elem) => elemMap.set(elem.name, elem));
-          this.filterSchema(root, elemMap, filtered);
-          elements = Array.from(filtered.values());
-        }
+  async loadSchema(url) {
+    const json = await fetch(url).then((response) => response.json());
+    let elements = json.elements;
+    const entryPoint = this.editor.schemaRoot;
+    if (entryPoint) {
+      const root = json.elements.find((elem) => elem.name === entryPoint);
+      if (root) {
+        const filtered = /* @__PURE__ */ new Map();
+        const elemMap = /* @__PURE__ */ new Map();
+        json.elements.forEach((elem) => elemMap.set(elem.name, elem));
+        this.filterSchema(root, elemMap, filtered);
+        elements = Array.from(filtered.values());
       }
-      this.extendSchema(elements);
-      return { elements };
-    });
+    }
+    this.extendSchema(elements);
+    return { elements };
   }
   filterSchema(elem, elemList, result, level = 0) {
     elem.children.forEach((child) => {
@@ -207,7 +183,6 @@ class XMLConfig extends EditorConfig {
     });
   }
   serialize() {
-    var _a;
     const parser = new DOMParser();
     const content = this.unwrap ? `<R xmlns="${this.namespace || ""}">${this.editor.content}</R>` : this.editor.content;
     const parsed = parser.parseFromString(content, "application/xml");
@@ -215,7 +190,7 @@ class XMLConfig extends EditorConfig {
     if (errors.length) {
       return null;
     }
-    return this.unwrap ? (_a = parsed.firstElementChild) == null ? void 0 : _a.childNodes : parsed.firstElementChild;
+    return this.unwrap ? parsed.firstElementChild?.childNodes : parsed.firstElementChild;
   }
 }
 export {

@@ -42,11 +42,10 @@ class ZoteroPicker extends HTMLElement {
     }
   }
   connectedCallback() {
-    var _a, _b;
     this.importTheme("default");
     this.group = this.getAttribute("group");
     const slot = document.createElement("slot");
-    (_a = this.shadowRoot) == null ? void 0 : _a.appendChild(slot);
+    this.shadowRoot?.appendChild(slot);
     let input = this.querySelector("input,select");
     if (!input) {
       input = document.createElement("input");
@@ -55,7 +54,7 @@ class ZoteroPicker extends HTMLElement {
     }
     const output = document.createElement("div");
     output.className = "jinn-zotero-picker-output";
-    (_b = this.shadowRoot) == null ? void 0 : _b.appendChild(output);
+    this.shadowRoot?.appendChild(output);
     let total = 0;
     const options = {
       load: (query, callback) => {
@@ -69,8 +68,7 @@ class ZoteroPicker extends HTMLElement {
             return response.json();
           }
         }).then((json) => {
-          var _a2;
-          (_a2 = this._select) == null ? void 0 : _a2.clearOptions();
+          this._select?.clearOptions();
           const data = [];
           if (total > 25) {
             data.push({
