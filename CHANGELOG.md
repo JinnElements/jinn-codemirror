@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.15.0...v1.16.0) (2024-03-29)
+
+
+### Features
+
+* **jinn-codemirror:** add json support ([8f08845](https://github.com/JinnElements/jinn-codemirror/commit/8f08845a087d0e6592c38dcedb26b32e251ec8d6))
+
 # [1.15.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.14.1...v1.15.0) (2024-02-04)
 
 
