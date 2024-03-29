@@ -43,7 +43,8 @@ export class JinnCodemirror extends HTMLElement {
     _placeholder: string = '';
 
     /**
-     * Editor theme to use. Currently only `dark` is supported.
+     * Editor theme to use. Currently `dark`, `material-dark`, `material-light`, `solarized-dark` and
+     * `solarized-light` are supported.
      */
     public theme?: string | null;
 
