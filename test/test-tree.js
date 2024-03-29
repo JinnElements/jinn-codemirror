@@ -1,4 +1,4 @@
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiXml from "chai-xml";
 import {leidenPlus2epiDoc} from "../dist/src/import/leiden+2xml.js";
 
