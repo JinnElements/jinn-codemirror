@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.0...v1.17.1) (2024-06-10)
+
+
+### Bug Fixes
+
+* close leiden editor if conversion from XML fails ([b396827](https://github.com/JinnElements/jinn-codemirror/commit/b396827fc4d4f0cd9195d7c5c360e429fa278266))
+
 # [1.17.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.16.0...v1.17.0) (2024-03-29)
 
 
