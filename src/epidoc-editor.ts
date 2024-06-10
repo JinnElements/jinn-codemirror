@@ -223,10 +223,11 @@ export class JinnEpidocEditor extends HTMLElement {
                             leidenEditor.value = value;
                         }
                         this.xmlEditor.status = '';
+                        showLeiden();
                     } catch (e) {
                         this.xmlEditor.status = e.message;
+                        hideLeiden();
                     }
-                    showLeiden();
                 } else {
                     showLeiden();
                     leidenEditor.value = '';
