@@ -64,7 +64,6 @@ class ZoteroPicker extends HTMLElement {
         fetch(`https://api.zotero.org/groups/${this.group}/items?q=${query}&sort=title&include=data,bib`).then((response) => {
           if (response.ok) {
             total = parseInt(response.headers.get("Total-Results") || "0");
-            console.log(total);
             return response.json();
           }
         }).then((json) => {
@@ -73,19 +72,27 @@ class ZoteroPicker extends HTMLElement {
           if (total > 25) {
             data.push({
               label: `${total} matching entries. Showing first 25.`,
-              tag: "invalid",
+              tag: "note",
               disabled: true
             });
           }
-          json.forEach((entry) => {
-            if (entry.data.tags && entry.data.tags.length > 0) {
-              data.push({
-                label: entry.bib,
-                tag: entry.data.tags[0].tag
-              });
+          json.forEach((entry, n) => {
+            if (entry.data.tags) {
+              const item = {
+                label: entry.bib
+              };
+              if (entry.data.tags.length > 0) {
+                item.tag = entry.data.tags[0].tag;
+              } else {
+                item.tag = `item-${n}`;
+                item.disabled = true;
+              }
+              data.push(item);
             }
           });
           callback(data);
+        }).catch(() => {
+          callback();
         });
       },
       placeholder: "Zotero search",
