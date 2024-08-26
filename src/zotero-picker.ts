@@ -111,9 +111,11 @@ export class ZoteroPicker extends HTMLElement {
                             data.push(item);
                         }
                     });
-                    console.log(data);
                     callback(data);
-                });
+                })
+                .catch(()=>{
+					callback();
+				});
             },
             placeholder: 'Zotero search',
             valueField: 'tag',
