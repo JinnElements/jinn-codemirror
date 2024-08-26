@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.1...v1.17.2) (2024-08-26)
+
+
+### Bug Fixes
+
+* **zotero-picker:** catch request errors ([c481635](https://github.com/JinnElements/jinn-codemirror/commit/c481635ca54b664d049457ae5fa59fa34a8d0975))
+
 ## [1.17.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.0...v1.17.1) (2024-06-10)
 
 
