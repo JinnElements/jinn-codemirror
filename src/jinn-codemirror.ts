@@ -399,4 +399,6 @@ export class JinnCodemirror extends HTMLElement {
     }
 }
 
-window.customElements.define('jinn-codemirror', JinnCodemirror);
+if (!customElements.get('jinn-codemirror')) {
+    window.customElements.define('jinn-codemirror', JinnCodemirror);
+}
