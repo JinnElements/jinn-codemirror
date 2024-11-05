@@ -1,3 +1,10 @@
+## [1.17.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.2...v1.17.3) (2024-11-05)
+
+
+### Bug Fixes
+
+* **zotero-picker:** include subcollections ([0a20e21](https://github.com/JinnElements/jinn-codemirror/commit/0a20e215e12bdb21f80fd059d1bd769321c662b8))
+
 ## [1.17.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.1...v1.17.2) (2024-08-26)
 
 
