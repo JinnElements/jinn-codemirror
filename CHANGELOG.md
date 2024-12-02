@@ -1,4 +1,11 @@
 ## [1.17.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.4...v1.17.5) (2024-12-02)
+
+
+### Bug Fixes
+
+* **registration-release:** trigger fix release ([8e9812f](https://github.com/JinnElements/jinn-codemirror/commit/8e9812fe24ba61e9ed7e75bfbf8769b170164a71))
+
+## [1.17.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.4...v1.17.5) (2024-12-02)
 * trying to fix broken release
 
 ## [1.17.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.3...v1.17.4) (2024-12-02)
