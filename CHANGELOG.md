@@ -1,3 +1,8 @@
+## [1.17.4](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.3...v1.17.4) (2024-12-02)
+### Bug Fixes
+* avoid duplicate registration of custom element
+
+  
 ## [1.17.3](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.2...v1.17.3) (2024-11-05)
 
 
