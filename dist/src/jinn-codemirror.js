@@ -17,6 +17,7 @@ class JinnCodemirror extends HTMLElement {
     this._mode = SourceType.xml;
     this._placeholder = "";
     this.attachShadow({ mode: "open" });
+    this.ignoreBlur = true;
   }
   static get observedAttributes() {
     return ["placeholder", "mode", "code"];
@@ -48,20 +49,18 @@ class JinnCodemirror extends HTMLElement {
     if (this.hasAttribute("theme")) {
       this.theme = this.getAttribute("theme");
     }
-    this.addEventListener("blur", (ev) => {
-      const target = ev.relatedTarget;
-      if (target) {
-        let parent = target.parentNode;
-        while (parent) {
-          if (parent === this) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            return;
-          }
-          parent = parent.parentNode;
+    this.ignoreBlur = this.hasAttribute("ignore-blur");
+    if (!this.ignoreBlur) {
+      this.addEventListener("blur", (ev) => {
+        if (!ev.relatedTarget || this.contains(ev.relatedTarget)) {
+          return;
         }
-      }
-    });
+        this.dispatchEvent(new CustomEvent("leave", {
+          composed: true,
+          bubbles: true
+        }));
+      });
+    }
   }
   attributeChangedCallback(name, oldValue, newValue) {
     if (!oldValue || oldValue === newValue) {
@@ -325,7 +324,9 @@ class JinnCodemirror extends HTMLElement {
         `;
   }
 }
-window.customElements.define("jinn-codemirror", JinnCodemirror);
+if (!customElements.get("jinn-codemirror")) {
+  window.customElements.define("jinn-codemirror", JinnCodemirror);
+}
 export {
   JinnCodemirror
 };

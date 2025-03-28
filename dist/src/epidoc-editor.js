@@ -96,7 +96,8 @@ class JinnEpidocEditor extends HTMLElement {
             <style>
                 ${style}
             </style>
-            <jinn-codemirror id="leiden-editor" class="${this.showLeiden ? "" : "hidden"}" mode="${this.mode}">
+            <jinn-codemirror id="leiden-editor" class="${this.showLeiden ? "" : "hidden"}" 
+                mode="${this.mode}" ignore-blur>
                 <div slot="header"><slot name="leiden-header"></slot></div>
                 <div slot="toolbar">
                     ${this.modeSelect ? createModeSelect(this.mode) : ""}
@@ -105,7 +106,7 @@ class JinnEpidocEditor extends HTMLElement {
                 </div>
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? "unwrap" : ""} schema="${this.schema}"
-                schema-root="${this.schemaRoot}" placeholder="${this.placeholder}">
+                schema-root="${this.schemaRoot}" placeholder="${this.placeholder}" ignore-blur>
                 <div slot="header"><slot name="xml-header"></slot></div>
                 <div slot="toolbar">
                     <slot name="open-leiden" id="import" class="${this.showLeiden ? "hidden" : ""}">
@@ -218,6 +219,15 @@ class JinnEpidocEditor extends HTMLElement {
       this.showLeiden = false;
     }, {
       once: true
+    });
+    this.addEventListener("blur", (ev) => {
+      if (!ev.relatedTarget || this.contains(ev.relatedTarget)) {
+        return;
+      }
+      this.dispatchEvent(new CustomEvent("leave", {
+        composed: true,
+        bubbles: true
+      }));
     });
   }
 }

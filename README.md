@@ -64,6 +64,7 @@ Features extended support for XML and Leiden+ code.
 | Event     | Description                                      |
 |-----------|--------------------------------------------------|
 | `invalid` | fired if the content of the editor is invalid (requires a linter to be supported) |
+| `leave`   |                                                  |
 | `update`  | fired when the content of the editor has changed |
 | `valid`   | fired if the content of the editor is valid (requires a linter to be supported) |
 
@@ -126,6 +127,7 @@ of the Leiden convention.
 | Event     |
 |-----------|
 | `invalid` |
+| `leave`   |
 | `valid`   |
 
 #### Slots

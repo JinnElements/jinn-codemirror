@@ -21,7 +21,7 @@ class ZoteroPicker extends HTMLElement {
   set value(value) {
     this._value = value;
     if (value && value.length > 0) {
-      fetch(`https://api.zotero.org/groups/${this.group}/items/top?tag=${this._value}&format=bib&amp;style=digital-humanities-im-deutschsprachigen-raum`).then((response) => {
+      fetch(`https://api.zotero.org/groups/${this.group}/items?tag=${this._value}&format=bib&amp;style=digital-humanities-im-deutschsprachigen-raum`).then((response) => {
         if (response.ok) {
           return response.text();
         }

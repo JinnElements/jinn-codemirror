@@ -220,6 +220,13 @@
                     // because we defined a wrapper, the returned content will be a node instead of a string
                     xmlOutput.innerText = new XMLSerializer().serializeToString(ev.detail.content);
                 });
+
+                epidoc.addEventListener('leave', (ev) => {
+                    console.log('epidoc left %o', ev.relatedTarget);
+                });
+                xml.addEventListener('leave', (ev) => {
+                    console.log('xml left %o', ev.relatedTarget);
+                });
             });
         </script>
     </body>
