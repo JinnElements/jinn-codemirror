@@ -1,3 +1,10 @@
+## [1.17.6](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.5...v1.17.6) (2025-03-28)
+
+
+### Bug Fixes
+
+* catch blur events in editors and emit 'leave' event instead ([53f54a3](https://github.com/JinnElements/jinn-codemirror/commit/53f54a308c3c4ff6447e081a11d4cdb5e90c671b))
+
 ## [1.17.5](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.4...v1.17.5) (2024-12-02)
 
 
