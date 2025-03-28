@@ -51,11 +51,14 @@ export class JinnCodemirror extends HTMLElement {
     _editor?: EditorView;
     _config?: EditorConfig;
 
+    protected ignoreBlur: boolean;
+
     static get observedAttributes() { return ['placeholder', 'mode', 'code']; }
 
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
+        this.ignoreBlur = true;
     }
 
     connectedCallback() {
@@ -90,20 +93,19 @@ export class JinnCodemirror extends HTMLElement {
             this.theme = this.getAttribute('theme');
         }
 
-        this.addEventListener('blur', (ev) => {
-            const target = ev.relatedTarget;
-            if (target) {
-                let parent = (<Element>target).parentNode;
-                while (parent) {
-                    if (parent === this) {
-                        ev.preventDefault();
-                        ev.stopPropagation();
-                        return;
-                    }
-                    parent = parent.parentNode;
+        this.ignoreBlur = this.hasAttribute('ignore-blur');
+        
+        if (!this.ignoreBlur) {
+            this.addEventListener('blur', (ev) => {
+                if (!ev.relatedTarget || this.contains(ev.relatedTarget as Node)) {
+                    return;
                 }
-            }
-        });
+                this.dispatchEvent(new CustomEvent('leave', {
+                    composed: true,
+                    bubbles: true
+                }));
+            });
+        }
     }
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
