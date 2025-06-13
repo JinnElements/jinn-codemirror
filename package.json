@@ -23,7 +23,7 @@
     "semantic-release": "semantic-release"
   },
   "author": "JinnTec GmbH",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "devDependencies": {
     "@lezer/generator": "^1.7.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
