@@ -149,7 +149,6 @@ const completeAttribute = (view: EditorView, completion: Completion, from: numbe
 
 export class XMLConfig extends EditorConfig {
 
-    private namespace: string|null;
     private unwrap: boolean|null;
     private checkNamespace: boolean|null;
 

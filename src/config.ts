@@ -143,11 +143,13 @@ export abstract class EditorConfig {
     commands: EditorCommands;
     threshold: number = 300;
     _status: HTMLDivElement|null = null;
+    protected namespace: string|null;
 
     constructor(editor:JinnCodemirror, toolbar: HTMLElement[] = [], commands: EditorCommands = defaultCommands) {
         this.editor = editor;
         this.commands = commands;
         this.keymap = [];
+        this.namespace = null;
         if (toolbar) {
             toolbar.forEach((control) => {
                 const cmdName = <string>(<HTMLElement>control).dataset.command;
@@ -239,6 +241,22 @@ export abstract class EditorConfig {
         return content;
     }
 
+    /**
+     * Strips default namespace declarations (xmlns="...") from serialized XML string
+     * Only removes namespaces that match this.namespace
+     */
+    private stripDefaultNamespaces(xmlString: string): string {
+        // If no namespace is set, don't remove anything
+        if (!this.namespace) {
+            return xmlString;
+        }
+        // Remove xmlns="..." attributes only if the namespace URI matches this.namespace
+        // Escape special regex characters in the namespace URI
+        const escapedNamespace = this.namespace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\s+xmlns\\s*=\\s*["']${escapedNamespace}["']`, 'g');
+        return xmlString.replace(regex, '');
+    }
+
     setFromValue(value: Element|NodeListOf<ChildNode>|string|null|undefined): string {
         if (!value) { 
             return '';
@@ -248,11 +266,11 @@ export abstract class EditorConfig {
             if (value instanceof NodeList) {
                 const buf = [];
                 for (let i = 0; i < (<NodeList>value).length; i++) {
-                    buf.push(serializer.serializeToString(value[i]));
+                    buf.push(this.stripDefaultNamespaces(serializer.serializeToString(value[i])));
                 }
                 return buf.join('');
             }
-            return serializer.serializeToString(value);
+            return this.stripDefaultNamespaces(serializer.serializeToString(value));
         }
         if (typeof value === 'string') {
             return value;
