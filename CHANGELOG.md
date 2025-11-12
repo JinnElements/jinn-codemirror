@@ -1,3 +1,10 @@
+## [1.17.7](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.6...v1.17.7) (2025-11-12)
+
+
+### Bug Fixes
+
+* strip declared default namespace when serializing XML to text ([7b39e29](https://github.com/JinnElements/jinn-codemirror/commit/7b39e294519a0c335d4bd8b9cb387423da1923b6))
+
 ## [1.17.6](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.5...v1.17.6) (2025-03-28)
 
 
