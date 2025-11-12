@@ -2,7 +2,7 @@
  * Tom Select Bootstrap 4
  */
 /**
- * tom-select.css (v2.3.1)
+ * tom-select.css (v2.4.3)
  * Copyright (c) contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -58,7 +58,7 @@
   border: 0 solid rgba(0, 0, 0, 0);
 }
 .ts-wrapper.multi.disabled .ts-control > div, .ts-wrapper.multi.disabled .ts-control > div.active {
-  color: #878787;
+  color: rgb(134.5, 134.5, 134.5);
   background: white;
   border: 0 solid white;
 }
@@ -156,10 +156,10 @@
 }
 .ts-dropdown .active {
   background-color: #e9ecef;
-  color: #16181b;
+  color: rgb(21.6283783784, 24.25, 26.8716216216);
 }
 .ts-dropdown .active.create {
-  color: #16181b;
+  color: rgb(21.6283783784, 24.25, 26.8716216216);
 }
 .ts-dropdown .create {
   color: rgba(52, 58, 64, 0.5);
@@ -269,7 +269,7 @@
   background: transparent;
 }
 .plugin-dropdown_input.focus .ts-dropdown .dropdown-input {
-  border-color: #80bdff;
+  border-color: rgb(127.5, 189, 255);
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
@@ -371,8 +371,8 @@
 }
 
 :root {
-  --ts-pr-clear-button: 0;
-  --ts-pr-caret: 0;
+  --ts-pr-clear-button: 0px;
+  --ts-pr-caret: 0px;
   --ts-pr-min: .75rem;
 }
 
@@ -502,7 +502,7 @@
   }
 }
 .focus .ts-control {
-  border-color: #80bdff;
+  border-color: rgb(127.5, 189, 255);
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
@@ -513,7 +513,7 @@
 }
 .focus .is-invalid .ts-control,
 .focus .was-validated .invalid .ts-control {
-  border-color: #bd2130;
+  border-color: rgb(189.2151898734, 32.7848101266, 47.7721518987);
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 

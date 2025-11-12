@@ -105,6 +105,7 @@ class EditorConfig {
     this.editor = editor;
     this.commands = commands;
     this.keymap = [];
+    this.namespace = null;
     if (toolbar) {
       toolbar.forEach((control) => {
         const cmdName = control.dataset.command;
@@ -184,6 +185,18 @@ class EditorConfig {
   onUpdate(tree, content) {
     return content;
   }
+  /**
+   * Strips default namespace declarations (xmlns="...") from serialized XML string
+   * Only removes namespaces that match this.namespace
+   */
+  stripDefaultNamespaces(xmlString) {
+    if (!this.namespace) {
+      return xmlString;
+    }
+    const escapedNamespace = this.namespace.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`\\s+xmlns\\s*=\\s*["']${escapedNamespace}["']`, "g");
+    return xmlString.replace(regex, "");
+  }
   setFromValue(value) {
     if (!value) {
       return "";
@@ -193,11 +206,11 @@ class EditorConfig {
       if (value instanceof NodeList) {
         const buf = [];
         for (let i = 0; i < value.length; i++) {
-          buf.push(serializer.serializeToString(value[i]));
+          buf.push(this.stripDefaultNamespaces(serializer.serializeToString(value[i])));
         }
         return buf.join("");
       }
-      return serializer.serializeToString(value);
+      return this.stripDefaultNamespaces(serializer.serializeToString(value));
     }
     if (typeof value === "string") {
       return value;
