@@ -81,7 +81,6 @@ async function prepare() {
         {regex: /..\/src\/tei.json/g, replacement: 'dist/tei.json'}
     ]);
     await mfs.copy('src/tei.json', 'dist');
-    await mfs.copy('node_modules/tom-select/dist/css/*.css', 'css');
 }
 
 const args = commandLineArgs([

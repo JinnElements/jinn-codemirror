@@ -7,7 +7,7 @@ import { syntaxTree } from "@codemirror/language";
 import { TreeCursor } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
 import { JinnXMLEditor } from "./xml-editor";
-import { commands, encloseWithPanel, zoteroPanel } from "./xml-commands";
+import { commands, encloseWithPanel } from "./xml-commands";
 import { Completion, autocompletion, CompletionSource } from "@codemirror/autocomplete";
 import { XMLAttributeAutocomplete } from "./autocomplete/xml-attribute-autocomplete";
 
@@ -165,7 +165,6 @@ export class XMLConfig extends EditorConfig {
     private getDefaultExtensions (): Extension[] {
         return [
             encloseWithPanel(),
-            zoteroPanel(),
             linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), {delay, markerFilter}), 
             lintGutter({markerFilter})
         ];
