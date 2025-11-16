@@ -1,6 +1,6 @@
 import { JinnCodemirror } from "./jinn-codemirror";
 import { XMLConfig } from "./xml";
-import { AttributeAutocompleteProvider, ZoteroAutocomplete } from "./zotero-autocomplete";
+import { AttributeAutocompleteProvider, ZoteroAutocomplete } from "./autocomplete/zotero-autocomplete";
 
 /**
  * Extends jinn-codemirror for XML editing: adds a boolean property "unwrap" to

@@ -90,3 +90,4 @@ export class ZoteroAutocomplete extends AttributeAutocompleteProvider {
         };
     }
 }
+

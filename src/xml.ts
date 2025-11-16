@@ -9,7 +9,7 @@ import { JinnCodemirror } from "./jinn-codemirror";
 import { JinnXMLEditor } from "./xml-editor";
 import { commands, encloseWithPanel, zoteroPanel } from "./xml-commands";
 import { Completion, autocompletion, CompletionSource } from "@codemirror/autocomplete";
-import { XMLAttributeAutocomplete } from "./xml-attribute-autocomplete";
+import { XMLAttributeAutocomplete } from "./autocomplete/xml-attribute-autocomplete";
 
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
