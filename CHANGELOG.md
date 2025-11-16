@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.7...v1.18.0) (2025-11-16)
+
+
+### Features
+
+* **xml-editor:** add xml attribute  value autocomplete to override default completion ([4409d65](https://github.com/JinnElements/jinn-codemirror/commit/4409d6554333d4ff7217512cf3b97bcd3ede231e))
+
 ## [1.17.7](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.6...v1.17.7) (2025-11-12)
 
 
