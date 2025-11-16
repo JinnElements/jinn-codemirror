@@ -1,5 +1,6 @@
 import { JinnCodemirror } from "./jinn-codemirror";
 import { XMLConfig } from "./xml";
+import { AttributeAutocompleteProvider, ZoteroAutocomplete } from "./zotero-autocomplete";
 
 /**
  * Extends jinn-codemirror for XML editing: adds a boolean property "unwrap" to
@@ -33,17 +34,33 @@ export class JinnXMLEditor extends JinnCodemirror {
      */
     schemaRoot: string | null;
 
+    /**
+     * Base URL for autocomplete providers.
+     * 
+     * @attr {string} base-url
+     */
+    baseUrl : string | null;
+
+    autocompleteProviders: AttributeAutocompleteProvider[] = [];
+    
     constructor() {
         super();
         this.schema = null;
         this.schemaRoot = null;
+        this.baseUrl = null;
     }
 
     connectedCallback() {
         this.schema = this.getAttribute('schema');
         this.schemaRoot = this.getAttribute('schema-root');
-
+        this.baseUrl = this.getAttribute('base-url');
         this.unwrap = this.hasAttribute('unwrap');
+        this.autocompleteProviders = this.getAttribute('providers')?.split(',').map((provider: string) => {
+            if (provider === 'zotero') {
+                return new ZoteroAutocomplete(this.baseUrl);
+            }
+            throw new Error(`Unknown autocomplete provider: ${provider}`);
+        }) || [];
         super.connectedCallback();
 
         const wrapper = this.getAttribute('wrapper');
@@ -74,7 +91,8 @@ export class JinnXMLEditor extends JinnCodemirror {
     configure() {
         const toolbar = this.getToolbarControls(<HTMLSlotElement|null> this.shadowRoot?.querySelector('[name=toolbar]'));
         const checkNamespace = this.hasAttribute('check-namespace');
-        this._config = new XMLConfig(this, toolbar, this.namespace, checkNamespace, this.unwrap);
+        this._config = new XMLConfig(this, toolbar, this.namespace, checkNamespace, this.unwrap, 
+            this.autocompleteProviders.map((provider: AttributeAutocompleteProvider) => provider.createAutocomplete()));
     }
 
     emitUpdateEvent(content: string) {

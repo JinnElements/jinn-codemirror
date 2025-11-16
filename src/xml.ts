@@ -1,5 +1,5 @@
-import { xml } from "@codemirror/lang-xml";
-import { Extension, EditorSelection } from "@codemirror/state";
+import { xml, completeFromSchema } from "@codemirror/lang-xml";
+import { Extension } from "@codemirror/state";
 import { EditorConfig } from "./config";
 import { Diagnostic, linter, lintGutter, Action } from "@codemirror/lint";
 import { EditorView } from "@codemirror/view";
@@ -8,7 +8,8 @@ import { TreeCursor } from "@lezer/common";
 import { JinnCodemirror } from "./jinn-codemirror";
 import { JinnXMLEditor } from "./xml-editor";
 import { commands, encloseWithPanel, zoteroPanel } from "./xml-commands";
-import { Completion } from "@codemirror/autocomplete";
+import { Completion, autocompletion, CompletionSource } from "@codemirror/autocomplete";
+import { XMLAttributeAutocomplete } from "./xml-attribute-autocomplete";
 
 const isNamespaceNode = (view:EditorView, node:TreeCursor): boolean => {
     return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns"
@@ -151,12 +152,14 @@ export class XMLConfig extends EditorConfig {
 
     private unwrap: boolean|null;
     private checkNamespace: boolean|null;
+    private attributeAutocomplete: XMLAttributeAutocomplete[];
 
-    constructor(editor: JinnCodemirror, toolbar: HTMLElement[] = [], namespace: string|null = null, checkNamespace: boolean|null = false, unwrap: boolean|null = false) {
+    constructor(editor: JinnCodemirror, toolbar: HTMLElement[] = [], namespace: string|null = null, checkNamespace: boolean|null = false, unwrap: boolean|null = false, attributeAutocomplete: XMLAttributeAutocomplete[] = []) {
         super(editor, toolbar, commands);
         this.namespace = namespace;
         this.checkNamespace = checkNamespace;
         this.unwrap = unwrap;
+        this.attributeAutocomplete = attributeAutocomplete;
     }
 
     private getDefaultExtensions (): Extension[] {
@@ -170,11 +173,41 @@ export class XMLConfig extends EditorConfig {
 
     async getExtensions(): Promise<Extension[]> {
         const schemaUrl = (<JinnXMLEditor>this.editor).schema;
+        const defaultExtensions = this.getDefaultExtensions();
+        
+        // Build completion sources array - put our custom ones first so they take precedence
+        const completionSources: CompletionSource[] = [];
+        
+        // Add attribute autocompletion sources
+        this.attributeAutocomplete.forEach((autocomplete) => {
+            const source = autocomplete.createCompletionSource();
+            if (source) {
+                completionSources.push(source);
+            }
+        });
+        
         if (schemaUrl) {
             const schema = await this.loadSchema(schemaUrl);
-            return this.getDefaultExtensions().concat(xml(schema));
+            completionSources.push(completeFromSchema(schema.elements, []));
+            // Get XML language support (without its default autocompletion since we're overriding)
+            const xmlSupport = xml(schema);
+            // Override autocompletion to include both XML schema completion and our custom one
+            return defaultExtensions.concat(
+                xmlSupport,
+                autocompletion({
+                    override: completionSources
+                })
+            );
+        } else {
+            // No schema, just use basic XML support
+            const xmlSupport = xml();
+            return defaultExtensions.concat(
+                xmlSupport,
+                autocompletion({
+                    override: completionSources
+                })
+            );
         }
-        return this.getDefaultExtensions().concat(xml());
     }
 
     private async loadSchema(url: string) {
