@@ -2,7 +2,6 @@ import { EditorSelection, StateEffect, StateField } from "@codemirror/state";
 import { EditorView, showPanel } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { wrapCommand, snippetCommand } from "./config";
-import { zoteroCommand, zoteroPanel } from "./zotero-command";
 const toggleEncloseWith = StateEffect.define();
 const encloseWithState = StateField.define({
   create: () => false,
@@ -121,9 +120,6 @@ const commands = {
   encloseWith: encloseWithCommand,
   snippet: {
     create: (template) => snippetCommand(template)
-  },
-  zotero: {
-    create: (group) => zoteroCommand(group)
   }
 };
 export {
@@ -131,7 +127,5 @@ export {
   encloseWithCommand,
   encloseWithPanel,
   removeEnclosingCommand,
-  selectElementCommand,
-  zoteroCommand,
-  zoteroPanel
+  selectElementCommand
 };

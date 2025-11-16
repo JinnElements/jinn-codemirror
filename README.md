@@ -89,11 +89,13 @@ content. Setting the property requires that a DOM element is passed via value.
 
 #### Properties
 
-| Property     | Attribute     | Type     | Default | Description                                      |
-|--------------|---------------|----------|---------|--------------------------------------------------|
-| `schema`     | `schema`      | `string` | null    | Schema to load for autocompletion.               |
-| `schemaRoot` | `schema-root` | `string` | null    | Determines the root element to be used for autocomplete. |
-| `unwrap`     | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content. The wrapper element itself will not be shown in the editor. |
+| Property                | Attribute     | Type     | Default | Description                                      |
+|-------------------------|---------------|----------|---------|--------------------------------------------------|
+| `autocompleteProviders` |               | `object` | []      |                                                  |
+| `baseUrl`               | `base-url`    | `string` | null    | Base URL for autocomplete providers.             |
+| `schema`                | `schema`      | `string` | null    | Schema to load for autocompletion.               |
+| `schemaRoot`            | `schema-root` | `string` | null    | Determines the root element to be used for autocomplete. |
+| `unwrap`                | `unwrap`      | `string` | false   | If set, expects that a value passed in is a DOM element, which will serve as a wrapper for the content. The wrapper element itself will not be shown in the editor. |
 
 #### Methods
 

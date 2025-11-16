@@ -1,5 +1,6 @@
 import { JinnCodemirror } from "./jinn-codemirror";
 import { XMLConfig } from "./xml";
+import { ZoteroAutocomplete } from "./autocomplete/zotero-autocomplete";
 class JinnXMLEditor extends JinnCodemirror {
   constructor() {
     super();
@@ -9,13 +10,22 @@ class JinnXMLEditor extends JinnCodemirror {
      * @attr {string} unwrap
      */
     this.unwrap = false;
+    this.autocompleteProviders = [];
     this.schema = null;
     this.schemaRoot = null;
+    this.baseUrl = null;
   }
   connectedCallback() {
     this.schema = this.getAttribute("schema");
     this.schemaRoot = this.getAttribute("schema-root");
+    this.baseUrl = this.getAttribute("base-url");
     this.unwrap = this.hasAttribute("unwrap");
+    this.autocompleteProviders = this.getAttribute("providers")?.split(",").map((provider) => {
+      if (provider === "zotero") {
+        return new ZoteroAutocomplete(this.baseUrl);
+      }
+      throw new Error(`Unknown autocomplete provider: ${provider}`);
+    }) || [];
     super.connectedCallback();
     const wrapper = this.getAttribute("wrapper");
     if (wrapper) {
@@ -44,7 +54,14 @@ class JinnXMLEditor extends JinnCodemirror {
   configure() {
     const toolbar = this.getToolbarControls(this.shadowRoot?.querySelector("[name=toolbar]"));
     const checkNamespace = this.hasAttribute("check-namespace");
-    this._config = new XMLConfig(this, toolbar, this.namespace, checkNamespace, this.unwrap);
+    this._config = new XMLConfig(
+      this,
+      toolbar,
+      this.namespace,
+      checkNamespace,
+      this.unwrap,
+      this.autocompleteProviders.map((provider) => provider.createAutocomplete())
+    );
   }
   emitUpdateEvent(content) {
     if (!this.unwrap) {

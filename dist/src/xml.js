@@ -1,8 +1,9 @@
-import { xml } from "@codemirror/lang-xml";
+import { xml, completeFromSchema } from "@codemirror/lang-xml";
 import { EditorConfig } from "./config";
 import { linter, lintGutter } from "@codemirror/lint";
 import { syntaxTree } from "@codemirror/language";
-import { commands, encloseWithPanel, zoteroPanel } from "./xml-commands";
+import { commands, encloseWithPanel } from "./xml-commands";
+import { autocompletion } from "@codemirror/autocomplete";
 const isNamespaceNode = (view, node) => {
   return node.type.name === "AttributeName" && view.state.sliceDoc(node.from, node.to) === "xmlns";
 };
@@ -119,27 +120,49 @@ const completeAttribute = (view, completion, from, to) => {
   view.dispatch(tx);
 };
 class XMLConfig extends EditorConfig {
-  constructor(editor, toolbar = [], namespace = null, checkNamespace = false, unwrap = false) {
+  constructor(editor, toolbar = [], namespace = null, checkNamespace = false, unwrap = false, attributeAutocomplete = []) {
     super(editor, toolbar, commands);
     this.namespace = namespace;
     this.checkNamespace = checkNamespace;
     this.unwrap = unwrap;
+    this.attributeAutocomplete = attributeAutocomplete;
   }
   getDefaultExtensions() {
     return [
       encloseWithPanel(),
-      zoteroPanel(),
       linter(teiFragmentLinter(this.editor, this.checkNamespace ? this.namespace : null), { delay, markerFilter }),
       lintGutter({ markerFilter })
     ];
   }
   async getExtensions() {
     const schemaUrl = this.editor.schema;
+    const defaultExtensions = this.getDefaultExtensions();
+    const completionSources = [];
+    this.attributeAutocomplete.forEach((autocomplete) => {
+      const source = autocomplete.createCompletionSource();
+      if (source) {
+        completionSources.push(source);
+      }
+    });
     if (schemaUrl) {
       const schema = await this.loadSchema(schemaUrl);
-      return this.getDefaultExtensions().concat(xml(schema));
+      completionSources.push(completeFromSchema(schema.elements, []));
+      const xmlSupport = xml(schema);
+      return defaultExtensions.concat(
+        xmlSupport,
+        autocompletion({
+          override: completionSources
+        })
+      );
+    } else {
+      const xmlSupport = xml();
+      return defaultExtensions.concat(
+        xmlSupport,
+        autocompletion({
+          override: completionSources
+        })
+      );
     }
-    return this.getDefaultExtensions().concat(xml());
   }
   async loadSchema(url) {
     const json = await fetch(url).then((response) => response.json());
