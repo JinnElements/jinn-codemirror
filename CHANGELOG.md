@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.18.0...v1.18.1) (2025-12-09)
+
+
+### Bug Fixes
+
+* **firefox:** update codemirror dependencies to fix crash in firefox ([6c40a03](https://github.com/JinnElements/jinn-codemirror/commit/6c40a038dcf6d0fb95fdda34a4d6e5f725161bf1))
+
 # [1.18.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.17.7...v1.18.0) (2025-11-16)
 
 
