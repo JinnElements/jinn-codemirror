@@ -1,3 +1,10 @@
+## [1.18.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.18.1...v1.18.2) (2025-12-11)
+
+
+### Bug Fixes
+
+* **leiden+:** treat newlines as space ([4ef0c03](https://github.com/JinnElements/jinn-codemirror/commit/4ef0c0348d80fe9e28b3c77cf0b516f96c9418ac))
+
 ## [1.18.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.18.0...v1.18.1) (2025-12-09)
 
 
