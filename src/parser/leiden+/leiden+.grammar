@@ -65,7 +65,7 @@ LostLines {
 @external tokens unclearToken from "../tokens.js" { Unclear }
 
 @tokens {
-    space { " " }
+    space { $[\u0020\u0009\u000a\u000d] }
 
     CertLow { "(?)" }
 

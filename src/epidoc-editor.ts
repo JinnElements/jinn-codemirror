@@ -147,7 +147,8 @@ export class JinnEpidocEditor extends HTMLElement {
                 </div>
             </jinn-codemirror>
             <jinn-xml-editor id="xml-editor" ${this.unwrap ? 'unwrap' : ''} schema="${this.schema}"
-                schema-root="${this.schemaRoot}" placeholder="${this.placeholder}" ignore-blur>
+                schema-root="${this.schemaRoot}" placeholder="${this.placeholder}" ignore-blur
+                namespace="http://www.tei-c.org/ns/1.0">
                 <div slot="header"><slot name="xml-header"></slot></div>
                 <div slot="toolbar">
                     <slot name="open-leiden" id="import" class="${this.showLeiden ? 'hidden' : ''}">

@@ -116,9 +116,13 @@ export function leidenPlus2epiDoc(input: string, root: Tree = parser.parse(input
                     value = /^\.([0-9?]+)(lin)?$/.exec(text(input, node));
                     if (value) {
                         if (value[2] === 'lin') {
-                            xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="line"/>`);
+                            if (value[1] === '?') {
+                                xml.push(`<gap reason="illegible" extent="unknown" unit="line"/>`);
+                            } else {
+                                xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="line"/>`);
+                            }
                         } else if (value[1] === '?') {
-                            xml.push(`<gap reason="illegible" extent="unkown" unit="character"/>`);
+                            xml.push(`<gap reason="illegible" extent="unknown" unit="character"/>`);
                         } else {
                             xml.push(`<gap reason="illegible" quantity="${value ? value[1]: ''}" unit="character"/>`);
                         }

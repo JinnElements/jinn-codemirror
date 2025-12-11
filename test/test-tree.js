@@ -113,7 +113,7 @@ describe('inline', () => {
     );
     testTransform('illegible lines, extent unknown',
         `<=1. (λινοκ(αλάμης)) .?lin=>`,
-        '<ab><lb n="1"/><expan>λινοκ<ex>αλάμης</ex></expan> <gap reason="illegible" quantity="?" unit="line"/></ab>'
+        '<ab><lb n="1"/><expan>λινοκ<ex>αλάμης</ex></expan> <gap reason="illegible" extent="unknown" unit="line"/></ab>'
     );
     testTransform('unclear',
         `<=ạ=>`,
@@ -132,5 +132,9 @@ describe('inline', () => {
     testTransform('language switch',
         `<=~|1. Ὑψίστῳ Σερά2.- πιδι σὺν γάστ3.- ρᾳ καὶ μυστα4.- ρίοις|~gr 5. (G(aius)) C(Calp(urnius)) 6. Rufinus (v(ir))=>`,
         '<ab><foreign xml:lang="gr"><lb n="1"/>Ὑψίστῳ Σερά<lb n="2" break="no"/>πιδι σὺν γάστ<lb n="3" break="no"/>ρᾳ καὶ μυστα<lb n="4" break="no"/>ρίοις</foreign> <lb n="5"/><expan>G<ex>aius</ex></expan> C<expan>Calp<ex>urnius</ex></expan> <lb n="6"/>Rufinus <expan>v<ex>ir</ex></expan></ab>'
+    );
+    testTransform('newline in input',
+        '<=foo\nlost.7lin=>',
+        '<ab>foo\n<gap reason="lost" quantity="7" unit="line"/></ab>'
     );
 });
