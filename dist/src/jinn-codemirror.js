@@ -127,9 +127,7 @@ class JinnCodemirror extends HTMLElement {
         state: EditorState.create(stateConfig),
         parent: wrapper
       });
-      if (!this._config) {
-        return;
-      }
+      console.log(`<jinn-codemirror> created new editor: %o`, stateConfig);
       if (update) {
         this.content = this._config.setFromValue(this._value);
       }
@@ -194,11 +192,23 @@ class JinnCodemirror extends HTMLElement {
       console.log("no editor");
       return;
     }
-    setTimeout(
-      () => this._editor.dispatch({
-        changes: { from: 0, to: this._editor.state.doc.length, insert: text }
-      })
-    );
+    if (text === this._editor?.state.doc.toString()) {
+      console;
+      return;
+    }
+    console.log("<jinn-codemirror> setting content: %o; %o", this._editor?.state.doc.toString(), text);
+    if (text === "") {
+      if (this._editor?.state.doc.length > 0) {
+        this._editor.dispatch({
+          changes: { from: 0, to: this._editor.state.doc.length, insert: "" }
+        });
+      }
+      return;
+    }
+    this._editor?.dispatch({
+      changes: { from: 0, to: this._editor.state.doc.length, insert: text || "" }
+    });
+    console.log(`<jinn-codemirror> content set: ${this._editor?.state.doc.length}; "${text || ""}"`);
   }
   get content() {
     return this._editor?.state.doc.toString() || "";
@@ -251,10 +261,6 @@ class JinnCodemirror extends HTMLElement {
   initModes() {
     const select = this.querySelector("[name=modes]");
     if (select && select instanceof HTMLSelectElement) {
-      select.addEventListener("change", () => {
-        this.mode = select.value;
-      });
-      return select.value;
     }
     return null;
   }

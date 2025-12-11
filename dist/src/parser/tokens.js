@@ -1,6 +1,6 @@
 import { ExternalTokenizer } from "@lezer/lr";
 import { chars as lp_chars, Unclear, lostLinesStart } from "./leiden+/parser.terms.js";
-const skipped = "() <>|?=.0123456789[]\u301A\u301B";
+const skipped = "() <>|?=.0123456789[]\u301A\u301B\n\r	";
 const charsToken = new ExternalTokenizer((input) => {
   let str = "";
   for (; ; ) {
