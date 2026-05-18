@@ -8,12 +8,7 @@ import { XMLAttributeAutocomplete } from "./xml-attribute-autocomplete";
  * specific autocomplete configurations.
  */
 export abstract class AttributeAutocompleteProvider {
-    /**
-     * Creates an XMLAttributeAutocomplete instance with the specific configuration.
-     * 
-     * @returns An XMLAttributeAutocomplete instance
-     */
-    abstract createAutocomplete(): XMLAttributeAutocomplete;
+    abstract createAutocomplete(): XMLAttributeAutocomplete[];
 }
 
 /**
@@ -29,13 +24,21 @@ export class ZoteroAutocomplete extends AttributeAutocompleteProvider {
         this.baseUrl = baseUrl;
     }
 
-    createAutocomplete(): XMLAttributeAutocomplete {
-        return new XMLAttributeAutocomplete({
-            elementName: 'ref',
-            attributeName: 'target',
-            conditionAttribute: { name: 'type', value: 'biblio' },
-            callback: this.createZoteroAutocompleteCallback()
-        });
+    createAutocomplete(): XMLAttributeAutocomplete[] {
+        const callback = this.createZoteroAutocompleteCallback();
+        return [
+            new XMLAttributeAutocomplete({
+                elementName: 'ref',
+                attributeName: 'target',
+                conditionAttribute: { name: 'type', value: 'biblio' },
+                callback
+            }),
+            new XMLAttributeAutocomplete({
+                elementName: 'rdg',
+                attributeName: 'wit',
+                callback
+            })
+        ];
     }
 
     /**

@@ -92,7 +92,7 @@ export class JinnXMLEditor extends JinnCodemirror {
         const toolbar = this.getToolbarControls(<HTMLSlotElement|null> this.shadowRoot?.querySelector('[name=toolbar]'));
         const checkNamespace = this.hasAttribute('check-namespace');
         this._config = new XMLConfig(this, toolbar, this.namespace, checkNamespace, this.unwrap, 
-            this.autocompleteProviders.map((provider: AttributeAutocompleteProvider) => provider.createAutocomplete()));
+            this.autocompleteProviders.flatMap((provider: AttributeAutocompleteProvider) => provider.createAutocomplete()));
     }
 
     emitUpdateEvent(content: string) {
