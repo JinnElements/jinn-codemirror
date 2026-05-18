@@ -1,5 +1,5 @@
 import { basicSetup } from "codemirror";
-import { EditorView, placeholder } from "@codemirror/view";
+import { EditorView, placeholder, showPanel } from "@codemirror/view";
 import { ViewPlugin, keymap } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { EditorSelection } from "@codemirror/state";
@@ -166,8 +166,8 @@ class EditorConfig {
       keymap.of([indentWithTab, ...this.keymap]),
       placeholder(this.editor.placeholder),
       ...customExtensions,
-      updateListener
-      // showPanel.of(createStatusPanel)
+      updateListener,
+      showPanel.of(createStatusPanel)
     ];
     if (this.editor && this.editor.theme) {
       const extTheme = theme(this.editor.theme);
