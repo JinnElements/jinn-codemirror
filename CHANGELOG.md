@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.18.2...v1.19.0) (2026-05-23)
+
+
+### Features
+
+* extend ZoteroAutocomplete to include rdg/[@wit](https://github.com/wit) ([fd3cb0d](https://github.com/JinnElements/jinn-codemirror/commit/fd3cb0dbfccee7bd470c5a301ee2eb4c98f0b8fd))
+
 ## [1.18.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.18.1...v1.18.2) (2025-12-11)
 
 
