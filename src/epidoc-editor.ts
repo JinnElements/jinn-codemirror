@@ -11,22 +11,25 @@ const style = `
         display: block;
         width: 100%;
     }
-    jinn-codemirror {
-        font-size: 1rem;
+    jinn-codemirror,
+    jinn-xml-editor {
+        font-size: var(--edep-editor-font-size, 1rem);
         display:block;
         width:100%;
     }
-    jinn-codemirror[valid="true"] {
-        outline: thin solid green;
-    }
-    jinn-codemirror[valid="false"] {
-        outline: thin solid red;
-    }
     #leiden-editor {
-        margin-bottom:0.5rem;
+        margin-bottom: 0;
     }
     [slot=toolbar] {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: var(--edep-editor-toolbar-gap, 4px);
+        width: 100%;
+        box-sizing: border-box;
+        padding: var(--edep-editor-toolbar-padding, 0.25rem 0.5rem);
+        background: var(--edep-editor-toolbar-background, inherit);
+        border-bottom: 1px solid var(--edep-editor-border-color, #CFCDC5);
     }
     .hidden {
         display: none;
