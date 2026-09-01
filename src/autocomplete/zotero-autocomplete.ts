@@ -13,7 +13,7 @@ export abstract class AttributeAutocompleteProvider {
 
 /**
  * Zotero-specific implementation of AttributeAutocompleteProvider.
- * Creates autocomplete for <ref type="biblio"> target attribute using Zotero API.
+ * Creates autocomplete for <ref type="biblio">/@target and <rdg>/@source using the Zotero API.
  */
 export class ZoteroAutocomplete extends AttributeAutocompleteProvider {
     
@@ -35,7 +35,7 @@ export class ZoteroAutocomplete extends AttributeAutocompleteProvider {
             }),
             new XMLAttributeAutocomplete({
                 elementName: 'rdg',
-                attributeName: 'wit',
+                attributeName: 'source',
                 callback
             })
         ];
