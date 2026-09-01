@@ -7,12 +7,20 @@ class ZoteroAutocomplete extends AttributeAutocompleteProvider {
     this.baseUrl = baseUrl;
   }
   createAutocomplete() {
-    return new XMLAttributeAutocomplete({
-      elementName: "ref",
-      attributeName: "target",
-      conditionAttribute: { name: "type", value: "biblio" },
-      callback: this.createZoteroAutocompleteCallback()
-    });
+    const callback = this.createZoteroAutocompleteCallback();
+    return [
+      new XMLAttributeAutocomplete({
+        elementName: "ref",
+        attributeName: "target",
+        conditionAttribute: { name: "type", value: "biblio" },
+        callback
+      }),
+      new XMLAttributeAutocomplete({
+        elementName: "rdg",
+        attributeName: "source",
+        callback
+      })
+    ];
   }
   /**
    * Creates an AutocompleteCallback that fetches completions from the Zotero API.

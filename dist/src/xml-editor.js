@@ -60,7 +60,7 @@ class JinnXMLEditor extends JinnCodemirror {
       this.namespace,
       checkNamespace,
       this.unwrap,
-      this.autocompleteProviders.map((provider) => provider.createAutocomplete())
+      this.autocompleteProviders.flatMap((provider) => provider.createAutocomplete())
     );
   }
   emitUpdateEvent(content) {
