@@ -35,7 +35,7 @@
     "chai-xml": "^0.4.1",
     "micro-fs": "^1.0.3",
     "mocha": "^10.4.0",
-    "semantic-release": "^23.0.6",
+    "semantic-release": "^25.0.9",
     "web-component-analyzer": "^2.0.0"
   },
   "dependencies": {

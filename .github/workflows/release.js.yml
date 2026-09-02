@@ -10,17 +10,26 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # publish GitHub release and commit release assets
+      issues: write # comment on released issues
+      pull-requests: write # comment on released pull requests
+      id-token: write # OIDC trusted publishing to npm
     steps:
-      - uses: actions/checkout@main
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
         with:
-          node-version: "20.x"
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Ensure npm CLI supports trusted publishing
+        run: npm install -g npm@latest
       - name: npm install and build
-        run:
+        run: |
           npm ci
           npm run build
       - run: npm test
-      - run: npx semantic-release
+      - name: Release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
