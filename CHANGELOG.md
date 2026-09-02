@@ -1,3 +1,12 @@
+## [1.19.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.19.0...v1.19.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** remove unwanted styling that can't be changed from outside ([a300290](https://github.com/JinnElements/jinn-codemirror/commit/a300290e9e53feec98a1254171ecc32e71f0f7d1))
+* move to trusted publisher ([4f1fd46](https://github.com/JinnElements/jinn-codemirror/commit/4f1fd46c6441b5864e262595ff9c2eaa883a3cce))
+* **ZoteroAutocomplete:** completion should be on rdg/[@source](https://github.com/source), not rdg/[@wit](https://github.com/wit) ([a2c2244](https://github.com/JinnElements/jinn-codemirror/commit/a2c2244700fdf2e68e2984ee0a6e5425512b525e))
+
 # [1.19.0](https://github.com/JinnElements/jinn-codemirror/compare/v1.18.2...v1.19.0) (2026-05-23)
 
 
