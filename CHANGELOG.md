@@ -1,3 +1,10 @@
+## [1.19.2](https://github.com/JinnElements/jinn-codemirror/compare/v1.19.1...v1.19.2) (2026-10-20)
+
+
+### Bug Fixes
+
+* **epidoc-editor:** close leiden editor on toolbar button press ([5943042](https://github.com/JinnElements/jinn-codemirror/commit/5943042cafd63f0092c3b78bfe60dad44dd57f14))
+
 ## [1.19.1](https://github.com/JinnElements/jinn-codemirror/compare/v1.19.0...v1.19.1) (2026-09-02)
 
 
