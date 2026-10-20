@@ -193,6 +193,15 @@ export class JinnEpidocEditor extends HTMLElement {
             }
         });
 
+        // XML toolbar commands change the XML without any key event, so close Leiden as well
+        this.addEventListener('click', (ev) => {
+            const target = ev.target as HTMLElement;
+            if (leidenEditorOpened && target.closest?.('[slot="xml-toolbar"] button')) {
+                // let the command run first
+                setTimeout(hideLeiden);
+            }
+        });
+
         const showLeiden = () => {
             openLeidenBtn.classList.add('hidden');
             leidenEditor.classList.remove('hidden');
